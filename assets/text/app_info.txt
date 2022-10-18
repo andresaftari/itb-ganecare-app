@@ -1,0 +1,90 @@
+Version 1.0.0
+
+Copyright 2020 © Direktorat Kemahasiswaan ITB
+
+contact: informasi@kemahasiswaan.itb.ac.id
+
+------------------------------------------------------------------------------------
+DEVELOPERS
+------------------------------------------------------------------------------------
+
+Ganesha Interactive Media ITB
+team:
+
+Frontend Programmer - Project Manager
+Mikhael Martin Nur Arief (S2 T.Elektro ITB '18)
+
+Lead UX Design
+Asri Nur Zahirah (S2 T.Elektro ITB '18)
+
+Backend Programmer
+Elbananda Permana Putri (S2 T.Elektro ITB '18)
+
+Frontend Programmer
+Sinantya Feranti Anindya (S2 T.Elektro ITB '18)
+
+Frontend Programmer
+Fais Zharfan Azif (S2 T.Informatika ITB '18)
+
+Logo & UI Design 
+Isna Salsabila (DKV ITB '17)
+
+UX Design
+Faiz Aulia Rahman (Fisika ITB '19)
+
+checkout our instagram:
+https://www.instagram.com/gim.itb/
+
+or join our server:
+https://bit.ly/GIMDiscordServer
+
+------------------------------------------------------------------------------------
+CREDIT & SPECIAL THANKS
+------------------------------------------------------------------------------------
+
+Kesejahteraan Mahasiswa Kabinet Arunika KM ITB:
+
+Mentri Koordinator Kesejahteraan Mahasiswa
+Muhammad Ghullam Reza Abramsyah (T.Dirgantara ITB '16)
+
+Menteri Edukasi dan Pendampingan Kesehatan Mental
+Rizqy Ananda Putri (STF ITB '16)
+
+Wakil Menteri Edukasi dan Pendampingan Kesehatan Mental
+Dyah Annisa Sutoyo Putri (T.Kelautan ITB '18)
+
+Dirjen Konselor Kementerian Edukasi dan Pendampingan Kesehatan Mental
+Maria Artha Febriyanti Turnip (Fisika ITB '17)
+
+------------------------------------------------------------------------------------
+
+Konsultan dalam pengembangan aplikasi:
+
+Koordinator Pengembangan Karakter LTPB ITB
+Mharta Adji Wardana (S2 Pengajaran Matematika ITB '18)
+
+Project Leader Peer Counselor LTPB ITB
+Evelyn Sippy Prisetyo (MRI ITB '17) 
+
+------------------------------------------------------------------------------------
+
+Tester:
+Muhammad Ghullam Reza Abramsyah (T.Dirgantara ITB '16)
+Rizqy Ananda Putri (STF ITB '16)
+Maria Artha Febriyanti Turnip (Fisika ITB '17)
+Ahmad Afif Aulia Hariz (Matematika ITB '17)
+Andrava Dema Syanatha (T.Material ITB '18)
+Rosa Syafiqoh (T.Fisika ITB '18)
+Qanita (STF ITB '18)
+Nada Nabilah (STF ITB '18)
+Fathiya Khairiya (Biologi ITB '18)
+Gama Luluh (Mikrobiologi ITB '18)
+Audrey Seravina (T.Kelautan '18)
+Muhammad Dika Nugroho (T.Industri ITB '19)
+Deas Triana Habibur Riza (PWK ITB '19)
+Syah Muhammad Al Akbar (Astronomi ITB '19)
+Rheznandya Arkaputra Azis (Aktuaria ITB '19)
+Mery Rosita (Biologi ITB '19)
+Agatha Edelwis Ng (T.Lingkungan ITB '19)
+Aulia Putri Irfani (FKK ITB '19)
+
