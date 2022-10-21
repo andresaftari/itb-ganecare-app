@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'ITB Wellbeing apps',
-      debugShowCheckedModeBanner: false,
+      // debugShowCheckedModeBanner: true,
       home: SplashScreen(scaffoldKey: scaffoldKey),
       // home: MultiRepositoryProvider(
       //   providers: [],
