@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:itb_ganecare/models/contact_data.dart';
 
 enum RequestStatus {

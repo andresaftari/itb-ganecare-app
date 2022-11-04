@@ -1,0 +1,255 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:itb_ganecare/models/link_data.dart';
+import 'package:itb_ganecare/screen/home_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class LoginScreen extends StatefulWidget {
+  final String deviceId, alertMessage;
+  final GlobalKey scaffoldKey;
+  final LinkData forgotPassLink;
+
+  const LoginScreen({
+    Key? key,
+    required this.deviceId,
+    required this.alertMessage,
+    required this.scaffoldKey,
+    required this.forgotPassLink,
+  }) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late String? alertMessage;
+  late LinkData? _forgotPasswordLink;
+
+  var email, password;
+  final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
+
+  void _showDialogLogin() {
+    alertMessage = widget.alertMessage;
+    _forgotPasswordLink = widget.forgotPassLink;
+
+    if (alertMessage != '') {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        final text = alertMessage;
+
+        log(alertMessage.toString(), name: 'Alert');
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Center(child: Text(text!)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+        alertMessage = null;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _showDialogLogin();
+    return Scaffold(
+      body: Container(
+        color: const Color(0xff00acea),
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Image.asset('assets/images/polosan splash login.png'),
+                ),
+              ),
+              Form(
+                key: _formKey,
+                child: FractionallySizedBox(
+                  widthFactor: 0.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      // Title
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: SizedBox(
+                          height: 130,
+                          width: 130,
+                          child: Image.asset('assets/images/logo gerak.gif'),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Instruction
+                      const FractionallySizedBox(
+                        widthFactor: 0.7,
+                        child: FittedBox(
+                          child: Text(
+                            "Login dengan INA",
+                            style: TextStyle(
+                              fontSize: 10000,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+
+                      // Email field
+                      TextFormField(
+                        // enabled: state is AuthenticationLoadingState
+                        //     ? false
+                        //     : true,
+                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                            labelText: 'Username',
+                            contentPadding: EdgeInsets.all(0)),
+                        validator: (emailValue) {
+                          if (emailValue!.isEmpty) {
+                            return 'Tolong input dengan benar';
+                          }
+                          
+                          email = emailValue;
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Password field
+                      TextFormField(
+                        // enabled: state is AuthenticationLoadingState
+                        //     ? false
+                        //     : true,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          contentPadding: EdgeInsets.all(0),
+                        ),
+                        validator: (passwordValue) {
+                          if (passwordValue!.isEmpty) {
+                            return 'Tolong input dengan benar';
+                          }
+                          password = passwordValue;
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 30),
+
+                      //Button
+                      ButtonTheme(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.orange,
+                          ),
+                          child: const FittedBox(
+                            child: Text(
+                              'Login',
+                              // state is AuthenticationLoadingState
+                              //     ? 'Processing...'
+                              //     : 'Login',
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return HomePage(
+                                  scaffoldKey: widget.scaffoldKey,
+                                  isDarkMode: false,
+                                );
+                              }),
+                            );
+
+                            // if (_formKey.currentState.validate()) {
+                            //   context.bloc<AuthenticationBloc>().add(
+                            //       AuthenticationLoginEvent(
+                            //           email, password, widget.deviceId));
+                            // }
+                          },
+                        ),
+                      ),
+                      // ButtonTheme(
+                      //   minWidth: double.maxFinite,
+                      //   child: FlatButton(
+                      //     color: Colors.orange,
+                      //     disabledColor: Colors.grey,
+                      //     shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(20)),
+                      //     onPressed: () {
+                      //       // if (_formKey.currentState.validate()) {
+                      //       //   context.bloc<AuthenticationBloc>().add(
+                      //       //       AuthenticationLoginEvent(
+                      //       //           email, password, widget.deviceId));
+                      //       // }
+                      //     },
+                      //     child: const FittedBox(
+                      //       child: Text(
+                      //         'Login',
+                      //         // state is AuthenticationLoadingState
+                      //         //     ? 'Processing...'
+                      //         //     : 'Login',
+                      //         textDirection: TextDirection.ltr,
+                      //         style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontSize: 15.0,
+                      //           decoration: TextDecoration.none,
+                      //           fontWeight: FontWeight.normal,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      if (_forgotPasswordLink != null)
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: InkWell(
+                            onTap: _launchLupaPassword,
+                            // _launchLupaPassword(_forgotPasswordLink
+                            //         ?.url ??
+                            //     'https://nic.itb.ac.id/manajemen-akun/reset-password'),
+                            child: const Text(
+                              'Lupa password?',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _launchLupaPassword() async {
+    if (await canLaunch(_forgotPasswordLink!.url)) {
+      await launch(_forgotPasswordLink!.url, forceWebView: false);
+    } else {
+      throw 'Could not launch ${_forgotPasswordLink!.url}';
+    }
+  }
+}

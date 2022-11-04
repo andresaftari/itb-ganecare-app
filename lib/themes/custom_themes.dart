@@ -126,8 +126,7 @@ ThemeData getTheme(
 
 class ThemeNotifier with ChangeNotifier {
   AppDataRepository appDataRepository;
-
-  ThemeData _themeData;
+  ThemeData? _themeData;
 
   ThemeNotifier(this._themeData, {required this.appDataRepository});
 
