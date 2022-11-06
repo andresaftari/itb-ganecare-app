@@ -271,6 +271,6 @@ class WorldTheme extends StatelessWidget {
   
   Widget buildFloatingActionButton() {
     return FloatingActionButton(onPressed: () {},
-    child: Icon(Icons.campaign_sharp),);
+    child: const Icon(Icons.campaign_sharp),);
   }
 }
