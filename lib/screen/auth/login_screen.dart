@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:itb_ganecare/models/link_data.dart';
-import 'package:itb_ganecare/screen/home_screen.dart';
+import 'package:itb_ganecare/screen/home/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {

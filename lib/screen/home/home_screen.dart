@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
+import 'package:itb_ganecare/screen/app/counseling_sebaya_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +31,7 @@ class HomePage extends StatelessWidget {
 class WorldTheme extends StatelessWidget {
   final GlobalKey localScaffoldKey;
   final bool isLoading = true;
+  final bool isCouncelor = false;
 
   const WorldTheme({
     Key? key,
@@ -145,6 +149,8 @@ class WorldTheme extends StatelessWidget {
                   buildHomeBody(context),
                   const SizedBox(height: 16),
                   buildConselee(context),
+                  const SizedBox(height: 16),
+                  buildScholarshipNews(context),
                 ],
               ),
             ),
@@ -214,7 +220,27 @@ class WorldTheme extends StatelessWidget {
                       width: 60,
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Image.asset('assets/icons/chat.png'),
+                      child: GestureDetector(
+                        onTap: () {
+                          log('Tapped!');
+
+                          if (isCouncelor) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CouncelingSebayaScreen(
+                                  isCouncelor: true,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Image.asset(
+                          'assets/icons/chat.png',
+                          width: 60,
+                        ),
+                      ),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
                         borderRadius: BorderRadius.circular(8),
@@ -226,7 +252,7 @@ class WorldTheme extends StatelessWidget {
                       width: 60,
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Image.asset('assets/emotes/a1.png'),
+                      child: Image.asset('assets/images/beasiswa.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
                         borderRadius: BorderRadius.circular(8),
@@ -238,7 +264,7 @@ class WorldTheme extends StatelessWidget {
                       width: 60,
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Image.asset('assets/emotes/a2.png'),
+                      child: Image.asset('assets/images/konsultasi.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
                         borderRadius: BorderRadius.circular(8),
@@ -250,7 +276,7 @@ class WorldTheme extends StatelessWidget {
                       width: 60,
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Image.asset('assets/emotes/a3.png'),
+                      child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
                         borderRadius: BorderRadius.circular(8),
@@ -262,7 +288,7 @@ class WorldTheme extends StatelessWidget {
                       width: 60,
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Image.asset('assets/emotes/a4.png'),
+                      child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
                         borderRadius: BorderRadius.circular(8),
@@ -304,19 +330,25 @@ class WorldTheme extends StatelessWidget {
               return Card(
                 child: Container(
                   width: 200,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
+                  // margin: const EdgeInsets.symmetric(horizontal: 16),
+                  // padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          const Text('Anonymous Conselee'),
-                          SizedBox(width: 4),
-                          Image.asset('assets/emotes/a1.png', width: 15,),
-                        ],
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            const Center(child: Text('{Anonymous Conselee}')),
+                            const SizedBox(width: 4),
+                            Image.asset(
+                              'assets/images/redalert.png',
+                              width: 12,
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      buildTextChatConselee(),
+                      buildTextChatConselee(context),
                     ],
                   ),
                 ),
@@ -328,20 +360,102 @@ class WorldTheme extends StatelessWidget {
     );
   }
 
-  Widget buildTextChatConselee() {
-    return Column(children: [
-      const Text('Owww ma gadd 🙂'),
-      const SizedBox(height: 16),
-      Container(
-        decoration: const BoxDecoration(
-          color: Color.fromRGBO(253, 143, 1, 1),
+  Widget buildTextChatConselee(BuildContext context) {
+    return Column(
+      children: [
+        const Text('Owww ma gadd 🙂'),
+        const SizedBox(height: 32),
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 34,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(253, 143, 1, 1),
+            ),
+            child: const Center(
+              child: Text(
+                'Bantu',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
         ),
-        child: const Text(
-          'Bantu',
-          style: TextStyle(color: Colors.white),
+      ],
+    );
+  }
+
+  Widget buildScholarshipNews(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: const Text(
+            'Beasiswa Terbaru',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          margin: const EdgeInsets.only(left: 16),
         ),
-      ),
-    ]);
+        const SizedBox(height: 16),
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 400,
+          child: ListView.builder(
+            itemCount: 3,
+            shrinkWrap: true,
+            itemBuilder: ((context, index) {
+              return Card(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 100,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/emotes/a1.png',
+                        width: 32,
+                      ),
+                      const SizedBox(width: 8),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            '{Nama Beasiswa}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Flexible(
+                            child: Text(
+                              'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildFloatingActionButton() {
