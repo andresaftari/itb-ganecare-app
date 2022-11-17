@@ -135,7 +135,21 @@ class WorldTheme extends StatelessWidget {
           ),
         ),
         // body: isLoading ? buildHomeLoading() : buildHomeBody(),
-        body: buildHomeBody(context),
+        body: Stack(
+          children: [
+            _backgroundContainer(),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  buildHomeBody(context),
+                  const SizedBox(height: 16),
+                  buildConselee(context),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -170,107 +184,171 @@ class WorldTheme extends StatelessWidget {
   }
 
   Widget buildHomeBody(BuildContext context) {
-    return Stack(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            child: const Text(
+              'Apps',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            margin: const EdgeInsets.only(left: 16, top: 32),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 60,
+            child: Center(
+              child: ListView.builder(
+                itemCount: 4,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: ((context, index) {
+                  if (index == 0) {
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Image.asset('assets/icons/chat.png'),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(253, 143, 1, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  } else if (index == 1) {
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Image.asset('assets/emotes/a1.png'),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(253, 143, 1, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  } else if (index == 2) {
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Image.asset('assets/emotes/a2.png'),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(253, 143, 1, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  } else if (index == 3) {
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Image.asset('assets/emotes/a3.png'),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(253, 143, 1, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      height: 60,
+                      width: 60,
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Image.asset('assets/emotes/a4.png'),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(253, 143, 1, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    );
+                  }
+                }),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildConselee(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _backgroundContainer(),
-        SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: const Text(
-                  'Apps',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+        Container(
+          child: const Text(
+            'Conselee',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          margin: const EdgeInsets.only(left: 16),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 135,
+          child: ListView.builder(
+            itemCount: 4,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: ((context, index) {
+              return Card(
+                child: Container(
+                  width: 200,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Text('Anonymous Conselee'),
+                          SizedBox(width: 4),
+                          Image.asset('assets/emotes/a1.png', width: 15,),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      buildTextChatConselee(),
+                    ],
                   ),
                 ),
-                margin: const EdgeInsets.only(left: 32, top: 32),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 60,
-                child: Center(
-                  child: ListView.builder(
-                    itemCount: 4,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: ((context, index) {
-                      if (index == 0) {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Image.asset('assets/icons/chat.png'),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(253, 143, 1, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      } else if (index == 1) {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Image.asset('assets/emotes/a1.png'),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(253, 143, 1, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      } else if (index == 2) {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Image.asset('assets/emotes/a2.png'),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(253, 143, 1, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      } else if (index == 3) {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Image.asset('assets/emotes/a3.png'),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(253, 143, 1, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Image.asset('assets/emotes/a4.png'),
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(253, 143, 1, 1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      }
-                    }),
-                  ),
-                ),
-              ),
-            ],
+              );
+            }),
           ),
         ),
       ],
     );
   }
-  
+
+  Widget buildTextChatConselee() {
+    return Column(children: [
+      const Text('Owww ma gadd 🙂'),
+      const SizedBox(height: 16),
+      Container(
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(253, 143, 1, 1),
+        ),
+        child: const Text(
+          'Bantu',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    ]);
+  }
+
   Widget buildFloatingActionButton() {
-    return FloatingActionButton(onPressed: () {},
-    child: const Icon(Icons.campaign_sharp),);
+    return FloatingActionButton(
+      onPressed: () {},
+      backgroundColor: Colors.redAccent,
+      child: const Icon(Icons.campaign_sharp),
+    );
   }
 }
