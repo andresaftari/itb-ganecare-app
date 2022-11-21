@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
-import 'package:itb_ganecare/screen/app/counseling_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +32,7 @@ class HomePage extends StatelessWidget {
 
 class WorldTheme extends StatelessWidget {
   final GlobalKey localScaffoldKey;
+
   final bool isLoading = true;
   final bool isCouncelor = false;
 
@@ -51,6 +54,7 @@ class WorldTheme extends StatelessWidget {
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 80,
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -144,14 +148,17 @@ class WorldTheme extends StatelessWidget {
             _backgroundContainer(),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  buildHomeBody(context),
-                  const SizedBox(height: 16),
-                  buildConselee(context),
-                  const SizedBox(height: 16),
-                  buildScholarshipNews(context),
-                ],
+              child: SingleChildScrollView(
+                primary: true,
+                child: Column(
+                  children: [
+                    buildHomeBody(context),
+                    const SizedBox(height: 16),
+                    buildConselee(context),
+                    const SizedBox(height: 16),
+                    buildScholarshipNews(context),
+                  ],
+                ),
               ),
             ),
           ],
@@ -224,17 +231,140 @@ class WorldTheme extends StatelessWidget {
                         onTap: () {
                           log('Tapped!');
 
-                          if (isCouncelor) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CouncelingSebayaScreen(
-                                  isCouncelor: true,
+                          showBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.white,
+                            builder: (context) => Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Container(
+                                height: 300,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Center(
+                                      child: Text(
+                                        'Counceling Sebaya',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    const Text(
+                                      'Anda akan membuka aplikasi Pendamping Sebaya\n'
+                                      'yang membuat Anda masuk ke mode anonim. Data pribadi\n'
+                                      'Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                      'Pendamping Sebaya maupun pengguna lain',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 32),
+                                    const Center(
+                                      child: Text('Masuk sebagai :'),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          child: const Text(
+                                            'Councelee',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: const Color.fromRGBO(
+                                              253,
+                                              143,
+                                              1,
+                                              1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return const CounceleeSebayaScreen();
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(width: 8),
+                                        ElevatedButton(
+                                          child: const Text(
+                                            'Councelor',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: const Color.fromRGBO(
+                                              253,
+                                              143,
+                                              1,
+                                              1,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return const CouncelorSebayaScreen();
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }
+                            ),
+                          );
+
+                          // if (isCouncelor) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           const CouncelorSebayaScreen(),
+                          //     ),
+                          //   );
+                          // } else {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           const CounceleeSebayaScreen(),
+                          //     ),
+                          //   );
+                          // }
                         },
                         child: Image.asset(
                           'assets/icons/chat.png',
@@ -328,7 +458,7 @@ class WorldTheme extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: ((context, index) {
               return Card(
-                child: Container(
+                child: SizedBox(
                   width: 200,
                   // margin: const EdgeInsets.symmetric(horizontal: 16),
                   // padding: const EdgeInsets.all(8),
