@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
@@ -15,13 +19,86 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: pages.elementAt(currentIndex),
+      bottomNavigationBar: bottomNavBar(),
+    );
+  }
+
+  Widget bottomNavBar() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromRGBO(0, 171, 233, 1),
+            Color.fromRGBO(6, 146, 196, 1),
+          ],
+          begin: Alignment.centerRight,
+          end: Alignment.centerLeft,
+        ),
+      ),
+      child: BottomNavigationBar(
+        elevation: 0,
+        currentIndex: currentIndex,
+        onTap: _onIconTapped,
+        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: Colors.black45,
+        selectedItemColor: Colors.blueAccent,
+        items: [
+          BottomNavigationBarItem(
+            label: 'Pesan',
+            icon: Image.asset('assets/images/chat_fill.png'),
+            activeIcon: Image.asset(
+              'assets/images/chat_fill_active.png',
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: 'Councelee',
+            icon: Image.asset('assets/images/chat_search_fill.png'),
+            activeIcon: Image.asset(
+              'assets/images/chat_search_fill_active.png',
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: 'Profile',
+            icon: Image.asset('assets/images/user_box_fill.png'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onIconTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+  static List<Widget> pages = [
+    const CouncelorSebayaViews(),
+    const CouncelorListViewScreen(),
+    const CouncelingProfileScreen(),
+  ];
+}
+
+class CouncelorSebayaViews extends StatelessWidget {
+  const CouncelorSebayaViews({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 80,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.close, color: Colors.white),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.close, 
+            color: Colors.white,
+          ),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -94,79 +171,14 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
           ),
         ),
       ),
-      body: pages.elementAt(currentIndex),
-      bottomNavigationBar: bottomNavBar(),
-    );
-  }
-
-  Widget bottomNavBar() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(0, 171, 233, 1),
-            Color.fromRGBO(6, 146, 196, 1),
-          ],
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
-        ),
-      ),
-      child: BottomNavigationBar(
-        elevation: 0,
-        currentIndex: currentIndex,
-        onTap: _onIconTapped,
-        type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Colors.black45,
-        selectedItemColor: Colors.blueAccent,
-        items: [
-          BottomNavigationBarItem(
-            label: 'Pesan',
-            icon: Image.asset('assets/images/chat_fill.png'),
-            activeIcon: Image.asset(
-              'assets/images/chat_fill_active.png',
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Councelee',
-            icon: Image.asset('assets/images/chat_search_fill.png'),
-            activeIcon: Image.asset(
-              'assets/images/chat_search_fill_active.png',
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Profile',
-            icon: Image.asset('assets/images/user_box_fill.png'),
-          ),
+      body: Column(
+        children: [
+          buildHeader(context),
+          buildCouncelee(context),
+          const SizedBox(height: 16),
+          buildHistoryCounceling(context),
         ],
       ),
-    );
-  }
-
-  void _onIconTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
-  static List<Widget> pages = [
-    const CouncelorSebayaViews(),
-    const CouncelorListViewScreen(),
-    Container(),
-  ];
-}
-
-class CouncelorSebayaViews extends StatelessWidget {
-  const CouncelorSebayaViews({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildHeader(context),
-        buildCouncelee(context),
-        const SizedBox(height: 16),
-        buildHistoryCounceling(context),
-      ],
     );
   }
 
@@ -180,8 +192,8 @@ class CouncelorSebayaViews extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children:  [
+                const Text(
                   'History Counceling',
                   style: TextStyle(
                     color: Colors.black,
@@ -189,7 +201,26 @@ class CouncelorSebayaViews extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                Icon(CupertinoIcons.sort_down, size: 24),
+                IconButton(onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      elevation: 1,
+                      backgroundColor: Colors.orange,
+                      content: Text('Sorting still in development', 
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black, 
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                }, 
+                icon: const Icon(
+                    CupertinoIcons.sort_down,
+                    size: 24,
+                  ),
+                ),
               ],
             ),
           ),
@@ -197,99 +228,112 @@ class CouncelorSebayaViews extends StatelessWidget {
             itemCount: 2,
             shrinkWrap: true,
             itemBuilder: ((context, index) {
-              return Card(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 80,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
-                      ),
-                      const SizedBox(width: 4),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              '#21345',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10,
+              return GestureDetector(
+                onTap: () {
+                  log('Logged');
+
+                  Navigator.push(
+                    context, MaterialPageRoute(
+                      builder: (context) {
+                        return const CouncelingChatScreen();
+                      },
+                    ),
+                  );
+                },
+                child: Card(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Image.asset('assets/images/cat.png'),
+                        ),
+                        const SizedBox(width: 4),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                '#21346',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: const [
-                              Icon(
-                                Icons.male,
-                                color: Colors.blueAccent,
-                              ),
-                              Text(
-                                'Anonymous',
+                            const SizedBox(height: 8),
+                            Row(
+                              children: const [
+                                Icon(
+                                  Icons.male,
+                                  color: Colors.blueAccent,
+                                ),
+                                Text(
+                                  'Anonymous',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                'Saya seorang yang hiya hiya hiya',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 softWrap: true,
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
-                                  color: Colors.black,
-                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10,
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 2),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'Saya seorang yang hiya hiya hiya',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 10,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                '2018',
-                                style: TextStyle(
-                                  backgroundColor: Colors.grey.withOpacity(0.4),
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 11,
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '2018',
+                                  style: TextStyle(
+                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 11,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Satu Jurusan',
-                                style: TextStyle(
-                                  backgroundColor: Colors.grey.withOpacity(0.4),
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 11,
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Satu Jurusan',
+                                  style: TextStyle(
+                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 11,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -327,100 +371,113 @@ class CouncelorSebayaViews extends StatelessWidget {
         itemCount: 2,
         shrinkWrap: true,
         itemBuilder: ((context, index) {
-          return Card(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 80,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Image.asset('assets/images/cat.png'),
-                  ),
-                  const SizedBox(width: 4),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          '#21345',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 10,
+          return GestureDetector(
+            onTap: () {
+              log('Logged');
+                  
+              Navigator.push(
+                context, MaterialPageRoute(
+                  builder: (context) {
+                    return const CouncelingChatScreen();
+                  },
+                ),
+              );
+            },
+            child: Card(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Image.asset('assets/images/cat.png'),
+                    ),
+                    const SizedBox(width: 4),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            '#21345',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.female,
-                            color: Colors.pinkAccent,
-                          ),
-                          Text(
-                            'Anonymous',
+                        const SizedBox(height: 8),
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.female,
+                              color: Colors.pinkAccent,
+                            ),
+                            Text(
+                              'Anonymous',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            'Last chat dummy',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             softWrap: true,
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
-                              color: Colors.black,
-                              fontSize: 14,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 10,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'Last chat dummy',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          softWrap: true,
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 56),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '2018',
-                            style: TextStyle(
-                              backgroundColor: Colors.grey.withOpacity(0.4),
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
+                      ],
+                    ),
+                    const SizedBox(width: 56),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '2018',
+                              style: TextStyle(
+                                backgroundColor: Colors.grey.withOpacity(0.4),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 11,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Satu Jurusan',
-                            style: TextStyle(
-                              backgroundColor: Colors.grey.withOpacity(0.4),
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
+                            const SizedBox(width: 4),
+                            Text(
+                              'Satu Jurusan',
+                              style: TextStyle(
+                                backgroundColor: Colors.grey.withOpacity(0.4),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 11,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );

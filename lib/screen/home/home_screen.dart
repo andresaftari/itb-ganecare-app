@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -229,120 +230,123 @@ class WorldTheme extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       child: GestureDetector(
                         onTap: () {
-                          log('Tapped!');
-
                           showBottomSheet(
                             context: context,
                             backgroundColor: Colors.white,
-                            builder: (context) => Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Container(
-                                height: 300,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    bottomRight: Radius.circular(16),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Center(
-                                      child: Text(
-                                        'Counceling Sebaya',
-                                        style: TextStyle(
+                            builder: (context) => GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 8),
+                                    height: 300,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16),
+                                        bottomRight: Radius.circular(16),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Center(
+                                          child: Text(
+                                            'Counceling Sebaya',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        const Text(
+                                          'Anda akan membuka aplikasi Pendamping Sebaya\n'
+                                          'yang membuat Anda masuk ke mode anonim. Data pribadi\n'
+                                          'Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                          'Pendamping Sebaya maupun pengguna lain',
+                                          style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    const Text(
-                                      'Anda akan membuka aplikasi Pendamping Sebaya\n'
-                                      'yang membuat Anda masuk ke mode anonim. Data pribadi\n'
-                                      'Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
-                                      'Pendamping Sebaya maupun pengguna lain',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 32),
-                                    const Center(
-                                      child: Text('Masuk sebagai :'),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        ElevatedButton(
-                                          child: const Text(
-                                            'Councelee',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
                                           ),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: const Color.fromRGBO(
-                                              253,
-                                              143,
-                                              1,
-                                              1,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  return const CounceleeSebayaScreen();
-                                                },
-                                              ),
-                                            );
-                                          },
                                         ),
-                                        const SizedBox(width: 8),
-                                        ElevatedButton(
-                                          child: const Text(
-                                            'Councelor',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: const Color.fromRGBO(
-                                              253,
-                                              143,
-                                              1,
-                                              1,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  return const CouncelorSebayaScreen();
-                                                },
+                                        const SizedBox(height: 32),
+                                        const Center(
+                                          child: Text('Masuk sebagai :'),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              child: const Text(
+                                                'Councelee',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
                                               ),
-                                            );
-                                          },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: const Color.fromRGBO(
+                                                  253,
+                                                  143,
+                                                  1,
+                                                  1,
+                                                ),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return const CounceleeSebayaScreen();
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(width: 8),
+                                            ElevatedButton(
+                                              child: const Text(
+                                                'Councelor',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: const Color.fromRGBO(
+                                                  253,
+                                                  143,
+                                                  1,
+                                                  1,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return const CouncelorSebayaScreen();
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),

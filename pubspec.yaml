@@ -31,7 +31,8 @@ dependencies:
     sdk: flutter
   auto_size_text: 3.0.0
   carousel_slider: 4.0.0
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.0
+  # dash_chat_2: 0.0.12
   equatable: 2.0.3
   flutter_bloc: 8.0.0
 #  firebase_analytics: ^8.1.1
@@ -43,7 +44,7 @@ dependencies:
   provider: 6.0.0
   rxdart: 0.27.5
   shared_preferences: 2.0.7
-  url_launcher: 6.0.4
+  url_launcher: 6.0.10
 
 dev_dependencies:
   flutter_test:
