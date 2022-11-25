@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 
@@ -42,18 +43,18 @@ class SplashScreen extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: 1.sh,
+            width: 1.sw,
             child: FittedBox(
               fit: BoxFit.fill,
               child: Image.asset('assets/images/polosan splash login.png'),
             ),
           ),
           Positioned(
-            bottom: 350,
+            bottom: 350.h,
             child: SizedBox(
-              height: 140,
-              width: 140,
+              height: 140.h,
+              width: 140.w,
               child: Image.asset('assets/images/logo gerak.gif'),
             ),
           ),

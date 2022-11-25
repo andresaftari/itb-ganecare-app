@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 
 class CouncelorListViewScreen extends StatefulWidget {
@@ -181,35 +182,35 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
             },
             child: Card(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 80,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(8),
+                width: 1.sw,
+                height: 80.h,
+                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                padding: EdgeInsets.all(8.w),
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8.w),
                       child: Image.asset('assets/images/cat.png'),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4.w),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.w),
                           child: Text(
                             '#21345',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 10,
+                              fontSize: 10.sp,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Row(
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.male,
                               color: Colors.blueAccent,
                             ),
@@ -221,14 +222,14 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 color: Colors.black,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 2),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
+                        SizedBox(height: 2.h),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.h),
                           child: Text(
                             'Saya seorang yang hiya hiya hiya',
                             overflow: TextOverflow.ellipsis,
@@ -238,7 +239,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                               overflow: TextOverflow.ellipsis,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
-                              fontSize: 10,
+                              fontSize: 10.sp,
                             ),
                           ),
                         ),
@@ -254,17 +255,17 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                 backgroundColor: Colors.grey.withOpacity(0.4),
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11,
+                                fontSize: 11.sp,
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4.w),
                             Text(
                               'Satu Jurusan',
                               style: TextStyle(
                                 backgroundColor: Colors.grey.withOpacity(0.4),
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11,
+                                fontSize: 11.sp,
                               ),
                             ),
                           ],
@@ -288,28 +289,28 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
+            margin: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Pending Request',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                 ),
                 IconButton(onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       elevation: 1,
                       backgroundColor: Colors.orange,
                       content: Text('Sorting still in development', 
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Colors.black, 
-                          fontSize: 16,
+                          fontSize: 16.sp,
                         ),
                       ),
                     ),
@@ -342,34 +343,34 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                 child: Card(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 80,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.all(8),
+                    height: 80.h,
+                    margin: EdgeInsets.symmetric(horizontal: 16.w),
+                    padding: EdgeInsets.all(8.w),
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8.w),
                           child: Image.asset('assets/images/cat.png'),
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4.w),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
+                            Padding(
+                              padding: EdgeInsets.only(left: 8.w),
                               child: Text(
                                 '#21345',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10,
+                                  fontSize: 10.sp,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             Row(
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   Icons.female,
                                   color: Colors.pinkAccent,
                                 ),
@@ -381,14 +382,14 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     color: Colors.black,
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 2),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
+                            SizedBox(height: 2.h),
+                            Padding(
+                              padding: EdgeInsets.only(left: 8.w),
                               child: Text(
                                 'Saya seorang yang hiya hiya hiya',
                                 overflow: TextOverflow.ellipsis,
@@ -398,7 +399,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 10,
+                                  fontSize: 10.sp,
                                 ),
                               ),
                             ),

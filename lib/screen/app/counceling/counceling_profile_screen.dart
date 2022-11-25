@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CouncelingProfileScreen extends StatefulWidget {
   const CouncelingProfileScreen({ Key? key }) : super(key: key);
@@ -13,7 +14,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 80.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -40,17 +41,17 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 46, top: 68),
-                child: const Text(
+                margin: EdgeInsets.only(left: 46.w, top: 68.h),
+                child: Text(
                     'Profile',
                     style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      fontSize: 18,
+                      color: const Color.fromRGBO(255, 255, 255, 1),
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
               ),
-              SizedBox(height: 16)
+              SizedBox(height: 16.h)
             ],
           ),
         ),
@@ -69,20 +70,20 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Column(
       children: [
         Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
-          width: MediaQuery.of(context).size.width,
-          height: 110,
+          decoration: const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
+          width: 1.sw,
+          height: 110.h,
         ),
-        const SizedBox(height: 165),
+        SizedBox(height: 165.h),
         Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
-          width: MediaQuery.of(context).size.width,
-          height: 40,
+          decoration: const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
+          width: 1.sw,
+          height: 40.h,
         ),
         Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(3, 160, 217, 1)),
-          width: MediaQuery.of(context).size.width,
-          height: 360,
+          decoration: const BoxDecoration(color: Color.fromRGBO(3, 160, 217, 1)),
+          width: 1.sw,
+          height: 360.h,
         ),
       ],
     );
@@ -94,34 +95,34 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       children: [
         Center(
           child: Container(
-            width: 125,
-            margin: const EdgeInsets.only(right: 24, top: 42),
+            width: 125.w,
+            margin: EdgeInsets.only(right: 24.w, top: 42.h),
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.black,
-                width: 0.5,
+                width: 0.5.w,
               ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5),
-                  blurRadius: 8,
+                  blurRadius: 8.r,
                   offset: const Offset(3, 2),
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.w),
               child: Image.asset('assets/images/cat.png'),
-              ),
+            ),
           ),
         ),
-        const SizedBox(height: 16),
-        const Text(
+        SizedBox(height: 16.h),
+        Text(
           'Anonymous', 
           style: TextStyle(
-            fontSize: 20, 
+            fontSize: 20.sp, 
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -129,44 +130,44 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: EdgeInsets.all(4.w),
               child: Text(
                 '2018',
                 style: TextStyle(
                   backgroundColor: Colors.grey.withOpacity(0.4),
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: EdgeInsets.all(4.w),
               child: Text(
                 'Satu Jurusan',
                 style: TextStyle(
                   backgroundColor: Colors.grey.withOpacity(0.4),
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        const Text(
+        SizedBox(height: 8.h),
+        Text(
           'BIO Example Text...', 
           style: TextStyle(
-            fontSize: 14, 
+            fontSize: 14.sp, 
             fontWeight: FontWeight.w300,
           ),
         ),
-        SizedBox(height: 44),
-        const Text(
+        SizedBox(height: 44.h),
+        Text(
           'Jan 2022', 
           style: TextStyle(
-            fontSize: 14, 
+            fontSize: 14.sp, 
             fontWeight: FontWeight.w600,
           ),
         ),

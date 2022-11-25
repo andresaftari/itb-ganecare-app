@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
   const CouncelingChatScreen({ Key? key }) : super(key: key);
@@ -13,13 +14,16 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 80.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.close, color: Colors.white),
+          child: const Icon(
+            Icons.close, 
+            color: Colors.white,
+          ),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -33,7 +37,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
             ),
           ),
           child: Container(
-            margin: const EdgeInsets.only(left: 24),
+            margin: EdgeInsets.only(left: 24.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -41,49 +45,57 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: const Text(
+                      child: Text(
                         '#21345',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 62, left: 24),
+                      margin: EdgeInsets.only(top: 62.h, left: 24.w),
                     ),
-                    Container(
-                      child: const Text(
-                        'Anonymous',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.male, 
+                          color: Colors.blueAccent,
                         ),
-                      ),
-                      margin: const EdgeInsets.only(left: 24),
+                        Container(
+                          child: Text(
+                            'Anonymous',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          margin: EdgeInsets.only(left: 24.w),
+                        ),
+                      ],
                     ),
                   ],
                 ),
                 Container(
-                  width: 44,
-                  margin: const EdgeInsets.only(right: 24, top: 42),
+                  width: 44.w,
+                  margin: EdgeInsets.only(right: 24.w, top: 42.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: Colors.black,
-                      width: 0.5,
+                      width: 0.5.w,
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8,
+                        blurRadius: 8.r,
                         offset: const Offset(3, 2),
                       ),
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     child: Image.asset('assets/images/cat.png'),
                   ),
                 ),
@@ -92,10 +104,10 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
           ),
         ),
       ),
-      body: const Center(
+      body: Center(
         child: Text('UI for Chat still in development',
         style: TextStyle(
-          fontSize: 18,
+          fontSize: 18.sp,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
@@ -103,45 +115,4 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
       ),
     );
   }
-
-//   List<ChatMessage> basicSample = <ChatMessage>[
-//   ChatMessage(
-//     text: 'google.com hello you @Marc is it &you okay?',
-//     user: user2,
-//     createdAt: DateTime(2021, 01, 31, 16, 45),
-//   ),
-//   ChatMessage(
-//     text: 'google.com',
-//     user: user2,
-//     createdAt: DateTime(2021, 01, 30, 16, 45),
-//   ),
-//   ChatMessage(
-//     text: "Oh what's up guys?",
-//     user: user2,
-//     createdAt: DateTime(2021, 01, 30, 16, 45),
-//   ),
-//   ChatMessage(
-//     text: 'How you doin?',
-//     user: currentUser,
-//     createdAt: DateTime(2021, 01, 30, 16, 34),
-//   ),
-//   ChatMessage(
-//     text: 'Hey!',
-//     user: currentUser,
-//     createdAt: DateTime(2021, 01, 30, 15, 50),
-//   ),
-//   ChatMessage(
-//     text: 'Hey!',
-//     user: currentUser,
-//     createdAt: DateTime(2021, 01, 28, 15, 50),
-//   ),
-//   ChatMessage(
-//     text: 'Hey!',
-//     user: currentUser,
-//     createdAt: DateTime(2021, 01, 28, 15, 50),
-//   ),
-// ];
 }
-
-// ChatUser user2 = ChatUser(id: '2', firstName: 'Niki Lauda');
-// ChatUser currentUser = ChatUser(id: '0');

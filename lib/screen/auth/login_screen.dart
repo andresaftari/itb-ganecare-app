@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,10 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Stack(
             alignment: Alignment.center,
-            children: <Widget>[
+            children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                height: 1.sh,
+                width: 1.sw,
                 child: FittedBox(
                   fit: BoxFit.fill,
                   child: Image.asset('assets/images/polosan splash login.png'),
@@ -78,31 +79,31 @@ class _LoginScreenState extends State<LoginScreen> {
                   widthFactor: 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: [
                       // Title
                       FittedBox(
                         fit: BoxFit.fitWidth,
                         child: SizedBox(
-                          height: 130,
-                          width: 130,
+                          height: 130.h,
+                          width: 130.w,
                           child: Image.asset('assets/images/logo gerak.gif'),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Instruction
-                      const FractionallySizedBox(
+                      FractionallySizedBox(
                         widthFactor: 0.7,
                         child: FittedBox(
                           child: Text(
                             "Login dengan INA",
                             style: TextStyle(
-                              fontSize: 10000,
+                              fontSize: 10000.sp,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
                       // Email field
                       TextFormField(
@@ -111,9 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         //     : true,
                         autocorrect: false,
                         keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            labelText: 'Username',
-                            contentPadding: EdgeInsets.all(0)),
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          contentPadding: EdgeInsets.all(0.w),
+                        ),
                         validator: (emailValue) {
                           if (emailValue!.isEmpty) {
                             return 'Tolong input dengan benar';
@@ -123,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
 
                       // Password field
                       TextFormField(
@@ -132,9 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         //     : true,
                         keyboardType: TextInputType.text,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Password',
-                          contentPadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.all(0.w),
                         ),
                         validator: (passwordValue) {
                           if (passwordValue!.isEmpty) {
@@ -145,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
                       //Button
                       ButtonTheme(
@@ -153,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: ElevatedButton.styleFrom(
                             primary: Colors.orange,
                           ),
-                          child: const FittedBox(
+                          child: FittedBox(
                             child: Text(
                               'Login',
                               // state is AuthenticationLoadingState
@@ -162,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               textDirection: TextDirection.ltr,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15.0,
+                                fontSize: 15.sp,
                                 decoration: TextDecoration.none,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -220,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // ),
                       if (_forgotPasswordLink != null)
                         Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(10.w),
                           child: InkWell(
                             onTap: _launchLupaPassword,
                             // _launchLupaPassword(_forgotPasswordLink
@@ -228,9 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             //     'https://nic.itb.ac.id/manajemen-akun/reset-password'),
                             child: const Text(
                               'Lupa password?',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
+                              style: TextStyle(color: Colors.red),
                             ),
                           ),
                         ),

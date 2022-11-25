@@ -1,8 +1,7 @@
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
@@ -54,7 +53,7 @@ class WorldTheme extends StatelessWidget {
         floatingActionButton: buildFloatingActionButton(),
         appBar: AppBar(
           elevation: 0,
-          toolbarHeight: 80,
+          toolbarHeight: 80.h,
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -74,26 +73,26 @@ class WorldTheme extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 62, left: 24),
+                      margin: EdgeInsets.only(top: 62.h, left: 24.w),
                     ),
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Developer',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 4, left: 24),
+                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
                     ),
                   ],
                 ),
@@ -103,24 +102,24 @@ class WorldTheme extends StatelessWidget {
                     GestureDetector(
                       onTap: () {},
                       child: Container(
-                        margin: const EdgeInsets.only(top: 58),
-                        child: const Icon(
+                        margin: EdgeInsets.only(top: 58.h),
+                        child: Icon(
                           Icons.notifications_rounded,
                           color: Colors.white,
-                          size: 28,
+                          size: 28.sp,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
                     Container(
-                      width: 44,
-                      margin: const EdgeInsets.only(right: 24, top: 58),
+                      width: 44.w,
+                      margin: EdgeInsets.only(right: 24.w, top: 58.h),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: Colors.black,
-                          width: 0.5,
+                          width: 0.5.w,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -132,11 +131,9 @@ class WorldTheme extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
-                        child: Image.asset(
-                          'assets/images/cat.png',
-                        ),
+                        child: Image.asset('assets/images/cat.png'),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -148,15 +145,15 @@ class WorldTheme extends StatelessWidget {
           children: [
             _backgroundContainer(),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
               child: SingleChildScrollView(
                 primary: true,
                 child: Column(
                   children: [
                     buildHomeBody(context),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     buildConselee(context),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     buildScholarshipNews(context),
                   ],
                 ),
@@ -190,7 +187,7 @@ class WorldTheme extends StatelessWidget {
         Center(
           child: Image.asset(
             'assets/images/logo gerak.gif',
-            width: 200,
+            width: 200.w,
           ),
         ),
       ],
@@ -211,11 +208,11 @@ class WorldTheme extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            margin: const EdgeInsets.only(left: 16, top: 32),
+            margin: EdgeInsets.only(left: 16.w, top: 32.h),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           SizedBox(
-            height: 60,
+            height: 60.h,
             child: Center(
               child: ListView.builder(
                 itemCount: 4,
@@ -224,10 +221,10 @@ class WorldTheme extends StatelessWidget {
                 itemBuilder: ((context, index) {
                   if (index == 0) {
                     return Container(
-                      height: 60,
-                      width: 60,
+                      height: 60.h,
+                      width: 60.w,
                       padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       child: GestureDetector(
                         onTap: () {
                           showBottomSheet(
@@ -238,97 +235,81 @@ class WorldTheme extends StatelessWidget {
                               child: BackdropFilter(
                                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(16.w),
                                   child: Container(
-                                    margin: const EdgeInsets.only(top: 8),
-                                    height: 300,
-                                    decoration: const BoxDecoration(
+                                    margin: EdgeInsets.only(top: 8.h),
+                                    height: 300.h,
+                                    decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        bottomRight: Radius.circular(16),
+                                        topLeft: Radius.circular(16.r),
+                                        bottomRight: Radius.circular(16.r),
                                       ),
                                     ),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Center(
+                                        Center(
                                           child: Text(
                                             'Counceling Sebaya',
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
+                                              fontSize: 16.sp,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(height: 24),
-                                        const Text(
+                                        SizedBox(height: 24.h),
+                                        Text(
                                           'Anda akan membuka aplikasi Pendamping Sebaya\n'
                                           'yang membuat Anda masuk ke mode anonim. Data pribadi\n'
                                           'Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
                                           'Pendamping Sebaya maupun pengguna lain',
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                             color: Colors.black,
                                           ),
                                         ),
-                                        const SizedBox(height: 32),
-                                        const Center(
-                                          child: Text('Masuk sebagai :'),
-                                        ),
-                                        const SizedBox(height: 16),
+                                        SizedBox(height: 32.h),
+                                        const Center(child: Text('Masuk sebagai :')),
+                                        SizedBox(height: 16.h),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             ElevatedButton(
-                                              child: const Text(
+                                              child: Text(
                                                 'Councelee',
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 16,
+                                                  fontSize: 16.sp,
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
-                                                primary: const Color.fromRGBO(
-                                                  253,
-                                                  143,
-                                                  1,
-                                                  1,
-                                                ),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                primary: const Color.fromRGBO(253, 143, 1, 1),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                                               ),
                                               onPressed: () {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return const CounceleeSebayaScreen();
-                                                    },
+                                                    builder: (context) => const CounceleeSebayaScreen(),
                                                   ),
                                                 );
                                               },
                                             ),
-                                            const SizedBox(width: 8),
+                                            SizedBox(width: 8.w),
                                             ElevatedButton(
-                                              child: const Text(
+                                              child: Text(
                                                 'Councelor',
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 16,
+                                                  fontSize: 16.sp,
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
-                                                primary: const Color.fromRGBO(
-                                                  253,
-                                                  143,
-                                                  1,
-                                                  1,
-                                                ),
+                                                primary: const Color.fromRGBO(253, 143, 1, 1),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
+                                                  borderRadius: BorderRadius.circular(16.r),
                                                 ),
                                               ),
                                               onPressed: () {
@@ -351,81 +332,63 @@ class WorldTheme extends StatelessWidget {
                               ),
                             ),
                           );
-
-                          // if (isCouncelor) {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           const CouncelorSebayaScreen(),
-                          //     ),
-                          //   );
-                          // } else {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           const CounceleeSebayaScreen(),
-                          //     ),
-                          //   );
-                          // }
                         },
                         child: Image.asset(
                           'assets/icons/chat.png',
-                          width: 60,
+                          width: 60.w,
                         ),
                       ),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     );
                   } else if (index == 1) {
                     return Container(
-                      height: 60,
-                      width: 60,
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 60.h,
+                      width: 60.w,
+                      padding: EdgeInsets.all(8.w),
+                      margin: EdgeInsets.symmetric(horizontal: 16.h),
                       child: Image.asset('assets/images/beasiswa.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     );
                   } else if (index == 2) {
                     return Container(
-                      height: 60,
-                      width: 60,
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 60.h,
+                      width: 60.w,
+                      padding: EdgeInsets.all(8.w),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Image.asset('assets/images/konsultasi.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     );
                   } else if (index == 3) {
                     return Container(
-                      height: 60,
-                      width: 60,
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 60.h,
+                      width: 60.w,
+                      padding: EdgeInsets.all(8.w),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     );
                   } else {
                     return Container(
-                      height: 60,
-                      width: 60,
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      height: 60.h,
+                      width: 60.w,
+                      padding: EdgeInsets.all(8.w),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     );
                   }
@@ -450,12 +413,12 @@ class WorldTheme extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          margin: const EdgeInsets.only(left: 16),
+          margin: EdgeInsets.only(left: 16.w),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
         SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 135,
+          width: 1.sw,
+          height: 135.h,
           child: ListView.builder(
             itemCount: 4,
             shrinkWrap: true,
@@ -463,25 +426,25 @@ class WorldTheme extends StatelessWidget {
             itemBuilder: ((context, index) {
               return Card(
                 child: SizedBox(
-                  width: 200,
+                  width: 200.w,
                   // margin: const EdgeInsets.symmetric(horizontal: 16),
                   // padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(8.w),
                         child: Row(
                           children: [
                             const Center(child: Text('{Anonymous Conselee}')),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4.w),
                             Image.asset(
                               'assets/images/redalert.png',
-                              width: 12,
+                              width: 12.w,
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       buildTextChatConselee(context),
                     ],
                   ),
@@ -498,12 +461,12 @@ class WorldTheme extends StatelessWidget {
     return Column(
       children: [
         const Text('Owww ma gadd 🙂'),
-        const SizedBox(height: 32),
+        SizedBox(height: 32.h),
         GestureDetector(
           onTap: () {},
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 34,
+            width: 1.sw,
+            height: 34.h,
             decoration: const BoxDecoration(
               color: Color.fromRGBO(253, 143, 1, 1),
             ),
@@ -531,41 +494,41 @@ class WorldTheme extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          margin: const EdgeInsets.only(left: 16),
+          margin: EdgeInsets.only(left: 16.w),
         ),
         const SizedBox(height: 16),
         SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 400,
+          width: 1.sw,
+          height: 400.h,
           child: ListView.builder(
             itemCount: 3,
             shrinkWrap: true,
             itemBuilder: ((context, index) {
               return Card(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 100,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(8),
+                  width: 1.sw,
+                  height: 100.h,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.all(8.w),
                   child: Row(
                     children: [
                       Image.asset(
                         'assets/emotes/a1.png',
-                        width: 32,
+                        width: 32.w,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             '{Nama Beasiswa}',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 12,
+                              fontSize: 12.sp,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           Flexible(
                             child: Text(
                               'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
@@ -575,7 +538,7 @@ class WorldTheme extends StatelessWidget {
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 color: Colors.black,
-                                fontSize: 12,
+                                fontSize: 12.sp,
                               ),
                             ),
                           ),
