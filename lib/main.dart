@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -31,24 +33,28 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
-    return MaterialApp(
-      title: 'ITB Wellbeing apps',
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(scaffoldKey: scaffoldKey),
-      // home: MultiRepositoryProvider(
-      //   providers: [],
-      //   child: MultiBlocProvider(
-      //     providers: [],
-      //     child: BlocConsumer(
-      //       // listenWhen: (_, state) {},
-      //       listener: (context, state) {},
-      //       builder: (context, state) {
-      //         return Container();
-      //       },
-      //       // buildWhen: (context, state) {},
-      //     ),
-      //   ),
-      // ),
+    return ScreenUtilInit(
+      builder: (context) { 
+        return MaterialApp(
+          title: 'ITB Wellbeing apps',
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(scaffoldKey: scaffoldKey),
+          // home: MultiRepositoryProvider(
+          //   providers: [],
+          //   child: MultiBlocProvider(
+          //     providers: [],
+          //     child: BlocConsumer(
+          //       // listenWhen: (_, state) {},
+          //       listener: (context, state) {},
+          //       builder: (context, state) {
+          //         return Container();
+          //       },
+          //       // buildWhen: (context, state) {},
+          //     ),
+          //   ),
+          // ),
+        );
+      },
     );
   }
 }

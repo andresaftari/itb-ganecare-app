@@ -41,10 +41,10 @@ class SplashScreen extends StatelessWidget {
       key: scaffoldKey,
       body: Stack(
         alignment: Alignment.center,
-        children: <Widget>[
+        children: [
           SizedBox(
-            height: 1.sh,
-            width: 1.sw,
+            height:  MediaQuery.of(context).size.height,
+            width:  MediaQuery.of(context).size.width,
             child: FittedBox(
               fit: BoxFit.fill,
               child: Image.asset('assets/images/polosan splash login.png'),

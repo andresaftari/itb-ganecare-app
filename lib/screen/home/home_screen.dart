@@ -208,23 +208,22 @@ class WorldTheme extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            margin: EdgeInsets.only(left: 16.w, top: 32.h),
+            margin: EdgeInsets.only(left: 16.w, top: 8.h),
           ),
           SizedBox(height: 16.h),
           SizedBox(
-            height: 60.h,
+            height: 55.h,
             child: Center(
               child: ListView.builder(
                 itemCount: 4,
-                shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: ((context, index) {
                   if (index == 0) {
                     return Container(
-                      height: 60.h,
+                      height: 55.h,
                       width: 60.w,
-                      padding: const EdgeInsets.all(8),
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(4.w),
+                      margin: EdgeInsets.symmetric(horizontal: 12.w),
                       child: GestureDetector(
                         onTap: () {
                           showBottomSheet(
@@ -235,9 +234,9 @@ class WorldTheme extends StatelessWidget {
                               child: BackdropFilter(
                                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                                 child: Padding(
-                                  padding: EdgeInsets.all(16.w),
+                                  padding: EdgeInsets.all(8.w),
                                   child: Container(
-                                    margin: EdgeInsets.only(top: 8.h),
+                                    margin: EdgeInsets.only(top: 16.h),
                                     height: 300.h,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -246,86 +245,88 @@ class WorldTheme extends StatelessWidget {
                                         bottomRight: Radius.circular(16.r),
                                       ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            'Counceling Sebaya',
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              'Counceling Sebaya',
+                                              style: TextStyle(
+                                                fontSize: 16.sp,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 24.h),
+                                          Text(
+                                            'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n' 
+                                            'Data pribadi Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                            'Pendamping Sebaya maupun pengguna lain',
                                             style: TextStyle(
-                                              fontSize: 16.sp,
+                                              fontSize: 14.sp,
                                               color: Colors.black,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 24.h),
-                                        Text(
-                                          'Anda akan membuka aplikasi Pendamping Sebaya\n'
-                                          'yang membuat Anda masuk ke mode anonim. Data pribadi\n'
-                                          'Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
-                                          'Pendamping Sebaya maupun pengguna lain',
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            color: Colors.black,
+                                          SizedBox(height: 32.h),
+                                          const Center(child: Text('Masuk sebagai :')),
+                                          SizedBox(height: 16.h),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                child: Text(
+                                                  'Councelee',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.sp,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: const Color.fromRGBO(253, 143, 1, 1),
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => const CounceleeSebayaScreen(),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              ElevatedButton(
+                                                child: Text(
+                                                  'Councelor',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.sp,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: const Color.fromRGBO(253, 143, 1, 1),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(16.r),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return const CouncelorSebayaScreen();
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        SizedBox(height: 32.h),
-                                        const Center(child: Text('Masuk sebagai :')),
-                                        SizedBox(height: 16.h),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(
-                                              child: Text(
-                                                'Councelee',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.sp,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                primary: const Color.fromRGBO(253, 143, 1, 1),
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => const CounceleeSebayaScreen(),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            SizedBox(width: 8.w),
-                                            ElevatedButton(
-                                              child: Text(
-                                                'Councelor',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.sp,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                primary: const Color.fromRGBO(253, 143, 1, 1),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(16.r),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return const CouncelorSebayaScreen();
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -347,8 +348,8 @@ class WorldTheme extends StatelessWidget {
                     return Container(
                       height: 60.h,
                       width: 60.w,
-                      padding: EdgeInsets.all(8.w),
-                      margin: EdgeInsets.symmetric(horizontal: 16.h),
+                      padding: EdgeInsets.all(4.w),
+                      margin: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Image.asset('assets/images/beasiswa.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
@@ -359,8 +360,8 @@ class WorldTheme extends StatelessWidget {
                     return Container(
                       height: 60.h,
                       width: 60.w,
-                      padding: EdgeInsets.all(8.w),
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(4.w),
+                      margin: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Image.asset('assets/images/konsultasi.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
@@ -371,8 +372,8 @@ class WorldTheme extends StatelessWidget {
                     return Container(
                       height: 60.h,
                       width: 60.w,
-                      padding: EdgeInsets.all(8.w),
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(4.w),
+                      margin: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
@@ -383,8 +384,8 @@ class WorldTheme extends StatelessWidget {
                     return Container(
                       height: 60.h,
                       width: 60.w,
-                      padding: EdgeInsets.all(8.w),
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(4.w),
+                      margin: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Image.asset('assets/images/achievement.png'),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(253, 143, 1, 1),
@@ -418,35 +419,46 @@ class WorldTheme extends StatelessWidget {
         SizedBox(height: 16.h),
         SizedBox(
           width: 1.sw,
-          height: 135.h,
+          height: 136.h,
           child: ListView.builder(
             itemCount: 4,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemBuilder: ((context, index) {
-              return Card(
-                child: SizedBox(
-                  width: 200.w,
-                  // margin: const EdgeInsets.symmetric(horizontal: 16),
-                  // padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(8.w),
-                        child: Row(
-                          children: [
-                            const Center(child: Text('{Anonymous Conselee}')),
-                            SizedBox(width: 4.w),
-                            Image.asset(
-                              'assets/images/redalert.png',
-                              width: 12.w,
-                            ),
-                          ],
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Card(
+                  child: SizedBox(
+                    width: 190.w,
+                    // margin: const EdgeInsets.symmetric(horizontal: 16),
+                    // padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.w),
+                          margin: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Row(
+                            children: [
+                              const Center(
+                                child: Text(
+                                  '{Anonymous Conselee}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 4.w),
+                              Image.asset(
+                                'assets/images/redalert.png',
+                                width: 12.w,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 16.h),
-                      buildTextChatConselee(context),
-                    ],
+                        SizedBox(height: 16.h),
+                        buildTextChatConselee(context),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -461,12 +473,12 @@ class WorldTheme extends StatelessWidget {
     return Column(
       children: [
         const Text('Owww ma gadd 🙂'),
-        SizedBox(height: 32.h),
+        SizedBox(height: 46.6.h),
         GestureDetector(
           onTap: () {},
           child: Container(
             width: 1.sw,
-            height: 34.h,
+            height: 30.h,
             decoration: const BoxDecoration(
               color: Color.fromRGBO(253, 143, 1, 1),
             ),

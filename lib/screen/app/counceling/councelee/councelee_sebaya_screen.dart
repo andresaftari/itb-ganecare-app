@@ -202,7 +202,7 @@ class CounceleeSebayaViews extends StatelessWidget {
 
   Widget buildCouncelee(BuildContext context) {
     return SizedBox(
-      width: 1.w,
+      width: 1.sw,
       height: 260.h,
       child: ListView.builder(
         itemCount: 2,
@@ -230,9 +230,12 @@ class CounceleeSebayaViews extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(8.w),
-                      child: Image.asset('assets/images/cat.png'),
+                      child: Image.asset(
+                        'assets/images/cat.png', 
+                        width: 46.w, 
+                        height: 46.h,
+                      ),
                     ),
-                    SizedBox(width: 4.w),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +288,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 64.w),
+                    SizedBox(width: 42.w),
                     Column(
                       children: [
                         Row(
