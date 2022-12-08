@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 
 class CouncelorListViewScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 80,
@@ -27,7 +29,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
             Navigator.pop(context);
           },
           child: const Icon(
-            Icons.close, 
+            Icons.close,
             color: Colors.white,
           ),
         ),
@@ -49,53 +51,72 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 62, left: 24),
+                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
                     ),
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Developer',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 4, left: 24),
+                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
                     ),
                   ],
                 ),
-                Container(
-                  width: 44,
-                  margin: const EdgeInsets.only(right: 24, top: 42),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 0.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8,
-                        offset: const Offset(3, 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: EdgeInsets.only(top: 42.h),
+                        child: Icon(
+                          Icons.notifications_rounded,
+                          color: Colors.white,
+                          size: 28.sp,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Image.asset('assets/images/cat.png'),
-                  ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      width: 44.w,
+                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5.w,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(3, 2),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset('assets/images/cat.png'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -108,7 +129,6 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
           children: [
             buildHeader(context),
             buildCouncelee(context),
-            const SizedBox(height: 16),
             buildPendingRequestList(context),
           ],
         ),
@@ -119,41 +139,43 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   Widget buildHeader(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 52,
+      height: 52.h,
       color: const Color.fromRGBO(253, 143, 1, 1),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Daftar Conselee',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            IconButton(onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16,
-                        ),
+            IconButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    elevation: 1,
+                    backgroundColor: Colors.orange,
+                    content: Text(
+                      'Sorting still in development',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16.sp,
                       ),
                     ),
-                  );
-                }, 
-                icon: const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 24,
                   ),
-                ),
+                );
+              },
+              icon: const Icon(
+                CupertinoIcons.sort_down,
+                size: 24,
+              ),
+            ),
           ],
         ),
       ),
@@ -163,54 +185,55 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   Widget buildCouncelee(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 260,
+      height: 250,
       child: ListView.builder(
-        itemCount: 4,
+        itemCount: 2,
         shrinkWrap: true,
         itemBuilder: ((context, index) {
           return GestureDetector(
             onTap: () {
               log('Logged');
 
-              Navigator.push(
-                context, MaterialPageRoute(
-                  builder: (context) {
-                    return const CouncelingChatScreen();
-                  },
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const CouncelingChatScreen();
+              //     },
+              //   ),
+              // );
+              Get.to(() => const CouncelingChatScreen());
             },
             child: Card(
               child: Container(
-                width: 1.sw,
-                height: 80.h,
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding: EdgeInsets.all(8.w),
+                width: MediaQuery.of(context).size.width,
+                height: 80,
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(8.w),
+                      padding: const EdgeInsets.all(8),
                       child: Image.asset('assets/images/cat.png'),
                     ),
-                    SizedBox(width: 4.w),
+                    const SizedBox(width: 4),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.w),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
                           child: Text(
-                            '#21345',
+                            '#21346',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 10.sp,
+                              fontSize: 10,
                             ),
                           ),
                         ),
-                        SizedBox(height: 8.h),
+                        const SizedBox(height: 8),
                         Row(
-                          children: [
-                            const Icon(
+                          children: const [
+                            Icon(
                               Icons.male,
                               color: Colors.blueAccent,
                             ),
@@ -222,14 +245,14 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 color: Colors.black,
-                                fontSize: 14.sp,
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 2.h),
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.h),
+                        const SizedBox(height: 2),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
                           child: Text(
                             'Saya seorang yang hiya hiya hiya',
                             overflow: TextOverflow.ellipsis,
@@ -239,36 +262,42 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                               overflow: TextOverflow.ellipsis,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
-                              fontSize: 10.sp,
+                              fontSize: 10,
                             ),
                           ),
                         ),
                       ],
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Row(
                           children: [
                             Text(
-                              '2018',
+                              '2017',
                               style: TextStyle(
                                 backgroundColor: Colors.grey.withOpacity(0.4),
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11.sp,
+                                fontSize: 11,
                               ),
                             ),
-                            SizedBox(width: 4.w),
+                            const SizedBox(width: 4),
                             Text(
-                              'Satu Jurusan',
+                              'Beda Jurusan',
                               style: TextStyle(
                                 backgroundColor: Colors.grey.withOpacity(0.4),
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 11.sp,
+                                fontSize: 11,
                               ),
                             ),
                           ],
+                        ),
+                        const Icon(
+                          Icons.arrow_right_alt_rounded,
+                          color: Colors.black,
+                          size: 28,
                         ),
                       ],
                     ),
@@ -285,38 +314,40 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   Widget buildPendingRequestList(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 260,
+      height: 260.h,
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.w),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Pending Request',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
+                    fontSize: 16,
                   ),
                 ),
-                IconButton(onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16.sp,
+                IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        elevation: 1,
+                        backgroundColor: Colors.orange,
+                        content: Text(
+                          'Sorting still in development',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }, 
-                icon: const Icon(
+                    );
+                  },
+                  icon: const Icon(
                     CupertinoIcons.sort_down,
                     size: 24,
                   ),
@@ -332,45 +363,46 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                 onTap: () {
                   log('Logged');
 
-                  Navigator.push(
-                    context, MaterialPageRoute(
-                      builder: (context) {
-                        return const CouncelingChatScreen();
-                      },
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const CouncelingChatScreen();
+                  //     },
+                  //   ),
+                  // );
+                  Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 80.h,
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
-                    padding: EdgeInsets.all(8.w),
+                    height: 80,
+                    padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(8.w),
+                          padding: const EdgeInsets.all(8),
                           child: Image.asset('assets/images/cat.png'),
                         ),
-                        SizedBox(width: 4.w),
+                        const SizedBox(width: 4),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.w),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
                               child: Text(
                                 '#21345',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8.h),
+                            const SizedBox(height: 8),
                             Row(
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   Icons.female,
                                   color: Colors.pinkAccent,
                                 ),
@@ -382,14 +414,14 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     color: Colors.black,
-                                    fontSize: 14.sp,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 2.h),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.w),
+                            const SizedBox(height: 2),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
                               child: Text(
                                 'Saya seorang yang hiya hiya hiya',
                                 overflow: TextOverflow.ellipsis,
@@ -399,7 +431,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                 ),
                               ),
                             ),
@@ -412,7 +444,8 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                 Text(
                                   '2017',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -422,7 +455,8 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                 Text(
                                   'Beda Jurusan',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -430,57 +464,6 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        elevation: 1,
-                                        backgroundColor: Colors.orange,
-                                        content: Text('This feature is still in development', 
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black, 
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.do_not_disturb_on_outlined,
-                                    color: Colors.redAccent,
-                                  ),
-                                  iconSize: 20,
-                                  splashRadius: 20,
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        elevation: 1,
-                                        backgroundColor: Colors.orange,
-                                        content: Text('This feature is still in development', 
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black, 
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.check_circle_outlined,
-                                    color: Colors.greenAccent,
-                                  ),
-                                  iconSize: 20,
-                                  splashRadius: 20,
-                                ),
-                              ],
-                            )
                           ],
                         ),
                       ],

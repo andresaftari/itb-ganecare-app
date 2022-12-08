@@ -14,7 +14,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 80.h,
+        toolbarHeight: 75.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -22,7 +22,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             Navigator.pop(context);
           },
           child: const Icon(
-            Icons.close, 
+            Icons.close,
             color: Colors.white,
           ),
         ),
@@ -39,9 +39,10 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(left: 46.w, top: 68.h),
+                margin: EdgeInsets.only(left: 46.w, top: 44.h),
                 child: Text(
                     'Profile',
                     style: TextStyle(
@@ -51,7 +52,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                     ),
                   ),
               ),
-              SizedBox(height: 16.h)
             ],
           ),
         ),
@@ -59,7 +59,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       body: Stack(
         children: [
           buildHeader(),
-          buildProfileFace(),
+          1.sh >= 800 ? buildProfileFace() : const Center(child: Text('Profile UI is in development'),)
         ],
       ),
       floatingActionButton: buildFloatingActionButton(),
@@ -83,7 +83,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         Container(
           decoration: const BoxDecoration(color: Color.fromRGBO(3, 160, 217, 1)),
           width: 1.sw,
-          height: 360.h,
+          height: 1.sh - 485.h,
         ),
       ],
     );
@@ -118,7 +118,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 24.h),
         Text(
           'Anonymous', 
           style: TextStyle(
@@ -176,18 +176,18 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   }
 
   Widget buildFloatingActionButton() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
+    return Container(
+      margin: EdgeInsets.only(bottom: 48.h),
       child: FloatingActionButton(
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               elevation: 1,
               backgroundColor: Colors.orange,
-              content: Text('This feature still in development', 
+              content: Text('This feature still in development',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Colors.black, 
+                  color: Colors.black,
                   fontSize: 16,
                 ),
               ),
@@ -196,7 +196,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         },
         backgroundColor: Colors.white,
         child: const Icon(
-          Icons.add_circle_rounded, 
+          Icons.add_circle_rounded,
           color: Color.fromRGBO(3, 160, 217, 1),
           size: 44,
         ),

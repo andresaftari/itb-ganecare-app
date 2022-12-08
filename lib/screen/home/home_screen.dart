@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
@@ -71,17 +73,18 @@ class WorldTheme extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: EdgeInsets.only(top: 62.h, left: 24.w),
+                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
                     ),
                     Container(
                       child: Text(
@@ -98,11 +101,12 @@ class WorldTheme extends StatelessWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {},
                       child: Container(
-                        margin: EdgeInsets.only(top: 58.h),
+                        margin: EdgeInsets.only(top: 42.h),
                         child: Icon(
                           Icons.notifications_rounded,
                           color: Colors.white,
@@ -113,7 +117,7 @@ class WorldTheme extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Container(
                       width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 58.h),
+                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -232,7 +236,10 @@ class WorldTheme extends StatelessWidget {
                             builder: (context) => GestureDetector(
                               onTap: () => Navigator.pop(context),
                               child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                filter: ImageFilter.blur(
+                                  sigmaX: 10,
+                                  sigmaY: 10,
+                                ),
                                 child: Padding(
                                   padding: EdgeInsets.all(8.w),
                                   child: Container(
@@ -246,9 +253,11 @@ class WorldTheme extends StatelessWidget {
                                       ),
                                     ),
                                     child: Container(
-                                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 16.w),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Center(
                                             child: Text(
@@ -262,7 +271,7 @@ class WorldTheme extends StatelessWidget {
                                           ),
                                           SizedBox(height: 24.h),
                                           Text(
-                                            'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n' 
+                                            'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n'
                                             'Data pribadi Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
                                             'Pendamping Sebaya maupun pengguna lain',
                                             style: TextStyle(
@@ -270,11 +279,13 @@ class WorldTheme extends StatelessWidget {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          SizedBox(height: 32.h),
-                                          const Center(child: Text('Masuk sebagai :')),
+                                          SizedBox(height: 8.h),
+                                          const Center(
+                                              child: Text('Masuk sebagai :')),
                                           SizedBox(height: 16.h),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               ElevatedButton(
                                                 child: Text(
@@ -285,14 +296,24 @@ class WorldTheme extends StatelessWidget {
                                                   ),
                                                 ),
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: const Color.fromRGBO(253, 143, 1, 1),
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                                                  primary: const Color.fromRGBO(
+                                                    253,
+                                                    143,
+                                                    1,
+                                                    1,
+                                                  ),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.r),
+                                                  ),
                                                 ),
                                                 onPressed: () {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (context) => const CounceleeSebayaScreen(),
+                                                      builder: (context) =>
+                                                          const CounceleeSebayaScreen(),
                                                     ),
                                                   );
                                                 },
@@ -307,9 +328,12 @@ class WorldTheme extends StatelessWidget {
                                                   ),
                                                 ),
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: const Color.fromRGBO(253, 143, 1, 1),
+                                                  primary: const Color.fromRGBO(
+                                                      253, 143, 1, 1),
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(16.r),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.r),
                                                   ),
                                                 ),
                                                 onPressed: () {
@@ -403,6 +427,8 @@ class WorldTheme extends StatelessWidget {
   }
 
   Widget buildConselee(BuildContext context) {
+    log(1.sw.toString());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -419,7 +445,7 @@ class WorldTheme extends StatelessWidget {
         SizedBox(height: 16.h),
         SizedBox(
           width: 1.sw,
-          height: 136.h,
+          height: 160.h,
           child: ListView.builder(
             itemCount: 4,
             shrinkWrap: true,
@@ -429,7 +455,7 @@ class WorldTheme extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Card(
                   child: SizedBox(
-                    width: 190.w,
+                    width: 1.sw <= 400 && 1.sw >= 300 ? 220.w : 195.w,
                     // margin: const EdgeInsets.symmetric(horizontal: 16),
                     // padding: const EdgeInsets.all(8),
                     child: Column(
@@ -438,6 +464,7 @@ class WorldTheme extends StatelessWidget {
                           padding: EdgeInsets.all(8.w),
                           margin: EdgeInsets.symmetric(horizontal: 8.w),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Center(
                                 child: Text(
@@ -455,7 +482,12 @@ class WorldTheme extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 16.h),
+
+                        if (1.sh > 100 && 1.sh < 800)
+                          SizedBox(height: 24.h)
+                        else if (1.sh >= 800)
+                          SizedBox(height: 33.h),
+
                         buildTextChatConselee(context),
                       ],
                     ),

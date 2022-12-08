@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
@@ -20,6 +21,7 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: pages.elementAt(currentIndex),
       bottomNavigationBar: bottomNavBar(),
     );
@@ -97,7 +99,7 @@ class CouncelorSebayaViews extends StatelessWidget {
             Navigator.pop(context);
           },
           child: const Icon(
-            Icons.close, 
+            Icons.close,
             color: Colors.white,
           ),
         ),
@@ -119,17 +121,18 @@ class CouncelorSebayaViews extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: EdgeInsets.only(top: 62.h, left: 24.w),
+                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
                     ),
                     Container(
                       child: Text(
@@ -144,28 +147,46 @@ class CouncelorSebayaViews extends StatelessWidget {
                     ),
                   ],
                 ),
-                Container(
-                  width: 44.w,
-                  margin: EdgeInsets.only(right: 24.w, top: 42.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 0.5.w,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8.r,
-                        offset: const Offset(3, 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: EdgeInsets.only(top: 42.h),
+                        child: Icon(
+                          Icons.notifications_rounded,
+                          color: Colors.white,
+                          size: 28.sp,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Image.asset('assets/images/cat.png'),
-                  ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      width: 44.w,
+                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5.w,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(3, 2),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset('assets/images/cat.png'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -176,7 +197,6 @@ class CouncelorSebayaViews extends StatelessWidget {
         children: [
           buildHeader(context),
           buildCouncelee(context),
-          SizedBox(height: 16.h),
           buildHistoryCounceling(context),
         ],
       ),
@@ -186,14 +206,14 @@ class CouncelorSebayaViews extends StatelessWidget {
   Widget buildHistoryCounceling(BuildContext context) {
     return SizedBox(
       width: 1.sw,
-      height: 260.h,
+      height: 250.h,
       child: Column(
         children: [
           Container(
             margin: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:  [
+              children: [
                 Text(
                   'History Counceling',
                   style: TextStyle(
@@ -202,22 +222,24 @@ class CouncelorSebayaViews extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                 ),
-                IconButton(onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16.sp,
+                IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        elevation: 1,
+                        backgroundColor: Colors.orange,
+                        content: Text(
+                          'Sorting still in development',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 16.sp,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }, 
-                icon: const Icon(
+                    );
+                  },
+                  icon: const Icon(
                     CupertinoIcons.sort_down,
                     size: 24,
                   ),
@@ -233,47 +255,48 @@ class CouncelorSebayaViews extends StatelessWidget {
                 onTap: () {
                   log('Logged');
 
-                  Navigator.push(
-                    context, MaterialPageRoute(
-                      builder: (context) {
-                        return const CouncelingChatScreen();
-                      },
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const CouncelingChatScreen();
+                  //     },
+                  //   ),
+                  // );
+                  Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
-                    width: 1.sw,
-                    height: 80.h,
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
-                    padding: EdgeInsets.all(8.w),
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(8.w),
+                          padding: const EdgeInsets.all(8),
                           child: Image.asset('assets/images/cat.png'),
                         ),
-                        SizedBox(width: 4.w),
+                        const SizedBox(width: 4),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.w),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
                               child: Text(
-                                '#21346',
+                                '#21345',
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                 ),
                               ),
                             ),
-                            SizedBox(height: 8.h),
+                            const SizedBox(height: 8),
                             Row(
-                              children: [
-                                const Icon(
-                                  Icons.male,
-                                  color: Colors.blueAccent,
+                              children: const [
+                                Icon(
+                                  Icons.female,
+                                  color: Colors.pinkAccent,
                                 ),
                                 Text(
                                   'Anonymous',
@@ -283,14 +306,14 @@ class CouncelorSebayaViews extends StatelessWidget {
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     color: Colors.black,
-                                    fontSize: 14.sp,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 2.h),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.w),
+                            const SizedBox(height: 2),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8.0),
                               child: Text(
                                 'Saya seorang yang hiya hiya hiya',
                                 overflow: TextOverflow.ellipsis,
@@ -300,7 +323,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                 ),
                               ),
                             ),
@@ -311,22 +334,24 @@ class CouncelorSebayaViews extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '2018',
+                                  '2017',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                    Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 11.sp,
+                                    fontSize: 11,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  'Satu Jurusan',
+                                  'Beda Jurusan',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                    Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 11.sp,
+                                    fontSize: 11,
                                   ),
                                 ),
                               ],
@@ -356,7 +381,7 @@ class CouncelorSebayaViews extends StatelessWidget {
           'Daftar Conselee Kamu',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -375,9 +400,10 @@ class CouncelorSebayaViews extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               log('Logged');
-                  
+
               Navigator.push(
-                context, MaterialPageRoute(
+                context,
+                MaterialPageRoute(
                   builder: (context) {
                     return const CouncelingChatScreen();
                   },
@@ -394,9 +420,12 @@ class CouncelorSebayaViews extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.all(8.w),
-                      child: Image.asset('assets/images/cat.png'),
+                      child: Image.asset(
+                        'assets/images/cat.png',
+                        width: 46.w,
+                        height: 46.h,
+                      ),
                     ),
-                    SizedBox(width: 4.w),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,7 +462,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                         ),
                         SizedBox(height: 2.h),
                         Padding(
-                          padding: EdgeInsets.only(left: 8.w),
+                          padding: EdgeInsets.only(left: 8.h),
                           child: Text(
                             'Last chat dummy',
                             overflow: TextOverflow.ellipsis,
@@ -449,7 +478,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 56.w),
+                    SizedBox(width: 24.w),
                     Column(
                       children: [
                         Row(

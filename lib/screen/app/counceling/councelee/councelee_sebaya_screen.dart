@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
@@ -21,6 +22,7 @@ class _CounceleeSebayaScreenState extends State<CounceleeSebayaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: pages.elementAt(currentIndex),
       bottomNavigationBar: bottomNavBar(),
     );
@@ -33,7 +35,7 @@ class _CounceleeSebayaScreenState extends State<CounceleeSebayaScreen> {
           colors: [
             Color.fromRGBO(0, 171, 233, 1),
             Color.fromRGBO(6, 146, 196, 1),
-          ], 
+          ],
           begin: Alignment.centerRight,
           end: Alignment.centerLeft,
         ),
@@ -117,17 +119,18 @@ class CounceleeSebayaViews extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: EdgeInsets.only(top: 62.h, left: 24.w),
+                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
                     ),
                     Container(
                       child: Text(
@@ -142,28 +145,46 @@ class CounceleeSebayaViews extends StatelessWidget {
                     ),
                   ],
                 ),
-                Container(
-                  width: 44.w,
-                  margin: EdgeInsets.only(right: 24.w, top: 42.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 0.5.w,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8.r,
-                        offset: const Offset(3, 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: EdgeInsets.only(top: 42.h),
+                        child: Icon(
+                          Icons.notifications_rounded,
+                          color: Colors.white,
+                          size: 28.sp,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Image.asset('assets/images/cat.png'),
-                  ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      width: 44.w,
+                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5.w,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(3, 2),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset('assets/images/cat.png'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -174,7 +195,6 @@ class CounceleeSebayaViews extends StatelessWidget {
         children: [
           buildHeader(context),
           buildCouncelee(context),
-          SizedBox(height: 16.h),
           buildHistoryCounceling(context),
         ],
       ),
@@ -192,7 +212,7 @@ class CounceleeSebayaViews extends StatelessWidget {
           'Daftar Pendamping Sebaya Kamu',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -213,7 +233,8 @@ class CounceleeSebayaViews extends StatelessWidget {
               log('Logged');
 
               Navigator.push(
-                context, MaterialPageRoute(
+                context,
+                MaterialPageRoute(
                   builder: (context) {
                     return const CouncelingChatScreen();
                   },
@@ -231,8 +252,8 @@ class CounceleeSebayaViews extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.all(8.w),
                       child: Image.asset(
-                        'assets/images/cat.png', 
-                        width: 46.w, 
+                        'assets/images/cat.png',
+                        width: 46.w,
                         height: 46.h,
                       ),
                     ),
@@ -288,7 +309,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 42.w),
+                    SizedBox(width: 24.w),
                     Column(
                       children: [
                         Row(
@@ -329,7 +350,7 @@ class CounceleeSebayaViews extends StatelessWidget {
   Widget buildHistoryCounceling(BuildContext context) {
     return SizedBox(
       width: 1.sw,
-      height: 260.h,
+      height: 250.h,
       child: Column(
         children: [
           Container(
@@ -345,22 +366,24 @@ class CounceleeSebayaViews extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                 ),
-                IconButton(onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16.sp,
+                IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        elevation: 1,
+                        backgroundColor: Colors.orange,
+                        content: Text(
+                          'Sorting still in development',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 16.sp,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }, 
-                icon: const Icon(
+                    );
+                  },
+                  icon: const Icon(
                     CupertinoIcons.sort_down,
                     size: 24,
                   ),
@@ -372,23 +395,24 @@ class CounceleeSebayaViews extends StatelessWidget {
             itemCount: 2,
             shrinkWrap: true,
             itemBuilder: ((context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    log('Logged');
+              return GestureDetector(
+                onTap: () {
+                  log('Logged');
 
-                    Navigator.push(
-                      context, MaterialPageRoute(
-                        builder: (context) {
-                          return const CouncelingChatScreen();
-                        },
-                      ),
-                    );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const CouncelingChatScreen();
+                  //     },
+                  //   ),
+                  // );
+                  Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 80,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
@@ -404,7 +428,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                             const Padding(
                               padding: EdgeInsets.only(left: 8.0),
                               child: Text(
-                                '#21346',
+                                '#21345',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 10,
@@ -415,8 +439,8 @@ class CounceleeSebayaViews extends StatelessWidget {
                             Row(
                               children: const [
                                 Icon(
-                                  Icons.male,
-                                  color: Colors.blueAccent,
+                                  Icons.female,
+                                  color: Colors.pinkAccent,
                                 ),
                                 Text(
                                   'Anonymous',
@@ -454,9 +478,10 @@ class CounceleeSebayaViews extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '2018',
+                                  '2017',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                    Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -464,9 +489,10 @@ class CounceleeSebayaViews extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  'Satu Jurusan',
+                                  'Beda Jurusan',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                    Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -488,4 +514,3 @@ class CounceleeSebayaViews extends StatelessWidget {
     );
   }
 }
-

@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late String? alertMessage;
   late LinkData? _forgotPasswordLink;
 
-  var email, password;
+  String username = '', password = '';
+  final AuthController _authController = Get.find();
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
 
   void _showDialogLogin() {
@@ -116,12 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelText: 'Username',
                           contentPadding: EdgeInsets.all(0.w),
                         ),
-                        validator: (emailValue) {
-                          if (emailValue!.isEmpty) {
+                        validator: (usernameValue) {
+                          if (usernameValue!.isEmpty) {
                             return 'Tolong input dengan benar';
                           }
-                          
-                          email = emailValue;
+
+                          username = usernameValue;
                           return null;
                         },
                       ),
@@ -171,15 +174,29 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return HomePage(
-                                  scaffoldKey: widget.scaffoldKey,
-                                  isDarkMode: false,
-                                );
-                              }),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              _authController
+                                  .postLogin(username, password)
+                                  .then((value) {
+                                if (value.statusLogin == 1) {
+                                  // Navigator.pushReplacement(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) {
+                                  //     return HomePage(
+                                  //       scaffoldKey: widget.scaffoldKey,
+                                  //       isDarkMode: false,
+                                  //     );
+                                  //   }),
+                                  // );
+                                  Get.off(
+                                    () => HomePage(
+                                      scaffoldKey: widget.scaffoldKey,
+                                      isDarkMode: false,
+                                    ),
+                                  );
+                                }
+                              });
+                            }
 
                             // if (_formKey.currentState.validate()) {
                             //   context.bloc<AuthenticationBloc>().add(

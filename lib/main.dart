@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
 void main() {
@@ -33,9 +35,12 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
 
+    Get.lazyPut(() => AuthController());
+
     return ScreenUtilInit(
       builder: (context) { 
-        return MaterialApp(
+        return GetMaterialApp(
+          // initialBinding: ,
           title: 'ITB Wellbeing apps',
           debugShowCheckedModeBanner: false,
           home: SplashScreen(scaffoldKey: scaffoldKey),

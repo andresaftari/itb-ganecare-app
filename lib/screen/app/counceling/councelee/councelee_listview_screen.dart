@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 
 class CounceleeListViewScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 80,
@@ -26,7 +29,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
             Navigator.pop(context);
           },
           child: const Icon(
-            Icons.close, 
+            Icons.close,
             color: Colors.white,
           ),
         ),
@@ -48,53 +51,72 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Selamat datang',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 62, left: 24),
+                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
                     ),
                     Container(
-                      child: const Text(
+                      child: Text(
                         'Developer',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: const EdgeInsets.only(top: 4, left: 24),
+                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
                     ),
                   ],
                 ),
-                Container(
-                  width: 44,
-                  margin: const EdgeInsets.only(right: 24, top: 42),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 0.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8,
-                        offset: const Offset(3, 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: EdgeInsets.only(top: 42.h),
+                        child: Icon(
+                          Icons.notifications_rounded,
+                          color: Colors.white,
+                          size: 28.sp,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Image.asset('assets/images/cat.png'),
-                  ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      width: 44.w,
+                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5.w,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(3, 2),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset('assets/images/cat.png'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -125,35 +147,36 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Pilih Pendamping Sebaya',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
             IconButton(
               onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16,
-                        ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    elevation: 1,
+                    backgroundColor: Colors.orange,
+                    content: Text(
+                      'Sorting still in development',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontSize: 16.sp,
                       ),
                     ),
-                  );
-                }, 
-                icon: const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 24,
                   ),
-                ),
+                );
+              },
+              icon: const Icon(
+                CupertinoIcons.sort_down,
+                size: 24,
+              ),
+            ),
           ],
         ),
       ),
@@ -165,26 +188,27 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
       width: MediaQuery.of(context).size.width,
       height: 260,
       child: ListView.builder(
-        itemCount: 4,
+        itemCount: 2,
         shrinkWrap: true,
         itemBuilder: ((context, index) {
           return GestureDetector(
             onTap: () {
               log('Logged');
 
-              Navigator.push(
-                context, MaterialPageRoute(
-                  builder: (context) {
-                    return const CouncelingChatScreen();
-                  },
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const CouncelingChatScreen();
+              //     },
+              //   ),
+              // );
+              Get.to(() => const CouncelingChatScreen());
             },
             child: Card(
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 80,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
@@ -291,7 +315,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
   Widget buildPendingRequestList(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 260,
+      height: 260.h,
       child: Column(
         children: [
           Container(
@@ -307,22 +331,24 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                     fontSize: 16,
                   ),
                 ),
-                IconButton(onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      elevation: 1,
-                      backgroundColor: Colors.orange,
-                      content: Text('Sorting still in development', 
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black, 
-                          fontSize: 16,
+                IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        elevation: 1,
+                        backgroundColor: Colors.orange,
+                        content: Text(
+                          'Sorting still in development',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }, 
-                icon: const Icon(
+                    );
+                  },
+                  icon: const Icon(
                     CupertinoIcons.sort_down,
                     size: 24,
                   ),
@@ -338,19 +364,20 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                 onTap: () {
                   log('Logged');
 
-                  Navigator.push(
-                    context, MaterialPageRoute(
-                      builder: (context) {
-                        return const CouncelingChatScreen();
-                      },
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const CouncelingChatScreen();
+                  //     },
+                  //   ),
+                  // );
+                  Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 80,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
@@ -418,7 +445,8 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                 Text(
                                   '2017',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -428,7 +456,8 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                 Text(
                                   'Beda Jurusan',
                                   style: TextStyle(
-                                    backgroundColor: Colors.grey.withOpacity(0.4),
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
