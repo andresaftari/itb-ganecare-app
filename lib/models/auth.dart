@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 Login loginFromJson(String str) => Login.fromJson(json.decode(str));
-
 String loginToJson(Login data) => json.encode(data.toJson());
 
 class Login {
@@ -36,12 +35,12 @@ class LoginData {
   });
 
   int statusCode;
-  DataData data;
+  ProfileData data;
   UserGroup userGroup;
 
   factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
     statusCode: json['status_code'],
-    data: DataData.fromJson(json['data']),
+    data: ProfileData.fromJson(json['data']),
     userGroup: UserGroup.fromJson(json['user_group']),
   );
 
@@ -52,8 +51,35 @@ class LoginData {
   };
 }
 
-class DataData {
-  DataData({
+Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+String profileToJson(Profile data) => json.encode(data.toJson());
+
+class Profile {
+  Profile({
+    required this.statusCode,
+    required this.data,
+    required this.userGroup,
+  });
+
+  int statusCode;
+  ProfileData data;
+  UserGroup userGroup;
+
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+    statusCode: json["status_code"],
+    data: ProfileData.fromJson(json["data"]),
+    userGroup: UserGroup.fromJson(json["user_group"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status_code": statusCode,
+    "data": data.toJson(),
+    "user_group": userGroup.toJson(),
+  };
+}
+
+class ProfileData {
+  ProfileData({
     required this.id,
     required this.nim,
     required this.name,
@@ -71,7 +97,7 @@ class DataData {
   String gender;
   String profile;
 
-  factory DataData.fromJson(Map<String, dynamic> json) => DataData(
+  factory ProfileData.fromJson(Map<String, dynamic> json) => ProfileData(
     id: json['id'],
     nim: json['nim'],
     name: json['name'],

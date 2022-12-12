@@ -2,8 +2,9 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
@@ -34,11 +35,12 @@ class HomePage extends StatelessWidget {
 
 class WorldTheme extends StatelessWidget {
   final GlobalKey localScaffoldKey;
+  final HomeController _homeController = Get.find();
 
   final bool isLoading = true;
   final bool isCouncelor = false;
 
-  const WorldTheme({
+  WorldTheme({
     Key? key,
     required GlobalKey scaffoldKey,
   })  : localScaffoldKey = scaffoldKey,
@@ -601,7 +603,11 @@ class WorldTheme extends StatelessWidget {
 
   Widget buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        _homeController.postQuickHelp('19101639').then((value) {
+          Get.snackbar('Quick Help', 'Posting!');
+        });
+      },
       backgroundColor: Colors.redAccent,
       child: const Icon(Icons.campaign_sharp),
     );

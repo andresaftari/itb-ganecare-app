@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String username = '', password = '';
   final AuthController _authController = Get.find();
+  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
 
   void _showDialogLogin() {
@@ -188,6 +191,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   //     );
                                   //   }),
                                   // );
+                                  _sharedPreference.putString(
+                                    'username',
+                                    username,
+                                  );
+
                                   Get.off(
                                     () => HomePage(
                                       scaffoldKey: widget.scaffoldKey,

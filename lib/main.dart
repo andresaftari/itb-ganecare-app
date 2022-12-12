@@ -4,11 +4,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
+import 'package:itb_ganecare/data/controllers/home_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  initializeDateFormatting();
+
+  await ProfileSharedPreference.init();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -36,6 +45,7 @@ class MyApp extends StatelessWidget {
     ]);
 
     Get.lazyPut(() => AuthController());
+    Get.lazyPut(() => HomeController());
 
     return ScreenUtilInit(
       builder: (context) { 
