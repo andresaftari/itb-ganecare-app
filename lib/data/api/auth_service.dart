@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
@@ -34,6 +36,7 @@ class AuthService extends AuthRepository {
       );
 
       if (response.statusCode == 200) {
+        log('${response.data}', name: 'post-login');
         return Right(loginFromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

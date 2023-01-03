@@ -20,7 +20,7 @@ class AuthController {
     final result = await _authService.postLogin(username, password, deviceId);
 
     result.fold((l) {
-      log('failed to login', name: 'login status');
+      log('failed to login ${l.message}', name: 'login status');
       hasError(true);
       errorValue('failed to login');
     }, (r) {

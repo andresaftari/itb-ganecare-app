@@ -1,10 +1,9 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/home_repo.dart';
-import 'package:itb_ganecare/models/auth.dart';
-import 'package:itb_ganecare/models/beasiswa.dart';
-import 'package:itb_ganecare/models/quick_help.dart';
 import 'package:itb_ganecare/data/endpoint.dart';
 
 class HomeService extends HomeRepo {
@@ -13,19 +12,22 @@ class HomeService extends HomeRepo {
   HomeService(this._dio);
 
   @override
-  Future<Either<Failed, QuickHelp>> postQuickHelp(String idUser) async {
+  Future<Either<Failed, Map<String, dynamic>>> postQuickHelp(String idUser) async {
     Failed failure;
+
+    FormData formData = FormData.fromMap(
+      {'idUser': idUser},
+    );
 
     try {
       final response = await _dio.postUri(
         Uri.parse(quickHelpUrl_),
-        data: {
-          'idUser': idUser,
-        },
+        data: formData,
       );
 
       if (response.statusCode == 200) {
-        return Right(quickHelpFromJson(response.data));
+        log('${response.data}', name: 'post-quickhelp');
+        return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
@@ -36,7 +38,7 @@ class HomeService extends HomeRepo {
   }
 
   @override
-  Future<Either<Failed, ProfileId>> postUserID(String nim) async {
+  Future<Either<Failed, Map<String, dynamic>>> postUserID(String nim) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(
@@ -50,7 +52,8 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        return Right(profileIdFromJson(response.data));
+        log('${(response.data)}', name: 'post-userid');
+        return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
@@ -61,7 +64,7 @@ class HomeService extends HomeRepo {
   }
 
   @override
-  Future<Either<Failed, Beasiswa>> postBeasiswaList(String userid) async {
+  Future<Either<Failed, Map<String, dynamic>>> postBeasiswaList(String userid) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(
@@ -75,7 +78,7 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        return Right(beasiswaFromJson(response.data));
+        return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }

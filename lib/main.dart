@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
+import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
 
     Get.lazyPut(() => AuthController());
     Get.lazyPut(() => HomeController());
+    Get.lazyPut(() => ProfileController());
 
     return ScreenUtilInit(
       builder: (context) { 

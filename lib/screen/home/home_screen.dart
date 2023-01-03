@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
+import 'package:itb_ganecare/data/controllers/profile_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
@@ -36,6 +38,9 @@ class HomePage extends StatelessWidget {
 class WorldTheme extends StatelessWidget {
   final GlobalKey localScaffoldKey;
   final HomeController _homeController = Get.find();
+  final ProfileController _profileController = Get.find();
+
+  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
 
   final bool isLoading = true;
   final bool isCouncelor = false;
@@ -484,12 +489,10 @@ class WorldTheme extends StatelessWidget {
                             ],
                           ),
                         ),
-
                         if (1.sh > 100 && 1.sh < 800)
                           SizedBox(height: 24.h)
                         else if (1.sh >= 800)
                           SizedBox(height: 33.h),
-
                         buildTextChatConselee(context),
                       ],
                     ),
@@ -529,84 +532,119 @@ class WorldTheme extends StatelessWidget {
   }
 
   Widget buildScholarshipNews(BuildContext context) {
+    String nim = _sharedPreference.getString('nim').toString();
+    // String userid = '';
 
+    // _homeController.postGetUserid(nim).then((value) {
+    //   userid = value['user_id'];
+    // });
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          child: const Text(
-            'Beasiswa Terbaru',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+    return FutureBuilder<dynamic>(
+      future: _homeController.postGetUserid(nim).then(
+            (value) => _homeController.postBeasiswa(value['user_id']),
           ),
-          margin: EdgeInsets.only(left: 16.w),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: 1.sw,
-          height: 400.h,
-          child: ListView.builder(
-            itemCount: 3,
-            shrinkWrap: true,
-            itemBuilder: ((context, index) {
-              return Card(
-                child: Container(
-                  width: 1.sw,
-                  height: 100.h,
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
-                  padding: EdgeInsets.all(8.w),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/emotes/a1.png',
-                        width: 32.w,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator.adaptive();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List list = snapshot.data['content'];
+
+            if (list.isNotEmpty) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: const Text(
+                      'Beasiswa Terbaru',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
                       ),
-                      SizedBox(width: 8.w),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '{Nama Beasiswa}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Flexible(
-                            child: Text(
-                              'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
+                    margin: EdgeInsets.only(left: 16.w),
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 1.sw,
+                    height: 400.h,
+                    child: ListView.builder(
+                      itemCount: 3,
+                      shrinkWrap: true,
+                      itemBuilder: ((context, index) {
+                        return Card(
+                          child: Container(
+                            width: 1.sw,
+                            height: 100.h,
+                            margin: EdgeInsets.symmetric(horizontal: 16.w),
+                            padding: EdgeInsets.all(8.w),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/emotes/a1.png',
+                                  width: 32.w,
+                                ),
+                                SizedBox(width: 8.w),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '{Nama Beasiswa}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Flexible(
+                                      child: Text(
+                                        'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
               );
-            }),
-          ),
-        ),
-      ],
+            } else {
+              return Container();
+            }
+          } else {
+            return Container();
+          }
+        } else {
+          return Container();
+        }
+      },
     );
   }
 
   Widget buildFloatingActionButton() {
+    String nim = _sharedPreference.getString('nim').toString();
+    String id = '';
+
+    _profileController
+        .getProfile(nim)
+        .then((value) => id = value['data']['id']);
+
     return FloatingActionButton(
       onPressed: () {
-        _homeController.postQuickHelp('19101639').then((value) {
+        _homeController.postQuickHelp(id).then((value) {
           Get.snackbar('Quick Help', 'Posting!');
         });
       },

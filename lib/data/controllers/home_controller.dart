@@ -16,7 +16,7 @@ class HomeController {
     final result = await _homeService.postQuickHelp(idUser);
 
     result.fold((l) {
-      log('failed to send quickhelp', name: 'send quickhelp');
+      log('failed to send quickhelp ${l.message}', name: 'send quickhelp');
       hasError(true);
       errorValue('failed to send quickhelp');
     }, (r) {
@@ -33,7 +33,7 @@ class HomeController {
     final result = await _homeService.postUserID(nim);
 
     result.fold((l) {
-      log('failed to get userid', name: 'post-getuserid');
+      log('failed to get userid ${l.message}', name: 'post-getuserid');
       hasError(true);
       errorValue('failed to get userid');
     }, (r) {
@@ -50,7 +50,7 @@ class HomeController {
     final result = await _homeService.postBeasiswaList(userid);
 
     result.fold((l) {
-      log('failed to get beasiswa', name: 'post-listbeasiswa');
+      log('failed to get beasiswa ${l.message}', name: 'post-listbeasiswa');
       hasError(true);
       errorValue('failed to get beasiswa');
     }, (r) {

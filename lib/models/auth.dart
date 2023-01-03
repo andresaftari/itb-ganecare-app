@@ -196,7 +196,6 @@ class LoginData {
 }
 
 Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
-
 String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
@@ -294,7 +293,7 @@ class ProfileId {
   });
 
   int statusCode;
-  String userId;
+  int userId;
 
   factory ProfileId.fromJson(Map<String, dynamic> json) => ProfileId(
         statusCode: json['statusCode'],

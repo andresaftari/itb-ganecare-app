@@ -186,15 +186,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                                   .then((value) {
                                 if (value.statusCode == 200) {
-                                  // Navigator.pushReplacement(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) {
-                                  //     return HomePage(
-                                  //       scaffoldKey: widget.scaffoldKey,
-                                  //       isDarkMode: false,
-                                  //     );
-                                  //   }),
-                                  // );
                                   _sharedPreference.putString(
                                     'username',
                                     username,
@@ -206,11 +197,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
 
                                   Get.off(
-                                    () => HomePage(
+                                        () => HomePage(
                                       scaffoldKey: widget.scaffoldKey,
                                       isDarkMode: false,
                                     ),
                                   );
+                                  // Navigator.pushReplacement(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) {
+                                  //     return HomePage(
+                                  //       scaffoldKey: widget.scaffoldKey,
+                                  //       isDarkMode: false,
+                                  //     );
+                                  //   }),
+                                  // );
                                 }
                               });
                             }

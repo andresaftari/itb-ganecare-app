@@ -16,7 +16,7 @@ class ProfileController {
     final result = await _profileService.getProfile(nim);
 
     result.fold((l) {
-      log('failed to get profile', name: 'get-profile');
+      log('failed to get profile ${l.message}', name: 'get-profile');
       hasError(true);
       errorValue('failed to get profile');
     }, (r) {
