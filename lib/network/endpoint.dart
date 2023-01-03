@@ -11,3 +11,6 @@ const String quickHelpUrl_ = '/api/v1/dashboard/quick_help';
 
 // GET USERID
 const String userIdUrl_ = '/api/v1/beasiswa/getuserid';
+
+// POST BEASISWA
+const String beasiswaTersediaUrl_ = '/api/beasiswa/beasiswa_tersedia';

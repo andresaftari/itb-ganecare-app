@@ -1,14 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/profile_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 
 class CouncelingProfileScreen extends StatefulWidget {
-  const CouncelingProfileScreen({ Key? key }) : super(key: key);
+  const CouncelingProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<CouncelingProfileScreen> createState() => _CouncelingProfileScreenState();
+  State<CouncelingProfileScreen> createState() =>
+      _CouncelingProfileScreenState();
 }
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
+  final ProfileController _authController = Get.find();
+  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,13 +53,13 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
               Container(
                 margin: EdgeInsets.only(left: 46.w, top: 44.h),
                 child: Text(
-                    'Profile',
-                    style: TextStyle(
-                      color: const Color.fromRGBO(255, 255, 255, 1),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  'Profile',
+                  style: TextStyle(
+                    color: const Color.fromRGBO(255, 255, 255, 1),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
               ),
             ],
           ),
@@ -59,10 +68,27 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       body: Stack(
         children: [
           buildHeader(),
-          1.sh >= 800 ? buildProfileFace() : const Center(child: Text('Profile UI is in development'),)
+          1.sh >= 800
+              ? buildProfileFace()
+              : const Center(
+                  child: Text('Profile UI is in development'),
+                )
         ],
       ),
       floatingActionButton: buildFloatingActionButton(),
+    );
+  }
+
+  void loadData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    // String username = _sharedPreference.getString('username').toString();
+
+    Future(
+      () => _authController.getProfile(nim).then(
+            (value) => log(
+              value.toString(),
+            ),
+          ),
     );
   }
 
@@ -70,18 +96,21 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Column(
       children: [
         Container(
-          decoration: const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
+          decoration:
+              const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
           width: 1.sw,
           height: 110.h,
         ),
         SizedBox(height: 165.h),
         Container(
-          decoration: const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
+          decoration:
+              const BoxDecoration(color: Color.fromRGBO(255, 195, 70, 1)),
           width: 1.sw,
           height: 40.h,
         ),
         Container(
-          decoration: const BoxDecoration(color: Color.fromRGBO(3, 160, 217, 1)),
+          decoration:
+              const BoxDecoration(color: Color.fromRGBO(3, 160, 217, 1)),
           width: 1.sw,
           height: 1.sh - 485.h,
         ),
@@ -120,9 +149,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         ),
         SizedBox(height: 24.h),
         Text(
-          'Anonymous', 
+          'Anonymous',
           style: TextStyle(
-            fontSize: 20.sp, 
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -157,17 +186,17 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         ),
         SizedBox(height: 8.h),
         Text(
-          'BIO Example Text...', 
+          'BIO Example Text...',
           style: TextStyle(
-            fontSize: 14.sp, 
+            fontSize: 14.sp,
             fontWeight: FontWeight.w300,
           ),
         ),
         SizedBox(height: 44.h),
         Text(
-          'Jan 2022', 
+          'Jan 2022',
           style: TextStyle(
-            fontSize: 14.sp, 
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -184,7 +213,8 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             const SnackBar(
               elevation: 1,
               backgroundColor: Colors.orange,
-              content: Text('This feature still in development',
+              content: Text(
+                'This feature still in development',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: Colors.black,

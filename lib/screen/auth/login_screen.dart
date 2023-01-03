@@ -196,6 +196,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     username,
                                   );
 
+                                  _sharedPreference.putString(
+                                    'nimid',
+                                    value.data.data.data.nim,
+                                  );
+
                                   Get.off(
                                     () => HomePage(
                                       scaffoldKey: widget.scaffoldKey,

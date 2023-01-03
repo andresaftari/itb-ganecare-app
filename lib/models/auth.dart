@@ -137,3 +137,28 @@ class UserGroup {
     'conselor': conselor,
   };
 }
+
+ProfileId profileIdFromJson(String str) => ProfileId.fromJson(json.decode(str));
+
+String profileIdToJson(ProfileId data) => json.encode(data.toJson());
+
+class ProfileId {
+  ProfileId({
+    required this.statusCode,
+    required this.userId,
+  });
+
+  int statusCode;
+  String userId;
+
+  factory ProfileId.fromJson(Map<String, dynamic> json) => ProfileId(
+    statusCode: json["statusCode"],
+    userId: json["user_id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "statusCode": statusCode,
+    "user_id": userId,
+  };
+}
+

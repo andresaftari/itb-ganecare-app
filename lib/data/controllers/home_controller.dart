@@ -26,4 +26,38 @@ class HomeController {
 
     return res;
   }
+  
+  Future postGetUserid(String nim) async {
+    var res;
+    
+    final result = await _homeService.postUserID(nim);
+
+    result.fold((l) {
+      log('failed to get userid', name: 'post-getuserid');
+      hasError(true);
+      errorValue('failed to get userid');
+    }, (r) {
+      res = r;
+      return r;
+    });
+
+    return res;
+  }
+
+  Future postBeasiswa(String userid) async {
+    var res;
+
+    final result = await _homeService.postBeasiswaList(userid);
+
+    result.fold((l) {
+      log('failed to get beasiswa', name: 'post-listbeasiswa');
+      hasError(true);
+      errorValue('failed to get beasiswa');
+    }, (r) {
+      res = r;
+      return r;
+    });
+
+    return res;
+  }
 }
