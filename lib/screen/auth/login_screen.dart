@@ -179,9 +179,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _authController
-                                  .postLogin(username, password)
+                                  .postLogin(
+                                username,
+                                password,
+                                widget.deviceId,
+                              )
                                   .then((value) {
-                                if (value.statusLogin == 1) {
+                                if (value.statusCode == 200) {
                                   // Navigator.pushReplacement(
                                   //   context,
                                   //   MaterialPageRoute(builder: (context) {
@@ -197,8 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
 
                                   _sharedPreference.putString(
-                                    'nimid',
-                                    value.data.data.data.nim,
+                                    'nim',
+                                    value.data.nim,
                                   );
 
                                   Get.off(

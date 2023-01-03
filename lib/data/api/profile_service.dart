@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/profile_repo.dart';
 import 'package:itb_ganecare/models/auth.dart';
-import 'package:itb_ganecare/network/endpoint.dart';
+import 'package:itb_ganecare/data/endpoint.dart';
 
 class ProfileService extends ProfileRepository {
   final Dio _dio;

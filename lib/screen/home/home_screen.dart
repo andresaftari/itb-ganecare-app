@@ -529,6 +529,8 @@ class WorldTheme extends StatelessWidget {
   }
 
   Widget buildScholarshipNews(BuildContext context) {
+
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

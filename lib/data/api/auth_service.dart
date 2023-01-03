@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/auth_repo.dart';
 import 'package:itb_ganecare/models/auth.dart';
-import 'package:itb_ganecare/network/endpoint.dart';
+import 'package:itb_ganecare/data/endpoint.dart';
 
 class AuthService extends AuthRepository {
   final Dio _dio;
@@ -11,14 +11,19 @@ class AuthService extends AuthRepository {
   AuthService(this._dio);
 
   @override
-  Future<Either<Failed, Login>> postLogin(String username, String password) async {
+  Future<Either<Failed, Login>> postLogin(
+    String username,
+    String password,
+    String deviceId,
+  ) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(
       {
         'username': username,
         'password': password,
-        'token': token_
+        'device_id': deviceId,
+        'token': token_,
       },
     );
 

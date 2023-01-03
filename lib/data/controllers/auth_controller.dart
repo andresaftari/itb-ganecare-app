@@ -10,10 +10,14 @@ class AuthController {
   RxBool hasError = false.obs;
   RxString errorValue = ''.obs;
 
-  Future postLogin(String username, String password) async {
+  Future postLogin(
+    String username,
+    String password,
+    String deviceId,
+  ) async {
     var res;
 
-    final result = await _authService.postLogin(username, password);
+    final result = await _authService.postLogin(username, password, deviceId);
 
     result.fold((l) {
       log('failed to login', name: 'login status');

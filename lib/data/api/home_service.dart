@@ -5,7 +5,7 @@ import 'package:itb_ganecare/data/repo/home_repo.dart';
 import 'package:itb_ganecare/models/auth.dart';
 import 'package:itb_ganecare/models/beasiswa.dart';
 import 'package:itb_ganecare/models/quick_help.dart';
-import 'package:itb_ganecare/network/endpoint.dart';
+import 'package:itb_ganecare/data/endpoint.dart';
 
 class HomeService extends HomeRepo {
   final Dio _dio;
