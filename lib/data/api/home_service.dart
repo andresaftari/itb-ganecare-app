@@ -21,7 +21,7 @@ class HomeService extends HomeRepo {
 
     try {
       final response = await _dio.postUri(
-        Uri.parse(quickHelpUrl_),
+        Uri.http(kemahasiswaanBaseUrl_, quickHelpUrl_),
         data: formData,
       );
 
@@ -47,7 +47,7 @@ class HomeService extends HomeRepo {
 
     try {
       final response = await _dio.postUri(
-        Uri.parse(userIdUrl_),
+        Uri.https(baseUrl_, userIdUrl_),
         data: formData,
       );
 
@@ -73,7 +73,7 @@ class HomeService extends HomeRepo {
 
     try {
       final response = await _dio.postUri(
-        Uri.parse(beasiswaTersediaUrl_),
+        Uri.https(baseUrl_, beasiswaTersediaUrl_),
         data: formData,
       );
 

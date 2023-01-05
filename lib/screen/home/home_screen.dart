@@ -37,9 +37,9 @@ class HomePage extends StatelessWidget {
 
 class WorldTheme extends StatelessWidget {
   final GlobalKey localScaffoldKey;
+
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
 
   final bool isLoading = true;
@@ -533,11 +533,6 @@ class WorldTheme extends StatelessWidget {
 
   Widget buildScholarshipNews(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
-    // String userid = '';
-
-    // _homeController.postGetUserid(nim).then((value) {
-    //   userid = value['user_id'];
-    // });
 
     return FutureBuilder<dynamic>(
       future: _homeController.postGetUserid(nim).then(

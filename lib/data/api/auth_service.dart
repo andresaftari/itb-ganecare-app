@@ -31,7 +31,7 @@ class AuthService extends AuthRepository {
 
     try {
       final response = await _dio.postUri(
-        Uri.parse(loginUrl_),
+        Uri.http(kemahasiswaanBaseUrl_, loginUrl_),
         data: formData,
       );
 
