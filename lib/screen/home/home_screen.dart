@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -54,6 +55,11 @@ class WorldTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
+
+    int page = 1;
+    _homeController.getQuickHelp(page.toString()).then((value) {
+      log(value.toString(), name: 'get-aja');
+    });
 
     return MaterialApp(
       theme: themeNotifier.getTheme(),
@@ -288,7 +294,8 @@ class WorldTheme extends StatelessWidget {
                                           ),
                                           SizedBox(height: 8.h),
                                           const Center(
-                                              child: Text('Masuk sebagai :')),
+                                            child: Text('Masuk sebagai :'),
+                                          ),
                                           SizedBox(height: 16.h),
                                           Row(
                                             mainAxisAlignment:
@@ -312,7 +319,8 @@ class WorldTheme extends StatelessWidget {
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            16.r),
+                                                      16.r,
+                                                    ),
                                                   ),
                                                 ),
                                                 onPressed: () {

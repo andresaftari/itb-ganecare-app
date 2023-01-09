@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (Platform.isAndroid) {
       deviceId = _deviceData['id'];
-      log(_deviceData['id'], name: 'id');
+      log(_deviceData['id'].toString(), name: 'id');
     } else if (Platform.isIOS) {
       deviceId = _deviceData['identifierForVendor'];
       log(_deviceData['identifierForVendor'], name: 'id');

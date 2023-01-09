@@ -84,7 +84,7 @@ class MetaHelp {
   Map<String, dynamic> toJson() => {
         'statusCode': statusCode,
         'meta-data': metaData.toJson(),
-        'data': List<dynamic>.from(data.map((x) => x.toJson())),
+        'data': List<MetaDatum>.from(data.map((x) => x.toJson())),
       };
 }
 

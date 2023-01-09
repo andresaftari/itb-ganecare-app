@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/home_repo.dart';
 import 'package:itb_ganecare/data/endpoint.dart';
+import 'package:itb_ganecare/models/quick_help.dart';
 
 class HomeService extends HomeRepo {
   final Dio _dio;
@@ -12,7 +13,33 @@ class HomeService extends HomeRepo {
   HomeService(this._dio);
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> postQuickHelp(String idUser) async {
+  Future<Either<Failed, MetaHelp>> getQuickHelp(String page) async {
+    Failed failure;
+
+    try {
+      final response = await _dio.getUri(
+        Uri.http(kemahasiswaanBaseUrl_, getQuickHelpUrl_, {
+          'limit': '5',
+          'page': page,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        log('${response.data}', name: 'get-quickhelp');
+        return Right(metaHelpFromJson(response.data));
+      } else {
+        throw '${response.statusCode}: ${response.statusMessage}';
+      }
+    } on DioError catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failed, Map<String, dynamic>>> postQuickHelp(
+    String idUser,
+  ) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(
@@ -64,7 +91,8 @@ class HomeService extends HomeRepo {
   }
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> postBeasiswaList(String userid) async {
+  Future<Either<Failed, Map<String, dynamic>>> postBeasiswaList(
+      String userid) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(

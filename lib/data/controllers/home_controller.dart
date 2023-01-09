@@ -10,13 +10,30 @@ class HomeController {
   RxBool hasError = false.obs;
   RxString errorValue = ''.obs;
 
+  Future getQuickHelp(String page) async {
+    var res;
+
+    final result = await _homeService.getQuickHelp(page);
+
+    result.fold((l) {
+      log('failed to get quickhelp ${l.message}', name: 'get-quickhelp');
+      hasError(true);
+      errorValue('failed to get quickhelp');
+    }, (r) {
+        res = r;
+        return r;
+    });
+
+    return res;
+  }
+
   Future postQuickHelp(String idUser) async {
     var res;
 
     final result = await _homeService.postQuickHelp(idUser);
 
     result.fold((l) {
-      log('failed to send quickhelp ${l.message}', name: 'send quickhelp');
+      log('failed to send quickhelp ${l.message}', name: 'post-quickhelp');
       hasError(true);
       errorValue('failed to send quickhelp');
     }, (r) {

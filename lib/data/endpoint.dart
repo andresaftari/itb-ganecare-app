@@ -8,6 +8,7 @@ const String loginUrl_ = '/api/v1/sso';
 // GET DATA PROFILE
 const String profileUrl_ = '/api/v1/dashboard/myprofile';
 const String quickHelpUrl_ = '/api/v1/dashboard/quick_help';
+const String getQuickHelpUrl_ = '/api/v1/dashboard/get_quick_help';
 
 // GET USERID
 const String userIdUrl_ = '/api/beasiswa/getuserid';
