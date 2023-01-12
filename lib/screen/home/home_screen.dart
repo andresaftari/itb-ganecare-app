@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/counselor_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -40,6 +41,8 @@ class WorldTheme extends StatelessWidget {
 
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
+  final CouncelorController _councelorController = Get.find();
+
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
 
   final bool isLoading = true;
@@ -59,6 +62,16 @@ class WorldTheme extends StatelessWidget {
     _homeController.getQuickHelp(page.toString()).then((value) {
       log(value.toString(), name: 'get-aja');
     });
+
+    _councelorController
+        .postPeerCouncelor(
+      _sharedPreference.getInt('angkatan').toString(),
+      _sharedPreference.getString('major').toString(),
+      _sharedPreference.getString('gender').toString(),
+    )
+        .then(((value) {
+      log(value.toString(), name: 'post-aja');
+    }));
 
     return MaterialApp(
       theme: themeNotifier.getTheme(),
@@ -477,23 +490,11 @@ class WorldTheme extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.all(8.w),
                           margin: EdgeInsets.symmetric(horizontal: 8.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Center(
-                                child: Text(
-                                  '{Anonymous Conselee}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Image.asset(
-                                'assets/images/redalert.png',
-                                width: 12.w,
-                              ),
-                            ],
+                          child: const Center(
+                            child: Text(
+                              '{Anonymous Conselee}',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         if (1.sh > 100 && 1.sh < 800)

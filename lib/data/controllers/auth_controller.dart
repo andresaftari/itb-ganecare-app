@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/auth_service.dart';
 
-class AuthController {
+class AuthController extends GetxController {
   final AuthService _authService = AuthService(Dio());
 
   RxBool hasError = false.obs;

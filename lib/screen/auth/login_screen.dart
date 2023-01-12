@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late LinkData? _forgotPasswordLink;
 
   String username = '', password = '';
+
   final AuthController _authController = Get.find();
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
 
@@ -196,8 +197,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                     value.data.nim,
                                   );
 
+                                  _sharedPreference.putString(
+                                    'token_user',
+                                    value.auth.tokenMahasiswa.token,
+                                  );
+
+                                  _sharedPreference.putInt(
+                                    'angkatan',
+                                    value.auth.user.angkatan,
+                                  );
+
+                                  _sharedPreference.putString(
+                                    'major',
+                                    value.auth.user.jurusan,
+                                  );
+
+                                  _sharedPreference.putString(
+                                    'gender',
+                                    value.auth.user.gender,
+                                  );
+
                                   Get.off(
-                                        () => HomePage(
+                                    () => HomePage(
                                       scaffoldKey: widget.scaffoldKey,
                                       isDarkMode: false,
                                     ),

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/home_service.dart';
 
-class HomeController {
+class HomeController extends GetxController {
   final HomeService _homeService = HomeService(Dio());
 
   RxBool hasError = false.obs;
