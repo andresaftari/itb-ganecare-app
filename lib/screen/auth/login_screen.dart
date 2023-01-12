@@ -217,6 +217,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                     value.auth.user.gender,
                                   );
 
+                                  if (value.userGroup.conselee.toString() != '') {
+                                    _sharedPreference.putInt(
+                                      'councelee_id',
+                                      value.userGroup.conselee,
+                                    );
+                                  }
+
+                                  if (value.userGroup.conselor.toString() != '') {
+                                    _sharedPreference.putInt(
+                                      'councelor_id',
+                                      value.userGroup.conselor,
+                                    );
+                                  }
+
                                   Get.off(
                                     () => HomePage(
                                       scaffoldKey: widget.scaffoldKey,

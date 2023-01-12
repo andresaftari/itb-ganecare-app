@@ -14,8 +14,8 @@ class CouncelorService extends CouncelorRepo {
 
   @override
   Future<Either<Failed, PeerCouncelor?>> postPeerCouncelor(
-    String year, 
-    String major, 
+    String year,
+    String major,
     String gender,
   ) async {
     Failed failure;
