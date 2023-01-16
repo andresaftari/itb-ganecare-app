@@ -66,9 +66,7 @@ class TokenMahasiswa {
         token: json['token'],
       );
 
-  Map<String, dynamic> toJson() => {
-        'token': token,
-      };
+  Map<String, dynamic> toJson() => {'token': token};
 }
 
 class User {
@@ -272,8 +270,8 @@ class UserGroup {
   String conselor;
 
   factory UserGroup.fromJson(Map<String, dynamic> json) => UserGroup(
-        conselee: json['conselee'],
-        conselor: json['conselor'],
+        conselee: json['conselee'].toString(),
+        conselor: json['conselor'].toString(),
       );
 
   Map<String, dynamic> toJson() => {

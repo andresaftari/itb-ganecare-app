@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:itb_ganecare/data/endpoint.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/profile_repo.dart';
-import 'package:itb_ganecare/data/endpoint.dart';
 
 class ProfileService extends ProfileRepository {
   final Dio _dio;
@@ -16,7 +16,9 @@ class ProfileService extends ProfileRepository {
     Failed failure;
 
     try {
-      final response = await _dio.getUri(Uri.parse('$profileUrl_?nim=$nim'));
+      final response = await _dio.getUri(
+        Uri.http(kemahasiswaanBaseUrl_, profileUrl_, {'nim': nim}),
+      );
 
       if (response.statusCode == 200) {
         log('${response.data}', name: 'get-profile');
