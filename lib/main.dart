@@ -41,16 +41,14 @@ class MyApp extends StatelessWidget {
       context,
     );
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     Get.lazyPut(() => AuthController());
     Get.lazyPut(() => HomeController());
     Get.lazyPut(() => ProfileController());
 
     return ScreenUtilInit(
-      builder: (context) { 
+      builder: (context) {
         return GetMaterialApp(
           // initialBinding: ,
           title: 'ITB Wellbeing apps',
