@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
-import 'package:itb_ganecare/data/controllers/counselor_controller.dart';
+import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -19,13 +19,13 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) => runApp(MyApp()));
+  ]).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,30 +46,16 @@ class MyApp extends StatelessWidget {
 
     Get.lazyPut(() => AuthController());
     Get.lazyPut(() => HomeController());
-    Get.lazyPut(() => CouncelorController());
+    Get.lazyPut(() => CounselingController());
     Get.lazyPut(() => ProfileController());
 
     return ScreenUtilInit(
       builder: (context) {
-        return GetMaterialApp(
+        return const GetMaterialApp(
           // initialBinding: ,
           title: 'ITB Wellbeing apps',
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(scaffoldKey: scaffoldKey),
-          // home: MultiRepositoryProvider(
-          //   providers: [],
-          //   child: MultiBlocProvider(
-          //     providers: [],
-          //     child: BlocConsumer(
-          //       // listenWhen: (_, state) {},
-          //       listener: (context, state) {},
-          //       builder: (context, state) {
-          //         return Container();
-          //       },
-          //       // buildWhen: (context, state) {},
-          //     ),
-          //   ),
-          // ),
+          home: SplashScreen(),
         );
       },
     );

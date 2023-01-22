@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 
 class CounceleeListViewScreen extends StatefulWidget {
@@ -15,13 +17,16 @@ class CounceleeListViewScreen extends StatefulWidget {
 }
 
 class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
+  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final CounselingController _councelingController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 80.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -45,7 +50,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
             ),
           ),
           child: Container(
-            margin: const EdgeInsets.only(left: 24),
+            margin: EdgeInsets.only(left: 24.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -139,8 +144,8 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
 
   Widget buildHeader(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 52,
+      width: 1.sw,
+      height: 52.h,
       color: const Color.fromRGBO(253, 143, 1, 1),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -183,133 +188,162 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     );
   }
 
-  Widget buildCouncelee(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 260,
-      child: ListView.builder(
-        itemCount: 2,
-        shrinkWrap: true,
-        itemBuilder: ((context, index) {
-          return GestureDetector(
-            onTap: () {
-              log('Logged');
+  FutureBuilder buildCouncelee(BuildContext context) {
+    String nim = _sharedPreference.getString('nim').toString();
+    String name = _sharedPreference.getString('name').toString();
 
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return const CouncelingChatScreen();
-              //     },
-              //   ),
-              // );
-              Get.to(() => const CouncelingChatScreen());
-            },
-            child: Card(
-              child: Container(
+    return FutureBuilder<dynamic>(
+        future: _councelingController.postPeerCounselee(nim, name),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator.adaptive();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              List dataset = snapshot.data['data'];
+              log(dataset.toString(), name: 'log-dataset');
+
+              return SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 80,
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Image.asset('assets/images/cat.png'),
-                    ),
-                    const SizedBox(width: 4),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            '#21346',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
+                height: 260,
+                child: ListView.builder(
+                  itemCount: dataset.length,
+                  shrinkWrap: true,
+                  itemBuilder: ((context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        log('Logged ${dataset[index]['counselee_name']}');
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CouncelingChatScreen(
+                                id: dataset[index]['counselee_id'],
+                                nim: dataset[index]['nim'],
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: Container(
+                          width: 1.sw,
+                          height: 80.h,
+                          padding: EdgeInsets.all(8.w),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.w),
+                                child: Image.asset('assets/images/cat.png'),
+                              ),
+                              SizedBox(width: 4.w),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 8.w),
+                                    child: Text(
+                                      '#${dataset[index]['counselee_id']}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Row(
+                                    children: [
+                                      dataset[index]['gender'].toString() == 'P'
+                                          ? const Icon(
+                                              Icons.female,
+                                              color: Colors.pinkAccent,
+                                            )
+                                          : const Icon(
+                                              Icons.male,
+                                              color: Colors.blueAccent,
+                                            ),
+                                      const Text(
+                                        'Anonymous',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      'Saya seorang yang hiya hiya hiya',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${dataset[index]['angkatan']}',
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${dataset[index]['jurusan']}',
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Icon(
+                                    Icons.arrow_right_alt_rounded,
+                                    color: Colors.black,
+                                    size: 28,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: const [
-                            Icon(
-                              Icons.male,
-                              color: Colors.blueAccent,
-                            ),
-                            Text(
-                              'Anonymous',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            'Saya seorang yang hiya hiya hiya',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            softWrap: true,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '2017',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Beda Jurusan',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Icons.arrow_right_alt_rounded,
-                          color: Colors.black,
-                          size: 28,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    );
+                  }),
                 ),
-              ),
-            ),
-          );
-        }),
-      ),
-    );
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return Container();
+          }
+        });
   }
 
   Widget buildPendingRequestList(BuildContext context) {
@@ -372,7 +406,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                   //     },
                   //   ),
                   // );
-                  Get.to(() => const CouncelingChatScreen());
+                  // Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(

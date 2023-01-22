@@ -4,16 +4,16 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/home_service.dart';
 
-class HomeController extends GetxController {
+class HomeController {
   final HomeService _homeService = HomeService(Dio());
 
   RxBool hasError = false.obs;
   RxString errorValue = ''.obs;
 
-  Future getQuickHelp(String page) async {
+  Future getQuickHelp() async {
     var res;
 
-    final result = await _homeService.getQuickHelp(page);
+    final result = await _homeService.getQuickHelp();
 
     result.fold((l) {
       log('failed to get quickhelp ${l.message}', name: 'get-quickhelp');

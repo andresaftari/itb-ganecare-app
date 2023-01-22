@@ -6,7 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:itb_ganecare/models/dummy_chat.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
-  const CouncelingChatScreen({Key? key}) : super(key: key);
+  final String id;
+  final String nim;
+
+  const CouncelingChatScreen({
+    Key? key,
+    required this.id,
+    required this.nim,
+  }) : super(key: key);
 
   @override
   State<CouncelingChatScreen> createState() => _CouncelingChatScreenState();
@@ -118,7 +125,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                   children: [
                     Container(
                       child: Text(
-                        '#21345',
+                        '#${widget.id}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -224,12 +231,10 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
               ),
             ],
           ),
-
           if (1.sh > 100 && 1.sh < 800)
             SizedBox(height: 1.sh - 0.81.sh)
           else if (1.sh >= 800)
             SizedBox(height: 1.sh - 0.75.sh),
-
           Container(
             padding: EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
             height: 50.h,

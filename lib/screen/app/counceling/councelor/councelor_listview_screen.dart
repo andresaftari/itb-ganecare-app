@@ -202,7 +202,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
               //     },
               //   ),
               // );
-              Get.to(() => const CouncelingChatScreen());
+              // Get.to(() => const CouncelingChatScreen());
             },
             child: Card(
               child: Container(
@@ -371,7 +371,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                   //     },
                   //   ),
                   // );
-                  Get.to(() => const CouncelingChatScreen());
+                  // Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(

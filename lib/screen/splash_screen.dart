@@ -8,11 +8,8 @@ import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  final GlobalKey scaffoldKey;
-
   const SplashScreen({
     Key? key,
-    required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -20,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late Map<String, dynamic> _deviceData = <String, dynamic>{};
+  late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
   @override
@@ -56,21 +53,23 @@ class _SplashScreenState extends State<SplashScreen> {
           builder: (context) => LoginScreen(
             deviceId: deviceId,
             alertMessage: '',
-            scaffoldKey: widget.scaffoldKey,
-            forgotPassLink: LinkData(title: 'A', description: 'B', url: 'C'),
+            forgotPassLink: LinkData(
+              title: 'A',
+              description: 'B',
+              url: 'C',
+            ),
           ),
         ),
       );
     });
 
     return Scaffold(
-      key: widget.scaffoldKey,
       body: Stack(
         alignment: Alignment.center,
         children: [
           SizedBox(
-            height:  MediaQuery.of(context).size.height,
-            width:  MediaQuery.of(context).size.width,
+            height: 1.sh,
+            width: 1.sw,
             child: FittedBox(
               fit: BoxFit.fill,
               child: Image.asset('assets/images/polosan splash login.png'),
@@ -93,8 +92,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var deviceData = <String, dynamic>{};
 
     if (Platform.isAndroid) {
-      deviceData =
-          _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
     } else if (Platform.isIOS) {
       deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
     }

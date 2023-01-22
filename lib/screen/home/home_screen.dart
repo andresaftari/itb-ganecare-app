@@ -4,23 +4,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:itb_ganecare/data/controllers/counselor_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
-import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  final GlobalKey scaffoldKey;
   final bool isDarkMode;
 
   const HomePage({
     Key? key,
-    required this.scaffoldKey,
     required this.isDarkMode,
   }) : super(key: key);
 
@@ -31,47 +28,66 @@ class HomePage extends StatelessWidget {
         isDarkMode ? darkTheme : lightTheme,
         appDataRepository: AppDataRepository(),
       ),
-      child: WorldTheme(scaffoldKey: scaffoldKey),
+      child: WorldTheme(),
     );
   }
 }
 
 class WorldTheme extends StatelessWidget {
-  final GlobalKey localScaffoldKey;
+  // final GlobalKey localScaffoldKey = GlobalKey(debugLabel: 'local');
 
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  final CouncelorController _councelorController = Get.find();
 
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
 
-  final bool isLoading = true;
-  final bool isCouncelor = false;
+  // final bool isLoading = true;
+  // final bool isCouncelor = false;
 
-  WorldTheme({
-    Key? key,
-    required GlobalKey scaffoldKey,
-  })  : localScaffoldKey = scaffoldKey,
-        super(key: key);
+  WorldTheme({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
-    int page = 1;
-    _homeController.getQuickHelp(page.toString()).then((value) {
+    // _councelingController
+    //     .postPeerCouncelee(
+    //   _sharedPreference.getString('nim').toString(),
+    //   _sharedPreference.getString('name').toString(),
+    // )
+    //     .then(
+    //   (value) {
+    //     if (value == null) {
+    //       log('$value is null', name: 'log');
+    //     } else {
+    //       log('$value', name: 'log');
+    //     }
+    //   },
+    // );
+
+    // int page = 1;
+    _homeController.getQuickHelp().then((value) {
       log(value.toString(), name: 'get-aja');
     });
 
-    _councelorController
-        .postPeerCouncelor(
-      _sharedPreference.getInt('angkatan').toString(),
-      _sharedPreference.getString('major').toString(),
-      _sharedPreference.getString('gender').toString(),
-    )
-        .then(((value) {
-      log(value.toString(), name: 'post-aja');
-    }));
+    // _councelingController
+    //     .postPeerCouncelor(
+    //   _sharedPreference.getInt('angkatan').toString(),
+    //   _sharedPreference.getString('major').toString(),
+    //   _sharedPreference.getString('gender').toString(),
+    // )
+    //     .then(((value) {
+    //   log(value.toString(), name: 'post-councelor');
+    // }));
+
+    // _councelingController
+    //     .postPeerCouncelee(
+    //   _sharedPreference.getString('nim').toString(),
+    //   _sharedPreference.getString('name').toString(),
+    // )
+    //     .then(((value) {
+    //   log(value.toString(), name: 'post-councelee');
+    // }));
 
     return MaterialApp(
       theme: themeNotifier.getTheme(),
@@ -181,7 +197,7 @@ class WorldTheme extends StatelessWidget {
                   children: [
                     buildHomeBody(context),
                     SizedBox(height: 16.h),
-                    buildConselee(context),
+                    loadCounseleeData(context),
                     SizedBox(height: 16.h),
                     buildScholarshipNews(context),
                   ],
@@ -336,13 +352,31 @@ class WorldTheme extends StatelessWidget {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const CounceleeSebayaScreen(),
-                                                    ),
-                                                  );
+                                                  if (_sharedPreference
+                                                          .getString(
+                                                              'councelee_id')
+                                                          .toString() !=
+                                                      '') {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const CounceleeSebayaScreen(),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    Get.snackbar(
+                                                      'Counceling Sebaya',
+                                                      'Pengguna ini bukan councelor',
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                        253,
+                                                        143,
+                                                        1,
+                                                        1,
+                                                      ),
+                                                    );
+                                                  }
                                                 },
                                               ),
                                               SizedBox(width: 8.w),
@@ -360,18 +394,36 @@ class WorldTheme extends StatelessWidget {
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            16.r),
+                                                      16.r,
+                                                    ),
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return const CouncelorSebayaScreen();
-                                                      },
-                                                    ),
-                                                  );
+                                                  if (_sharedPreference
+                                                          .getString(
+                                                              'councelor_id')
+                                                          .toString() !=
+                                                      '') {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const CounceleeSebayaScreen(),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    Get.snackbar(
+                                                      'Counceling Sebaya',
+                                                      'Pengguna ini bukan councelor',
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                        253,
+                                                        143,
+                                                        1,
+                                                        1,
+                                                      ),
+                                                    );
+                                                  }
                                                 },
                                               ),
                                             ],
@@ -453,8 +505,17 @@ class WorldTheme extends StatelessWidget {
     );
   }
 
+  Widget loadCounseleeData(BuildContext context) {
+    String nim = _sharedPreference.getString('nim').toString();
+    String name = _sharedPreference.getString('name').toString();
+
+    
+
+    return buildConselee(context);
+  }
+
   Widget buildConselee(BuildContext context) {
-    log(1.sw.toString());
+    log('sw: ${1.sw} | sh: ${1.sh}', name: 'sw size | sh size');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -520,7 +581,9 @@ class WorldTheme extends StatelessWidget {
         const Text('Owww ma gadd 🙂'),
         SizedBox(height: 46.6.h),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            
+          },
           child: Container(
             width: 1.sw,
             height: 30.h,
@@ -625,13 +688,111 @@ class WorldTheme extends StatelessWidget {
                 ],
               );
             } else {
-              return Container();
+              return ListView.builder(
+                itemCount: 3,
+                shrinkWrap: true,
+                itemBuilder: ((context, index) {
+                  return Card(
+                    child: Container(
+                      width: 1.sw,
+                      height: 100.h,
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(8.w),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/emotes/a1.png',
+                            width: 32.w,
+                          ),
+                          SizedBox(width: 8.w),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '{Nama Beasiswa}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              Flexible(
+                                child: Text(
+                                  'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Colors.black,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              );
             }
           } else {
             return Container();
           }
         } else {
-          return Container();
+          return ListView.builder(
+            itemCount: 3,
+            shrinkWrap: true,
+            itemBuilder: ((context, index) {
+              return Card(
+                child: Container(
+                  width: 1.sw,
+                  height: 100.h,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.all(8.w),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/emotes/a1.png',
+                        width: 32.w,
+                      ),
+                      SizedBox(width: 8.w),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '{Nama Beasiswa}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Flexible(
+                            child: Text(
+                              'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          );
         }
       },
     );

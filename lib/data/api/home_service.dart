@@ -13,14 +13,14 @@ class HomeService extends HomeRepo {
   HomeService(this._dio);
 
   @override
-  Future<Either<Failed, MetaHelp>> getQuickHelp(String page) async {
+  Future<Either<Failed, MetaHelp>> getQuickHelp() async {
     Failed failure;
 
     try {
       final response = await _dio.getUri(
         Uri.http(kemahasiswaanBaseUrl_, getQuickHelpUrl_, {
           'limit': '5',
-          'page': page,
+          'page': '1',
         }),
       );
 
@@ -42,9 +42,7 @@ class HomeService extends HomeRepo {
   ) async {
     Failed failure;
 
-    FormData formData = FormData.fromMap(
-      {'idUser': idUser},
-    );
+    FormData formData = FormData.fromMap({'idUser': idUser});
 
     try {
       final response = await _dio.postUri(

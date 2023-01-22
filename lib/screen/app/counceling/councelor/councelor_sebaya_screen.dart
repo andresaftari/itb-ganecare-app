@@ -196,7 +196,7 @@ class CouncelorSebayaViews extends StatelessWidget {
       body: Column(
         children: [
           buildHeader(context),
-          buildCouncelee(context),
+          buildCounselor(context),
           buildHistoryCounceling(context),
         ],
       ),
@@ -263,7 +263,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                   //     },
                   //   ),
                   // );
-                  Get.to(() => const CouncelingChatScreen());
+                  // Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
@@ -389,7 +389,7 @@ class CouncelorSebayaViews extends StatelessWidget {
     );
   }
 
-  Widget buildCouncelee(BuildContext context) {
+  Widget buildCounselor(BuildContext context) {
     return SizedBox(
       width: 1.sw,
       height: 260.h,
@@ -401,14 +401,14 @@ class CouncelorSebayaViews extends StatelessWidget {
             onTap: () {
               log('Logged');
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const CouncelingChatScreen();
-                  },
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const CouncelingChatScreen();
+              //     },
+              //   ),
+              // );
             },
             child: Card(
               child: Container(

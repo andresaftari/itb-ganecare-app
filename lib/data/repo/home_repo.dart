@@ -1,5 +1,5 @@
 abstract class HomeRepo {
-  Future getQuickHelp(String page);
+  Future getQuickHelp();
 
   Future postQuickHelp(String idUser);
   Future postUserID(String nim);

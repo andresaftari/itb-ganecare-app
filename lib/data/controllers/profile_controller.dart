@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/profile_service.dart';
 
-class ProfileController extends GetxController {
+class ProfileController {
   final ProfileService _profileService = ProfileService(Dio());
 
   RxBool hasError = false.obs;

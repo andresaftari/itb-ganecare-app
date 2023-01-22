@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
@@ -78,14 +80,17 @@ class _CounceleeSebayaScreenState extends State<CounceleeSebayaScreen> {
   }
 
   static List<Widget> pages = [
-    const CounceleeSebayaViews(),
+    CounceleeSebayaViews(),
     const CounceleeListViewScreen(),
     const CouncelingProfileScreen(),
   ];
 }
 
 class CounceleeSebayaViews extends StatelessWidget {
-  const CounceleeSebayaViews({Key? key}) : super(key: key);
+  CounceleeSebayaViews({Key? key}) : super(key: key);
+
+  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final CounselingController _councelingController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -194,8 +199,8 @@ class CounceleeSebayaViews extends StatelessWidget {
       body: Column(
         children: [
           buildHeader(context),
-          buildCouncelee(context),
-          buildHistoryCounceling(context),
+          buildCounceleeWidget(context),
+          // buildHistoryCounceling(context),
         ],
       ),
     );
@@ -220,130 +225,161 @@ class CounceleeSebayaViews extends StatelessWidget {
     );
   }
 
-  Widget buildCouncelee(BuildContext context) {
-    return SizedBox(
-      width: 1.sw,
-      height: 260.h,
-      child: ListView.builder(
-        itemCount: 2,
-        shrinkWrap: true,
-        itemBuilder: ((context, index) {
-          return GestureDetector(
-            onTap: () {
-              log('Logged');
+  FutureBuilder buildCounceleeWidget(BuildContext context) {
+    String nim = _sharedPreference.getString('nim').toString();
+    String name = _sharedPreference.getString('name').toString();
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const CouncelingChatScreen();
-                  },
-                ),
-              );
-            },
-            child: Card(
-              child: Container(
-                width: 1.sw,
-                height: 80.h,
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding: EdgeInsets.all(8.w),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: Image.asset(
-                        'assets/images/cat.png',
-                        width: 46.w,
-                        height: 46.h,
+    return FutureBuilder<dynamic>(
+      future: _councelingController.postPeerCounselee(nim, name),
+      builder: ((context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator.adaptive();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List dataset = snapshot.data['data'];
+            log(dataset.toString(), name: 'log-dataset');
+
+            return SizedBox(
+              width: 1.sw,
+              height: 260.h,
+              child: ListView.builder(
+                itemCount: dataset.length,
+                shrinkWrap: true,
+                itemBuilder: ((context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      log('Logged ${dataset[index]['counselee_name']}');
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CouncelingChatScreen(
+                              id: dataset[index]['counselee_id'],
+                              nim: dataset[index]['nim'],
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Card(
+                      child: Container(
+                        width: 1.sw,
+                        height: 80.h,
+                        margin: EdgeInsets.symmetric(horizontal: 16.w),
+                        padding: EdgeInsets.all(8.w),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.w),
+                              child: Image.asset(
+                                'assets/images/cat.png',
+                                width: 46.w,
+                                height: 46.h,
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8.w),
+                                  child: Text(
+                                    '#${dataset[index]['counselee_id']}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                Row(
+                                  children: [
+                                    dataset[index]['gender'].toString() == 'P'
+                                        ? const Icon(
+                                            Icons.female,
+                                            color: Colors.pinkAccent,
+                                          )
+                                        : const Icon(
+                                            Icons.male,
+                                            color: Colors.blueAccent,
+                                          ),
+                                    Text(
+                                      'Anonymous',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.black,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 2.h),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 8.h),
+                                  child: Text(
+                                    'Last chat dummy',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 24.w),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      '${dataset[index]['angkatan']}',
+                                      style: TextStyle(
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.4),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 2.w),
+                                    Text(
+                                      '${dataset[index]['jurusan']}',
+                                      style: TextStyle(
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.4),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.w),
-                          child: Text(
-                            '#21345',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.female,
-                              color: Colors.pinkAccent,
-                            ),
-                            Text(
-                              'Anonymous',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 2.h),
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.h),
-                          child: Text(
-                            'Last chat dummy',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            softWrap: true,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 24.w),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '2018',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11.sp,
-                              ),
-                            ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              'Satu Jurusan',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  );
+                }),
               ),
-            ),
-          );
-        }),
-      ),
+            );
+          } else {
+            return Container();
+          }
+        } else {
+          return Container();
+        }
+      }),
     );
   }
 
@@ -407,7 +443,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                   //     },
                   //   ),
                   // );
-                  Get.to(() => const CouncelingChatScreen());
+                  // Get.to(() => const CouncelingChatScreen());
                 },
                 child: Card(
                   child: Container(
@@ -481,7 +517,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                   '2017',
                                   style: TextStyle(
                                     backgroundColor:
-                                    Colors.grey.withOpacity(0.4),
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,
@@ -492,7 +528,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                   'Beda Jurusan',
                                   style: TextStyle(
                                     backgroundColor:
-                                    Colors.grey.withOpacity(0.4),
+                                        Colors.grey.withOpacity(0.4),
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 11,

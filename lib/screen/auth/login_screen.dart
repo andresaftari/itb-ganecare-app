@@ -11,14 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   final String deviceId, alertMessage;
-  final GlobalKey scaffoldKey;
   final LinkData forgotPassLink;
 
   const LoginScreen({
     Key? key,
     required this.deviceId,
     required this.alertMessage,
-    required this.scaffoldKey,
     required this.forgotPassLink,
   }) : super(key: key);
 
@@ -193,6 +191,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
 
                                   _sharedPreference.putString(
+                                    'name',
+                                    value.data.name,
+                                  );
+
+                                  _sharedPreference.putString(
                                     'nim',
                                     value.data.nim,
                                   );
@@ -217,92 +220,57 @@ class _LoginScreenState extends State<LoginScreen> {
                                     value.auth.user.gender,
                                   );
 
-                                  if (value.userGroup.conselee.toString() != '') {
-                                    _sharedPreference.putInt(
+                                  if (value.userGroup.conselee == '') {
+                                    _sharedPreference.putString(
+                                      'councelee_id',
+                                      value.userGroup.conselee,
+                                    );
+                                  } else if (value.userGroup.conselee != '') {
+                                    _sharedPreference.putString(
                                       'councelee_id',
                                       value.userGroup.conselee,
                                     );
                                   }
 
-                                  if (value.userGroup.conselor.toString() != '') {
-                                    _sharedPreference.putInt(
+                                  if (value.userGroup.conselor == '') {
+                                    _sharedPreference.putString(
+                                      'councelor_id',
+                                      value.userGroup.conselor,
+                                    );
+                                  } else if (value.userGroup.conselor != '') {
+                                    _sharedPreference.putString(
                                       'councelor_id',
                                       value.userGroup.conselor,
                                     );
                                   }
 
                                   Get.off(
-                                    () => HomePage(
-                                      scaffoldKey: widget.scaffoldKey,
-                                      isDarkMode: false,
-                                    ),
+                                    () => const HomePage(isDarkMode: false),
                                   );
-                                  // Navigator.pushReplacement(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) {
-                                  //     return HomePage(
-                                  //       scaffoldKey: widget.scaffoldKey,
-                                  //       isDarkMode: false,
-                                  //     );
-                                  //   }),
-                                  // );
                                 }
                               });
-                            }
 
-                            // if (_formKey.currentState.validate()) {
-                            //   context.bloc<AuthenticationBloc>().add(
-                            //       AuthenticationLoginEvent(
-                            //           email, password, widget.deviceId));
-                            // }
+                              // In case of server error, uncomment these code
+                              // below & comment the main code above to check
+                              // login-screen function
+                              // Get.off(
+                              //       () => const HomePage(isDarkMode: false),
+                              // );
+                            }
                           },
                         ),
                       ),
-                      // ButtonTheme(
-                      //   minWidth: double.maxFinite,
-                      //   child: FlatButton(
-                      //     color: Colors.orange,
-                      //     disabledColor: Colors.grey,
-                      //     shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(20)),
-                      //     onPressed: () {
-                      //       // if (_formKey.currentState.validate()) {
-                      //       //   context.bloc<AuthenticationBloc>().add(
-                      //       //       AuthenticationLoginEvent(
-                      //       //           email, password, widget.deviceId));
-                      //       // }
-                      //     },
-                      //     child: const FittedBox(
-                      //       child: Text(
-                      //         'Login',
-                      //         // state is AuthenticationLoadingState
-                      //         //     ? 'Processing...'
-                      //         //     : 'Login',
-                      //         textDirection: TextDirection.ltr,
-                      //         style: TextStyle(
-                      //           color: Colors.white,
-                      //           fontSize: 15.0,
-                      //           decoration: TextDecoration.none,
-                      //           fontWeight: FontWeight.normal,
-                      //         ),
-                      //       ),
+                      // if (_forgotPasswordLink != null)
+                      // Padding(
+                      //   padding: EdgeInsets.all(10.w),
+                      //   child: InkWell(
+                      //     onTap: _launchLupaPassword,
+                      //     child: const Text(
+                      //       'Lupa password?',
+                      //       style: TextStyle(color: Colors.red),
                       //     ),
                       //   ),
                       // ),
-                      if (_forgotPasswordLink != null)
-                        Padding(
-                          padding: EdgeInsets.all(10.w),
-                          child: InkWell(
-                            onTap: _launchLupaPassword,
-                            // _launchLupaPassword(_forgotPasswordLink
-                            //         ?.url ??
-                            //     'https://nic.itb.ac.id/manajemen-akun/reset-password'),
-                            child: const Text(
-                              'Lupa password?',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),
