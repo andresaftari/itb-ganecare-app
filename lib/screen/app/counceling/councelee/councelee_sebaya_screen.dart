@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
@@ -91,6 +92,7 @@ class CounceleeSebayaViews extends StatelessWidget {
 
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
   final CounselingController _councelingController = Get.find();
+  final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -228,15 +230,38 @@ class CounceleeSebayaViews extends StatelessWidget {
   FutureBuilder buildCounceleeWidget(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
+    String lastMessage = '';
+
+    Future(
+      () => _firestoreUtils.getLiveChatRoom().then(
+        (value) {
+          if (_firestoreUtils.roomList.isNotEmpty) {
+            for (final data in _firestoreUtils.roomList) {
+              _firestoreUtils.getLiveChat(data.id).then((chat) {
+                for (final texts in _firestoreUtils.chatList) {
+                  lastMessage = texts.message;
+                }
+              });
+            }
+          }
+        },
+      ),
+    );
+
+    List list = _firestoreUtils.roomList;
+    log('$list', name: 'test-fs');
 
     return FutureBuilder<dynamic>(
-      future: _councelingController.postPeerCounselee(nim, name),
+      future: Future.delayed(
+        const Duration(seconds: 2),
+        () => _councelingController.postPeerCounselee(nim, name),
+      ),
       builder: ((context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator.adaptive();
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List dataset = snapshot.data['data'];
+            List dataset = snapshot.data.data;
             log(dataset.toString(), name: 'log-dataset');
 
             return SizedBox(
@@ -248,19 +273,23 @@ class CounceleeSebayaViews extends StatelessWidget {
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      log('Logged ${dataset[index]['counselee_name']}');
+                      log('Logged ${dataset[index].counseleeId}');
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return CouncelingChatScreen(
-                              id: dataset[index]['counselee_id'],
-                              nim: dataset[index]['nim'],
-                            );
-                          },
-                        ),
-                      );
+                      if (_firestoreUtils.chatList.isEmpty) {
+                        Get.snackbar('Chat', 'Belum ada histori pesan');
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CouncelingChatScreen(
+                                id: dataset[index].counseleeId.toString(),
+                                nim: dataset[index].nim.toString(),
+                              );
+                            },
+                          ),
+                        );
+                      }
                     },
                     child: Card(
                       child: Container(
@@ -285,7 +314,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.only(left: 8.w),
                                   child: Text(
-                                    '#${dataset[index]['counselee_id']}',
+                                    '#${dataset[index].counseleeId}',
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 10.sp,
@@ -295,7 +324,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                 SizedBox(height: 8.h),
                                 Row(
                                   children: [
-                                    dataset[index]['gender'].toString() == 'P'
+                                    dataset[index].gender.toString() == 'P'
                                         ? const Icon(
                                             Icons.female,
                                             color: Colors.pinkAccent,
@@ -318,21 +347,37 @@ class CounceleeSebayaViews extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 2.h),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 8.h),
-                                  child: Text(
-                                    'Last chat dummy',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
-                                ),
+                                list.isEmpty
+                                    ? Padding(
+                                        padding: EdgeInsets.only(left: 8.h),
+                                        child: Text(
+                                          'No Chat History',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 10.sp,
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: EdgeInsets.only(left: 8.h),
+                                        child: Text(
+                                          lastMessage,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 10.sp,
+                                          ),
+                                        ),
+                                      ),
                               ],
                             ),
                             SizedBox(width: 24.w),
@@ -341,7 +386,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      '${dataset[index]['angkatan']}',
+                                      '${dataset[index].angkatan}',
                                       style: TextStyle(
                                         backgroundColor:
                                             Colors.grey.withOpacity(0.4),
@@ -352,7 +397,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                                     ),
                                     SizedBox(width: 2.w),
                                     Text(
-                                      '${dataset[index]['jurusan']}',
+                                      '${dataset[index].jurusan}',
                                       style: TextStyle(
                                         backgroundColor:
                                             Colors.grey.withOpacity(0.4),

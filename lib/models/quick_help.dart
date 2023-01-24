@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-QuickHelp quickHelpFromJson(String str) => QuickHelp.fromJson(json.decode(str));
 String quickHelpToJson(QuickHelp data) => json.encode(data.toJson());
 
 class QuickHelp {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "994257971296",
+    "project_id": "new-itb-ganecare",
+    "storage_bucket": "new-itb-ganecare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994257971296:android:8c0141d3c739595597bb05",
+        "android_client_info": {
+          "package_name": "com.GaneCare.itb_ganecare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994257971296-to23ccrrref1n04hhsmubi0ef1mgr2pt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGLKmqveVmiTnYrmyE7LdoeGTqtWRruRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994257971296-to23ccrrref1n04hhsmubi0ef1mgr2pt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

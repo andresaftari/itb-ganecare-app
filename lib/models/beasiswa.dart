@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-Beasiswa beasiswaFromJson(String str) => Beasiswa.fromJson(json.decode(str));
-
 String beasiswaToJson(Beasiswa data) => json.encode(data.toJson());
 
 class Beasiswa {
@@ -78,61 +76,61 @@ class BeasiswaData {
   String syaratLainnya;
 
   factory BeasiswaData.fromJson(Map<String, dynamic> json) => BeasiswaData(
-        idPeriode: json["id_periode"],
-        namaDonatur: json["nama_donatur"],
-        idBeasiswa: json["id_beasiswa"],
-        tglInput: DateTime.parse(json["tgl_input"]),
-        idDonatur: json["id_donatur"],
-        idJenisBeasiswa: json["id_jenis_beasiswa"],
-        namaBeasiswa: json["nama_beasiswa"],
-        awalPeriodeBeasiswa: DateTime.parse(json["awal_periode_beasiswa"]),
-        akhirPeriodeBeasiswa: DateTime.parse(json["akhir_periode_beasiswa"]),
-        awalPeriodePembiayaan: DateTime.parse(json["awal_periode_pembiayaan"]),
+        idPeriode: json['id_periode'],
+        namaDonatur: json['nama_donatur'],
+        idBeasiswa: json['id_beasiswa'],
+        tglInput: DateTime.parse(json['tgl_input']),
+        idDonatur: json['id_donatur'],
+        idJenisBeasiswa: json['id_jenis_beasiswa'],
+        namaBeasiswa: json['nama_beasiswa'],
+        awalPeriodeBeasiswa: DateTime.parse(json['awal_periode_beasiswa']),
+        akhirPeriodeBeasiswa: DateTime.parse(json['akhir_periode_beasiswa']),
+        awalPeriodePembiayaan: DateTime.parse(json['awal_periode_pembiayaan']),
         akhirPeriodePembiayaan:
-            DateTime.parse(json["akhir_periode_pembiayaan"]),
-        kuota: json["kuota"],
-        anggaran: json["anggaran"],
-        deskripsi: json["deskripsi"],
-        isAktif: json["is_aktif"],
-        isValid: json["is_valid"],
-        modifyDate: DateTime.parse(json["modify_date"]),
-        cek: json["cek"],
-        idBeasiswaFasilitas: json["id_beasiswa_fasilitas"],
-        biayaHidup: json["biaya_hidup"],
-        ukt: json["ukt"],
-        ta: json["ta"],
-        fasilitasLainnya: json["fasilitas_lainnya"],
-        syaratLainnya: json["syarat_lainnya"],
+            DateTime.parse(json['akhir_periode_pembiayaan']),
+        kuota: json['kuota'],
+        anggaran: json['anggaran'],
+        deskripsi: json['deskripsi'],
+        isAktif: json['is_aktif'],
+        isValid: json['is_valid'],
+        modifyDate: DateTime.parse(json['modify_date']),
+        cek: json['cek'],
+        idBeasiswaFasilitas: json['id_beasiswa_fasilitas'],
+        biayaHidup: json['biaya_hidup'],
+        ukt: json['ukt'],
+        ta: json['ta'],
+        fasilitasLainnya: json['fasilitas_lainnya'],
+        syaratLainnya: json['syarat_lainnya'],
       );
 
   Map<String, dynamic> toJson() => {
-        "id_periode": idPeriode,
-        "nama_donatur": namaDonatur,
-        "id_beasiswa": idBeasiswa,
-        "tgl_input": tglInput.toIso8601String(),
-        "id_donatur": idDonatur,
-        "id_jenis_beasiswa": idJenisBeasiswa,
-        "nama_beasiswa": namaBeasiswa,
-        "awal_periode_beasiswa":
-            "${awalPeriodeBeasiswa.year.toString().padLeft(4, '0')}-${awalPeriodeBeasiswa.month.toString().padLeft(2, '0')}-${awalPeriodeBeasiswa.day.toString().padLeft(2, '0')}",
-        "akhir_periode_beasiswa":
-            "${akhirPeriodeBeasiswa.year.toString().padLeft(4, '0')}-${akhirPeriodeBeasiswa.month.toString().padLeft(2, '0')}-${akhirPeriodeBeasiswa.day.toString().padLeft(2, '0')}",
-        "awal_periode_pembiayaan":
-            "${awalPeriodePembiayaan.year.toString().padLeft(4, '0')}-${awalPeriodePembiayaan.month.toString().padLeft(2, '0')}-${awalPeriodePembiayaan.day.toString().padLeft(2, '0')}",
-        "akhir_periode_pembiayaan":
-            "${akhirPeriodePembiayaan.year.toString().padLeft(4, '0')}-${akhirPeriodePembiayaan.month.toString().padLeft(2, '0')}-${akhirPeriodePembiayaan.day.toString().padLeft(2, '0')}",
-        "kuota": kuota,
-        "anggaran": anggaran,
-        "deskripsi": deskripsi,
-        "is_aktif": isAktif,
-        "is_valid": isValid,
-        "modify_date": modifyDate.toIso8601String(),
-        "cek": cek,
-        "id_beasiswa_fasilitas": idBeasiswaFasilitas,
-        "biaya_hidup": biayaHidup,
-        "ukt": ukt,
-        "ta": ta,
-        "fasilitas_lainnya": fasilitasLainnya,
-        "syarat_lainnya": syaratLainnya,
+        'id_periode': idPeriode,
+        'nama_donatur': namaDonatur,
+        'id_beasiswa': idBeasiswa,
+        'tgl_input': tglInput.toIso8601String(),
+        'id_donatur': idDonatur,
+        'id_jenis_beasiswa': idJenisBeasiswa,
+        'nama_beasiswa': namaBeasiswa,
+        'awal_periode_beasiswa':
+            '${awalPeriodeBeasiswa.year.toString().padLeft(4, '0')}-${awalPeriodeBeasiswa.month.toString().padLeft(2, '0')}-${awalPeriodeBeasiswa.day.toString().padLeft(2, '0')}',
+        'akhir_periode_beasiswa':
+            '${akhirPeriodeBeasiswa.year.toString().padLeft(4, '0')}-${akhirPeriodeBeasiswa.month.toString().padLeft(2, '0')}-${akhirPeriodeBeasiswa.day.toString().padLeft(2, '0')}',
+        'awal_periode_pembiayaan':
+            '${awalPeriodePembiayaan.year.toString().padLeft(4, '0')}-${awalPeriodePembiayaan.month.toString().padLeft(2, '0')}-${awalPeriodePembiayaan.day.toString().padLeft(2, '0')}',
+        'akhir_periode_pembiayaan':
+            '${akhirPeriodePembiayaan.year.toString().padLeft(4, '0')}-${akhirPeriodePembiayaan.month.toString().padLeft(2, '0')}-${akhirPeriodePembiayaan.day.toString().padLeft(2, '0')}',
+        'kuota': kuota,
+        'anggaran': anggaran,
+        'deskripsi': deskripsi,
+        'is_aktif': isAktif,
+        'is_valid': isValid,
+        'modify_date': modifyDate.toIso8601String(),
+        'cek': cek,
+        'id_beasiswa_fasilitas': idBeasiswaFasilitas,
+        'biaya_hidup': biayaHidup,
+        'ukt': ukt,
+        'ta': ta,
+        'fasilitas_lainnya': fasilitasLainnya,
+        'syarat_lainnya': syaratLainnya,
       };
 }

@@ -134,7 +134,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
           children: [
             buildHeader(context),
             buildCouncelee(context),
-            const SizedBox(height: 16),
+            SizedBox(height: 8.h),
             buildPendingRequestList(context),
           ],
         ),
@@ -199,12 +199,12 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator.adaptive();
             } else if (snapshot.connectionState == ConnectionState.done) {
-              List dataset = snapshot.data['data'];
+              List dataset = snapshot.data.data;
               log(dataset.toString(), name: 'log-dataset');
 
               return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 260,
+                width: 1.sw,
+                height: 260.h,
                 child: ListView.builder(
                   itemCount: dataset.length,
                   shrinkWrap: true,
@@ -218,8 +218,8 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                           MaterialPageRoute(
                             builder: (context) {
                               return CouncelingChatScreen(
-                                id: dataset[index]['counselee_id'],
-                                nim: dataset[index]['nim'],
+                                id: dataset[index].counseleeId.toString(),
+                                nim: dataset[index].nim.toString(),
                               );
                             },
                           ),
@@ -229,14 +229,18 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                         child: Container(
                           width: 1.sw,
                           height: 80.h,
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
                           padding: EdgeInsets.all(8.w),
                           child: Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.all(8.w),
-                                child: Image.asset('assets/images/cat.png'),
+                                child: Image.asset(
+                                  'assets/images/cat.png',
+                                  width: 46.w,
+                                  height: 46.h,
+                                ),
                               ),
-                              SizedBox(width: 4.w),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +248,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 8.w),
                                     child: Text(
-                                      '#${dataset[index]['counselee_id']}',
+                                      '#${dataset[index].counseleeId}',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 10.sp,
@@ -254,7 +258,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                   SizedBox(height: 8.h),
                                   Row(
                                     children: [
-                                      dataset[index]['gender'].toString() == 'P'
+                                      dataset[index].gender.toString() == 'P'
                                           ? const Icon(
                                               Icons.female,
                                               color: Colors.pinkAccent,
@@ -263,7 +267,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                               Icons.male,
                                               color: Colors.blueAccent,
                                             ),
-                                      const Text(
+                                      Text(
                                         'Anonymous',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
@@ -271,16 +275,16 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                         style: TextStyle(
                                           overflow: TextOverflow.ellipsis,
                                           color: Colors.black,
-                                          fontSize: 14,
+                                          fontSize: 14.sp,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 2),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
+                                  SizedBox(height: 2.h),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 8.h),
                                     child: Text(
-                                      'Saya seorang yang hiya hiya hiya',
+                                      'Last chat dummy',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                       softWrap: true,
@@ -288,44 +292,39 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 10,
+                                        fontSize: 10.sp,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
+                              SizedBox(width: 24.w),
                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Row(
                                     children: [
                                       Text(
-                                        '${dataset[index]['angkatan']}',
+                                        '${dataset[index].angkatan}',
                                         style: TextStyle(
                                           backgroundColor:
                                               Colors.grey.withOpacity(0.4),
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 11,
+                                          fontSize: 8.sp,
                                         ),
                                       ),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: 2.w),
                                       Text(
-                                        '${dataset[index]['jurusan']}',
+                                        '${dataset[index].jurusan}',
                                         style: TextStyle(
                                           backgroundColor:
                                               Colors.grey.withOpacity(0.4),
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 11,
+                                          fontSize: 8.sp,
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  const Icon(
-                                    Icons.arrow_right_alt_rounded,
-                                    color: Colors.black,
-                                    size: 28,
                                   ),
                                 ],
                               ),

@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
-import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
 
@@ -28,66 +30,31 @@ class HomePage extends StatelessWidget {
         isDarkMode ? darkTheme : lightTheme,
         appDataRepository: AppDataRepository(),
       ),
-      child: WorldTheme(),
+      child: const WorldTheme(),
     );
   }
 }
 
-class WorldTheme extends StatelessWidget {
-  // final GlobalKey localScaffoldKey = GlobalKey(debugLabel: 'local');
+class WorldTheme extends StatefulWidget {
+  const WorldTheme({Key? key}) : super(key: key);
 
+  @override
+  State<WorldTheme> createState() => _WorldThemeState();
+}
+
+class _WorldThemeState extends State<WorldTheme> {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-
   final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
-
-  // final bool isLoading = true;
-  // final bool isCouncelor = false;
-
-  WorldTheme({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
-    // _councelingController
-    //     .postPeerCouncelee(
-    //   _sharedPreference.getString('nim').toString(),
-    //   _sharedPreference.getString('name').toString(),
-    // )
-    //     .then(
-    //   (value) {
-    //     if (value == null) {
-    //       log('$value is null', name: 'log');
-    //     } else {
-    //       log('$value', name: 'log');
-    //     }
-    //   },
-    // );
-
     // int page = 1;
     _homeController.getQuickHelp().then((value) {
       log(value.toString(), name: 'get-aja');
     });
-
-    // _councelingController
-    //     .postPeerCouncelor(
-    //   _sharedPreference.getInt('angkatan').toString(),
-    //   _sharedPreference.getString('major').toString(),
-    //   _sharedPreference.getString('gender').toString(),
-    // )
-    //     .then(((value) {
-    //   log(value.toString(), name: 'post-councelor');
-    // }));
-
-    // _councelingController
-    //     .postPeerCouncelee(
-    //   _sharedPreference.getString('nim').toString(),
-    //   _sharedPreference.getString('name').toString(),
-    // )
-    //     .then(((value) {
-    //   log(value.toString(), name: 'post-councelee');
-    // }));
 
     return MaterialApp(
       theme: themeNotifier.getTheme(),
@@ -197,7 +164,7 @@ class WorldTheme extends StatelessWidget {
                   children: [
                     buildHomeBody(context),
                     SizedBox(height: 16.h),
-                    loadCounseleeData(context),
+                    buildConselee(context),
                     SizedBox(height: 16.h),
                     buildScholarshipNews(context),
                   ],
@@ -505,15 +472,7 @@ class WorldTheme extends StatelessWidget {
     );
   }
 
-  Widget loadCounseleeData(BuildContext context) {
-    String nim = _sharedPreference.getString('nim').toString();
-    String name = _sharedPreference.getString('name').toString();
-
-    
-
-    return buildConselee(context);
-  }
-
+  // Widget loadCounseleeData(BuildContext context) {
   Widget buildConselee(BuildContext context) {
     log('sw: ${1.sw} | sh: ${1.sh}', name: 'sw size | sh size');
 
@@ -581,9 +540,7 @@ class WorldTheme extends StatelessWidget {
         const Text('Owww ma gadd 🙂'),
         SizedBox(height: 46.6.h),
         GestureDetector(
-          onTap: () {
-            
-          },
+          onTap: () {},
           child: Container(
             width: 1.sw,
             height: 30.h,
@@ -614,11 +571,12 @@ class WorldTheme extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator.adaptive();
           } else if (snapshot.connectionState == ConnectionState.done) {
-            List list = snapshot.data['content'];
+            List list = snapshot.data.content;
 
             if (list.isNotEmpty) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     child: const Text(
@@ -630,7 +588,7 @@ class WorldTheme extends StatelessWidget {
                     ),
                     margin: EdgeInsets.only(left: 16.w),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   SizedBox(
                     width: 1.sw,
                     height: 400.h,
@@ -656,7 +614,7 @@ class WorldTheme extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '{Nama Beasiswa}',
+                                      '${list[index].namaBeasiswa.substring(0, 25)}',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 12.sp,
@@ -665,7 +623,7 @@ class WorldTheme extends StatelessWidget {
                                     SizedBox(height: 8.h),
                                     Flexible(
                                       child: Text(
-                                        'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
+                                        '${list[index].deskripsi.substring(0, 40)}',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
                                         softWrap: true,
@@ -688,7 +646,60 @@ class WorldTheme extends StatelessWidget {
                 ],
               );
             } else {
-              return ListView.builder(
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: const Text(
+                      'Beasiswa Terbaru',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    margin: EdgeInsets.only(left: 16.w),
+                  ),
+                  SizedBox(height: 16.h),
+                  Card(
+                    child: Container(
+                      width: 1.sw,
+                      height: 60.h,
+                      margin: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Center(
+                        child: Text(
+                          'Belum ada beasiswa\nyang tersedia',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+          } else {
+            return Container();
+          }
+        } else {
+          return Column(
+            children: [
+              Container(
+                child: const Text(
+                  'Beasiswa Terbaru',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                margin: EdgeInsets.only(left: 16.w),
+              ),
+              SizedBox(height: 16.h),
+              ListView.builder(
                 itemCount: 3,
                 shrinkWrap: true,
                 itemBuilder: ((context, index) {
@@ -737,61 +748,8 @@ class WorldTheme extends StatelessWidget {
                     ),
                   );
                 }),
-              );
-            }
-          } else {
-            return Container();
-          }
-        } else {
-          return ListView.builder(
-            itemCount: 3,
-            shrinkWrap: true,
-            itemBuilder: ((context, index) {
-              return Card(
-                child: Container(
-                  width: 1.sw,
-                  height: 100.h,
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
-                  padding: EdgeInsets.all(8.w),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/emotes/a1.png',
-                        width: 32.w,
-                      ),
-                      SizedBox(width: 8.w),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '{Nama Beasiswa}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Flexible(
-                            child: Text(
-                              'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
+              ),
+            ],
           );
         }
       },

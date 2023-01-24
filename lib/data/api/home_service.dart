@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/home_repo.dart';
 import 'package:itb_ganecare/data/endpoint.dart';
+import 'package:itb_ganecare/models/beasiswa.dart';
 import 'package:itb_ganecare/models/quick_help.dart';
 
 class HomeService extends HomeRepo {
@@ -37,7 +38,7 @@ class HomeService extends HomeRepo {
   }
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> postQuickHelp(
+  Future<Either<Failed, QuickHelp>> postQuickHelp(
     String idUser,
   ) async {
     Failed failure;
@@ -52,7 +53,7 @@ class HomeService extends HomeRepo {
 
       if (response.statusCode == 200) {
         log('${response.data}', name: 'post-quickhelp');
-        return Right(response.data);
+        return Right(QuickHelp.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
@@ -67,7 +68,10 @@ class HomeService extends HomeRepo {
     Failed failure;
 
     FormData formData = FormData.fromMap(
-      {'token': token_, 'nim': nim},
+      {
+        'token': token_,
+        'nim': nim,
+      },
     );
 
     try {
@@ -89,8 +93,9 @@ class HomeService extends HomeRepo {
   }
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> postBeasiswaList(
-      String userid) async {
+  Future<Either<Failed, Beasiswa>> postBeasiswaList(
+    String userid,
+  ) async {
     Failed failure;
 
     FormData formData = FormData.fromMap(
@@ -104,7 +109,7 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        return Right(response.data);
+        return Right(Beasiswa.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/endpoint.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/counseling_repo.dart';
+import 'package:itb_ganecare/models/counseling.dart';
 
 class CounselingService extends CounselingRepo {
   final Dio _dio;
@@ -12,7 +13,7 @@ class CounselingService extends CounselingRepo {
   CounselingService(this._dio);
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> postPeerCouncelee(
+  Future<Either<Failed, PostCounselee>> postPeerCouncelee(
     String nim,
     String nama,
   ) async {
@@ -32,7 +33,7 @@ class CounselingService extends CounselingRepo {
 
       if (response.statusCode == 200) {
         log('${response.data}', name: 'post-counselee');
-        return Right(response.data);
+        return Right(PostCounselee.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
