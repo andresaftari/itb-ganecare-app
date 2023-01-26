@@ -211,15 +211,18 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                   itemBuilder: ((context, index) {
                     return GestureDetector(
                       onTap: () {
-                        log('Logged ${dataset[index]['counselee_name']}');
+                        log('Logged ${dataset[index].counselee_name}');
+
+                        String roomId = dataset[index].id.toString();
 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
                               return CouncelingChatScreen(
-                                id: dataset[index].counseleeId.toString(),
-                                nim: dataset[index].nim.toString(),
+                                id: roomId,
+                                conseleeId: dataset[index].counseleeId,
+                                conselorId: dataset[index].counselorId,
                               );
                             },
                           ),

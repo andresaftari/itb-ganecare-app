@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
+import 'package:itb_ganecare/models/chats.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
@@ -230,26 +231,39 @@ class CounceleeSebayaViews extends StatelessWidget {
   FutureBuilder buildCounceleeWidget(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
-    String lastMessage = '';
 
-    Future(
-      () => _firestoreUtils.getLiveChatRoom().then(
-        (value) {
-          if (_firestoreUtils.roomList.isNotEmpty) {
-            for (final data in _firestoreUtils.roomList) {
-              _firestoreUtils.getLiveChat(data.id).then((chat) {
-                for (final texts in _firestoreUtils.chatList) {
-                  lastMessage = texts.message;
-                }
-              });
-            }
+    List<String> roomIds = [];
+    List<String> lastMessages = [];
+    List<Rooms> rooms = [];
+    List<int> counseleeIds = [];
+    List<int> counselorIds = [];
+
+    _firestoreUtils.getLiveChatRoom().then(
+      (value) {
+        if (_firestoreUtils.roomList.isNotEmpty) {
+          rooms = _firestoreUtils.roomList;
+          log('$rooms', name: 'fs');
+
+          for (final data in _firestoreUtils.roomList) {
+            if (roomIds.isNotEmpty) roomIds.clear();
+            roomIds.add(data.id);
+
+            if (counselorIds.isNotEmpty) counselorIds.clear();
+            counselorIds.add(data.idConselor);
+
+            if (counseleeIds.isNotEmpty) counseleeIds.clear();
+            counseleeIds.add(data.idConselee);
+
+            _firestoreUtils.getLiveChat(data.id).then((chat) {
+              for (final texts in _firestoreUtils.chatList) {
+                if (lastMessages.isNotEmpty) lastMessages.clear();
+                lastMessages.add(texts.message);
+              }
+            });
           }
-        },
-      ),
+        }
+      },
     );
-
-    List list = _firestoreUtils.roomList;
-    log('$list', name: 'test-fs');
 
     return FutureBuilder<dynamic>(
       future: Future.delayed(
@@ -259,165 +273,151 @@ class CounceleeSebayaViews extends StatelessWidget {
       builder: ((context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator.adaptive();
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator.adaptive(),
+            );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List dataset = snapshot.data.data;
             log(dataset.toString(), name: 'log-dataset');
 
-            return SizedBox(
-              width: 1.sw,
-              height: 260.h,
-              child: ListView.builder(
-                itemCount: dataset.length,
-                shrinkWrap: true,
-                itemBuilder: ((context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      log('Logged ${dataset[index].counseleeId}');
+            if (rooms.isNotEmpty) {
+              return SizedBox(
+                width: 1.sw,
+                height: 260.h,
+                child: ListView.builder(
+                  itemCount: rooms.length,
+                  shrinkWrap: true,
+                  itemBuilder: ((context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        log('Logged ${dataset[index].counseleeId}');
 
-                      if (_firestoreUtils.chatList.isEmpty) {
-                        Get.snackbar('Chat', 'Belum ada histori pesan');
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return CouncelingChatScreen(
-                                id: dataset[index].counseleeId.toString(),
-                                nim: dataset[index].nim.toString(),
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                    child: Card(
-                      child: Container(
-                        width: 1.sw,
-                        height: 80.h,
-                        margin: EdgeInsets.symmetric(horizontal: 16.w),
-                        padding: EdgeInsets.all(8.w),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.w),
-                              child: Image.asset(
-                                'assets/images/cat.png',
-                                width: 46.w,
-                                height: 46.h,
-                              ),
+                        if (_firestoreUtils.chatList.isEmpty) {
+                          Get.snackbar('Chat', 'Belum ada histori pesan');
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return CouncelingChatScreen(
+                                  id: roomIds[index],
+                                  conseleeId: counseleeIds[index],
+                                  conselorId: counselorIds[index],
+                                );
+                              },
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 8.w),
-                                  child: Text(
-                                    '#${dataset[index].counseleeId}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10.sp,
-                                    ),
-                                  ),
+                          );
+                        }
+                      },
+                      child: Card(
+                        child: Container(
+                          width: 1.sw,
+                          height: 80.h,
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
+                          padding: EdgeInsets.all(8.w),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.w),
+                                child: Image.asset(
+                                  'assets/images/cat.png',
+                                  width: 46.w,
+                                  height: 46.h,
                                 ),
-                                SizedBox(height: 8.h),
-                                Row(
-                                  children: [
-                                    dataset[index].gender.toString() == 'P'
-                                        ? const Icon(
-                                            Icons.female,
-                                            color: Colors.pinkAccent,
-                                          )
-                                        : const Icon(
-                                            Icons.male,
-                                            color: Colors.blueAccent,
-                                          ),
-                                    Text(
-                                      'Anonymous',
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      dataset[index].gender.toString() == 'P'
+                                          ? const Icon(
+                                              Icons.female,
+                                              color: Colors.pinkAccent,
+                                            )
+                                          : const Icon(
+                                              Icons.male,
+                                              color: Colors.blueAccent,
+                                            ),
+                                      Text(
+                                        'Anonymous',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 8.h),
+                                    child: Text(
+                                      lastMessages[index],
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                       softWrap: true,
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
-                                        color: Colors.black,
-                                        fontSize: 14.sp,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10.sp,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 2.h),
-                                list.isEmpty
-                                    ? Padding(
-                                        padding: EdgeInsets.only(left: 8.h),
-                                        child: Text(
-                                          'No Chat History',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 10.sp,
-                                          ),
-                                        ),
-                                      )
-                                    : Padding(
-                                        padding: EdgeInsets.only(left: 8.h),
-                                        child: Text(
-                                          lastMessage,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 10.sp,
-                                          ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 24.w),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${dataset[index].angkatan}',
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 8.sp,
                                         ),
                                       ),
-                              ],
-                            ),
-                            SizedBox(width: 24.w),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${dataset[index].angkatan}',
-                                      style: TextStyle(
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.4),
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 8.sp,
+                                      SizedBox(width: 2.w),
+                                      Text(
+                                        '${dataset[index].jurusan}',
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 8.sp,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(width: 2.w),
-                                    Text(
-                                      '${dataset[index].jurusan}',
-                                      style: TextStyle(
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.4),
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 8.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
-              ),
-            );
+                    );
+                  }),
+                ),
+              );
+            } else {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: const Text('No chat history'),
+                ),
+              );
+            }
           } else {
             return Container();
           }

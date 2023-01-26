@@ -12,10 +12,12 @@ class ChatUsers {
 
 class ChatMessage {
   String messageContent;
-  String messageType;
+  int senderId;
+  int receiverId;
 
   ChatMessage({
     required this.messageContent,
-    required this.messageType,
+    required this.senderId,
+    required this.receiverId,
   });
 }

@@ -1,15 +1,12 @@
-import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
-import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
@@ -687,6 +684,8 @@ class _WorldThemeState extends State<WorldTheme> {
           }
         } else {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 child: const Text(
@@ -699,55 +698,23 @@ class _WorldThemeState extends State<WorldTheme> {
                 margin: EdgeInsets.only(left: 16.w),
               ),
               SizedBox(height: 16.h),
-              ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                itemBuilder: ((context, index) {
-                  return Card(
-                    child: Container(
-                      width: 1.sw,
-                      height: 100.h,
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
-                      padding: EdgeInsets.all(8.w),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/emotes/a1.png',
-                            width: 32.w,
-                          ),
-                          SizedBox(width: 8.w),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '{Nama Beasiswa}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              Flexible(
-                                child: Text(
-                                  'Lorem Ipsum Dolor sit Amet, this is\njust a dummy text',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 12.sp,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+              Card(
+                child: Container(
+                  width: 1.sw,
+                  height: 60.h,
+                  margin: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: Center(
+                    child: Text(
+                      'Belum ada beasiswa\nyang tersedia',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
                       ),
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
             ],
           );

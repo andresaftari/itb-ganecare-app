@@ -2,17 +2,21 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/dummy_chat.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
   final String id;
-  final String nim;
+  final int conseleeId;
+  final int conselorId;
 
   const CouncelingChatScreen({
     Key? key,
     required this.id,
-    required this.nim,
+    required this.conseleeId,
+    required this.conselorId,
   }) : super(key: key);
 
   @override
@@ -20,71 +24,76 @@ class CouncelingChatScreen extends StatefulWidget {
 }
 
 class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
-  List<ChatMessage> messages = [
-    ChatMessage(
-      messageContent: "Halo salam kenal",
-      messageType: "receiver",
-    ),
-    ChatMessage(
-      messageContent: "Halo salam kenal juga",
-      messageType: "sender",
-    ),
-    ChatMessage(
-      messageContent: "You ok?",
-      messageType: "sender",
-    ),
-    ChatMessage(
-      messageContent: "ehhhh, doing OK.",
-      messageType: "receiver",
-    ),
-    ChatMessage(
-      messageContent: "Beneran?",
-      messageType: "sender",
-    ),
-  ];
+  // final CounselingController _counselingController = Get.find();
+  final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
-  List<ChatUsers> chatList = [
-    ChatUsers(
-      name: 'Jane Russel',
-      messageText: 'Awesome Setup',
-      time: 'Now',
-    ),
-    ChatUsers(
-      name: 'Gladys Murphy',
-      messageText: 'That\'s Great',
-      time: 'Yesterday',
-    ),
-    ChatUsers(
-      name: 'Jorge Henry',
-      messageText: 'Hey where are you?',
-      time: '31 Mar',
-    ),
-    ChatUsers(
-      name: 'Philip Fox',
-      messageText: 'Busy! Call me in 20 mins',
-      time: '28 Mar',
-    ),
-    ChatUsers(
-      name: 'Debra Hawkins',
-      messageText: 'Thankyou, It\'s awesome',
-      time: '23 Mar',
-    ),
-    ChatUsers(
-      name: 'Jacob Pena',
-      messageText: 'will update you in evening',
-      time: '17 Mar',
-    ),
-    ChatUsers(
-      name: 'Andrey Jones',
-      messageText: 'Can you please share the file?',
-      time: '24 Feb',
-    ),
-    ChatUsers(
-      name: 'John Wick',
-      messageText: 'How are you?',
-      time: '18 Feb',
-    ),
-  ];
+  List<ChatMessage> textMessages = [];
+
+  // List<ChatMessage> messages = [
+  //   ChatMessage(
+  //     messageContent: "Halo salam kenal",
+  //     messageType: "receiver",
+  //   ),
+  //   ChatMessage(
+  //     messageContent: "Halo salam kenal juga",
+  //     messageType: "sender",
+  //   ),
+  //   ChatMessage(
+  //     messageContent: "You ok?",
+  //     messageType: "sender",
+  //   ),
+  //   ChatMessage(
+  //     messageContent: "ehhhh, doing OK.",
+  //     messageType: "receiver",
+  //   ),
+  //   ChatMessage(
+  //     messageContent: "Beneran?",
+  //     messageType: "sender",
+  //   ),
+  // ];
+
+  // List<ChatUsers> chatList = [
+  //   ChatUsers(
+  //     name: 'Jane Russel',
+  //     messageText: 'Awesome Setup',
+  //     time: 'Now',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Gladys Murphy',
+  //     messageText: 'That\'s Great',
+  //     time: 'Yesterday',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Jorge Henry',
+  //     messageText: 'Hey where are you?',
+  //     time: '31 Mar',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Philip Fox',
+  //     messageText: 'Busy! Call me in 20 mins',
+  //     time: '28 Mar',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Debra Hawkins',
+  //     messageText: 'Thankyou, It\'s awesome',
+  //     time: '23 Mar',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Jacob Pena',
+  //     messageText: 'will update you in evening',
+  //     time: '17 Mar',
+  //   ),
+  //   ChatUsers(
+  //     name: 'Andrey Jones',
+  //     messageText: 'Can you please share the file?',
+  //     time: '24 Feb',
+  //   ),
+  //   ChatUsers(
+  //     name: 'John Wick',
+  //     messageText: 'How are you?',
+  //     time: '18 Feb',
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +188,39 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
     );
   }
 
+  Widget buildLiveChatUI() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(top: 16.h),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            'ha',
+            style: TextStyle(fontSize: 12.sp),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildChatUI() {
     var today = DateFormat('d MMMM yyyy', 'ID').format(DateTime.now());
     log(1.sh.toString());
+
+    _firestoreUtils.getLiveChat(widget.id).then((value) {
+      if (textMessages.isNotEmpty) textMessages.clear();
+
+      for (final data in _firestoreUtils.chatList) {
+        textMessages.add(
+          ChatMessage(
+            messageContent: data.message,
+            senderId: data.idSender,
+            receiverId: data.idReceiver,
+          ),
+        );
+      }
+    });
 
     return SingleChildScrollView(
       padding: EdgeInsets.only(top: 16.h),
@@ -196,7 +235,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 style: TextStyle(fontSize: 12.sp),
               ),
               ListView.builder(
-                itemCount: messages.length,
+                itemCount: textMessages.length,
                 shrinkWrap: true,
                 padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
                 physics: const NeverScrollableScrollPhysics(),
@@ -209,19 +248,21 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       bottom: 8.h,
                     ),
                     child: Align(
-                      alignment: (messages[index].messageType == "receiver"
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
+                      alignment:
+                          (textMessages[index].receiverId == widget.conseleeId
+                              ? Alignment.topLeft
+                              : Alignment.topRight),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (messages[index].messageType == "receiver"
+                          color: (textMessages[index].receiverId ==
+                                  widget.conseleeId
                               ? Colors.grey.shade200
                               : Colors.blue[200]),
                         ),
                         padding: EdgeInsets.all(16.w),
                         child: Text(
-                          messages[index].messageContent,
+                          textMessages[index].messageContent,
                           style: TextStyle(fontSize: 14.sp),
                         ),
                       ),
@@ -232,10 +273,11 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
             ],
           ),
           if (1.sh > 100 && 1.sh < 800)
-            SizedBox(height: 1.sh - 0.81.sh)
+            SizedBox(height: 1.sh - 0.6.sh)
           else if (1.sh >= 800)
-            SizedBox(height: 1.sh - 0.75.sh),
+            SizedBox(height: 1.sh - 0.4.sh),
           Container(
+            alignment: Alignment.bottomCenter,
             padding: EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
             height: 50.h,
             color: Colors.white,
@@ -269,7 +311,28 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 ),
                 SizedBox(width: 16.w),
                 FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    Get.snackbar('Test Send', 'Coba');
+
+                    await _firestoreUtils
+                        .getLiveChat(widget.id)
+                        .then((value) {
+                      _firestoreUtils
+                          .postLiveChat(
+                            widget.id,
+                            widget.conselorId,
+                            widget.conseleeId,
+                            'testtt',
+                            value.type,
+                          )
+                          .then(
+                            (value) => log(
+                              value.toString(),
+                              name: 'post-live',
+                            ),
+                          );
+                    });
+                  },
                   child: Icon(
                     Icons.send,
                     color: Colors.white,
