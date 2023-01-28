@@ -16,7 +16,7 @@ void main() async {
   await Firebase.initializeApp();
   initializeDateFormatting();
 
-  await ProfileSharedPreference.init();
+  await SharedPrefUtils.init();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

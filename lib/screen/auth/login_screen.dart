@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String username = '', password = '';
 
   final AuthController _authController = Get.find();
-  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
 

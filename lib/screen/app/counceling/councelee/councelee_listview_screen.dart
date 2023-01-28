@@ -17,7 +17,7 @@ class CounceleeListViewScreen extends StatefulWidget {
 }
 
 class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
-  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final CounselingController _councelingController = Get.find();
 
   @override
@@ -220,7 +220,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                           MaterialPageRoute(
                             builder: (context) {
                               return CouncelingChatScreen(
-                                id: roomId,
                                 conseleeId: dataset[index].counseleeId,
                                 conselorId: dataset[index].counselorId,
                               );

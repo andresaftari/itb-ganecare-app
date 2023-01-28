@@ -3,25 +3,23 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/models/chats.dart';
 
 class FirestoreUtils extends ChangeNotifier {
-  // StreamSubscription<QuerySnapshot>? _roomSubscription;
+  RxList<Rooms> chatRooms = <Rooms>[].obs;
+  // RxList<Rooms> get roomList => _chatRoomList;
 
-  List<Rooms> _chatRoomList = [];
-  List<Rooms> get roomList => _chatRoomList;
-
-  List<Chats> _chatList = [];
-  List<Chats> get chatList => _chatList;
+  RxList<Chats> chats = <Chats>[].obs;
+  // RxList<Chats> get chatList => chats;
 
   Future getLiveChatRoom() async {
     FirebaseFirestore.instance.collection('rooms').snapshots().listen((event) {
-      _chatRoomList = [];
+      chatRooms = <Rooms>[].obs;
 
       for (final documents in event.docs) {
-        _chatRoomList.add(
+        chatRooms.add(
           Rooms(
             id: documents.id.toString(),
             createdAtRoom: documents.data()['createdAtRoom'],
@@ -46,6 +44,8 @@ class FirestoreUtils extends ChangeNotifier {
         );
       }
     });
+
+    return chatRooms;
   }
 
   Future getLiveChat(String roomId) async {
@@ -55,10 +55,10 @@ class FirestoreUtils extends ChangeNotifier {
         .collection('chats')
         .snapshots()
         .listen((event) {
-      _chatList = [];
+      chats = <Chats>[].obs;
 
       for (final documents in event.docs) {
-        _chatList.add(
+        chats.add(
           Chats(
             dateTime: documents.data()['dateTime'],
             idReceiver: documents.data()['idReceiver'],
@@ -71,25 +71,28 @@ class FirestoreUtils extends ChangeNotifier {
         );
       }
     });
+
+    return chats;
   }
 
   Future postLiveChat(
     String roomId,
+    DateTime dateTime,
     int idReceiver,
     int idSender,
     String message,
     String type,
   ) async {
     Failed failure;
-    DateTime currentDate = DateTime.now();
+    // DateTime currentDate = DateTime.now();
 
-    String today = DateFormat.yMMMMd().format(currentDate);
-    String time = DateFormat.jms().format(currentDate);
-    String date = '$today at $time UTC+7';
+    // String today = DateFormat.yMMMMd().format(currentDate);
+    // String time = DateFormat.jms().format(currentDate);
+    // String date = '$today at $time UTC+7';
 
     try {
       Chats chat = Chats(
-        dateTime: Timestamp.now(),
+        dateTime: Timestamp.fromDate(dateTime),
         idReceiver: idReceiver,
         idRoom: roomId,
         idSender: idSender,
@@ -100,19 +103,19 @@ class FirestoreUtils extends ChangeNotifier {
 
       log('chat $chat', name: 'data');
 
-      // return FirebaseFirestore.instance
-      //     .collection('rooms')
-      //     .doc(roomId)
-      //     .collection('chats')
-      //     .add({
-      //   'dateTime': Timestamp.now(),
-      //   'idRoom': roomId,
-      //   'idReceiver': idReceiver,
-      //   'idSender': idSender,
-      //   'isRead': false,
-      //   'message': message,
-      //   'type': type,
-      // });
+      FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomId)
+          .collection('chats')
+          .add({
+        'dateTime': Timestamp.fromDate(dateTime),
+        'idRoom': roomId,
+        'idReceiver': idReceiver,
+        'idSender': idSender,
+        'isRead': false,
+        'message': message,
+        'type': type,
+      });
     } catch (e) {
       failure = Failed(e.toString());
       return Left(failure);

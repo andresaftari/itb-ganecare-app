@@ -27,7 +27,7 @@ class HomeService extends HomeRepo {
 
       if (response.statusCode == 200) {
         log('${response.data}', name: 'get-quickhelp');
-        return Right(metaHelpFromJson(response.data));
+        return Right(MetaHelp.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }

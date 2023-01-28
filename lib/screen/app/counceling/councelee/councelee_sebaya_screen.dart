@@ -91,8 +91,9 @@ class _CounceleeSebayaScreenState extends State<CounceleeSebayaScreen> {
 class CounceleeSebayaViews extends StatelessWidget {
   CounceleeSebayaViews({Key? key}) : super(key: key);
 
-  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final CounselingController _councelingController = Get.find();
+
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   @override
@@ -232,19 +233,20 @@ class CounceleeSebayaViews extends StatelessWidget {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
 
-    List<String> roomIds = [];
-    List<String> lastMessages = [];
+    RxList<String> roomIds = <String>[].obs;
+    RxList<String> lastMessages = <String>[].obs;
     List<Rooms> rooms = [];
+
     List<int> counseleeIds = [];
     List<int> counselorIds = [];
 
     _firestoreUtils.getLiveChatRoom().then(
       (value) {
-        if (_firestoreUtils.roomList.isNotEmpty) {
-          rooms = _firestoreUtils.roomList;
+        if (_firestoreUtils.chatRooms.isNotEmpty) {
+          rooms = _firestoreUtils.chatRooms;
           log('$rooms', name: 'fs');
 
-          for (final data in _firestoreUtils.roomList) {
+          for (final data in _firestoreUtils.chatRooms) {
             if (roomIds.isNotEmpty) roomIds.clear();
             roomIds.add(data.id);
 
@@ -255,10 +257,12 @@ class CounceleeSebayaViews extends StatelessWidget {
             counseleeIds.add(data.idConselee);
 
             _firestoreUtils.getLiveChat(data.id).then((chat) {
-              for (final texts in _firestoreUtils.chatList) {
+              for (final texts in _firestoreUtils.chats) {
                 if (lastMessages.isNotEmpty) lastMessages.clear();
                 lastMessages.add(texts.message);
               }
+              
+              log('test $lastMessages');
             });
           }
         }
@@ -281,143 +285,164 @@ class CounceleeSebayaViews extends StatelessWidget {
             List dataset = snapshot.data.data;
             log(dataset.toString(), name: 'log-dataset');
 
-            if (rooms.isNotEmpty) {
-              return SizedBox(
-                width: 1.sw,
-                height: 260.h,
-                child: ListView.builder(
-                  itemCount: rooms.length,
-                  shrinkWrap: true,
-                  itemBuilder: ((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        log('Logged ${dataset[index].counseleeId}');
+            return Obx(
+              () => _firestoreUtils.chatRooms.isNotEmpty
+                  ? SizedBox(
+                      width: 1.sw,
+                      height: 260.h,
+                      child: ListView.builder(
+                        itemCount: _firestoreUtils.chatRooms.length,
+                        shrinkWrap: true,
+                        itemBuilder: ((context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              log('Logged ${dataset[index].counseleeId}');
+                              _sharedPreference.putString(
+                                  'roomId', roomIds[index]);
 
-                        if (_firestoreUtils.chatList.isEmpty) {
-                          Get.snackbar('Chat', 'Belum ada histori pesan');
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CouncelingChatScreen(
-                                  id: roomIds[index],
-                                  conseleeId: counseleeIds[index],
-                                  conselorId: counselorIds[index],
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      child: Card(
-                        child: Container(
-                          width: 1.sw,
-                          height: 80.h,
-                          margin: EdgeInsets.symmetric(horizontal: 16.w),
-                          padding: EdgeInsets.all(8.w),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: Image.asset(
-                                  'assets/images/cat.png',
-                                  width: 46.w,
-                                  height: 46.h,
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      dataset[index].gender.toString() == 'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                            ),
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                    ],
+                              if (_firestoreUtils.chats.isEmpty) {
+                                Get.snackbar('Chat', 'Belum ada histori pesan');
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return CouncelingChatScreen(
+                                        conseleeId: counseleeIds[index],
+                                        conselorId: counselorIds[index],
+                                      );
+                                    },
                                   ),
-                                  SizedBox(height: 2.h),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.h),
-                                    child: Text(
-                                      lastMessages[index],
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 10.sp,
+                                );
+                              }
+                            },
+                            child: Card(
+                              child: Container(
+                                width: 1.sw,
+                                height: 80.h,
+                                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                                padding: EdgeInsets.all(8.w),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.w),
+                                      child: Image.asset(
+                                        'assets/images/cat.png',
+                                        width: 46.w,
+                                        height: 46.h,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 24.w),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${dataset[index].angkatan}',
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            dataset[index].gender.toString() ==
+                                                    'P'
+                                                ? const Icon(
+                                                    Icons.female,
+                                                    color: Colors.pinkAccent,
+                                                  )
+                                                : const Icon(
+                                                    Icons.male,
+                                                    color: Colors.blueAccent,
+                                                  ),
+                                            Text(
+                                              'Anonymous',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Text(
-                                        '${dataset[index].jurusan}',
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
+                                        SizedBox(height: 2.h),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 8.h),
+                                          child: lastMessages.isNotEmpty
+                                              ? Text(
+                                                  lastMessages[index],
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 10.sp,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  '',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 10.sp,
+                                                  ),
+                                                ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                    SizedBox(width: 24.w),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${dataset[index].angkatan}',
+                                              style: TextStyle(
+                                                backgroundColor: Colors.grey
+                                                    .withOpacity(0.4),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 8.sp,
+                                              ),
+                                            ),
+                                            SizedBox(width: 2.w),
+                                            Text(
+                                              '${dataset[index].jurusan}',
+                                              style: TextStyle(
+                                                backgroundColor: Colors.grey
+                                                    .withOpacity(0.4),
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 8.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        }),
                       ),
-                    );
-                  }),
-                ),
-              );
-            } else {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: const Text('No chat history'),
-                ),
-              );
-            }
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: const Text('No chat history'),
+                      ),
+                    ),
+            );
           } else {
             return Container();
           }

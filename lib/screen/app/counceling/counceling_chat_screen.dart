@@ -1,20 +1,20 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
-import 'package:itb_ganecare/models/dummy_chat.dart';
+import 'package:itb_ganecare/models/chats.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
-  final String id;
   final int conseleeId;
   final int conselorId;
 
   const CouncelingChatScreen({
     Key? key,
-    required this.id,
     required this.conseleeId,
     required this.conselorId,
   }) : super(key: key);
@@ -24,79 +24,16 @@ class CouncelingChatScreen extends StatefulWidget {
 }
 
 class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
-  // final CounselingController _counselingController = Get.find();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
-  List<ChatMessage> textMessages = [];
-
-  // List<ChatMessage> messages = [
-  //   ChatMessage(
-  //     messageContent: "Halo salam kenal",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Halo salam kenal juga",
-  //     messageType: "sender",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "You ok?",
-  //     messageType: "sender",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "ehhhh, doing OK.",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Beneran?",
-  //     messageType: "sender",
-  //   ),
-  // ];
-
-  // List<ChatUsers> chatList = [
-  //   ChatUsers(
-  //     name: 'Jane Russel',
-  //     messageText: 'Awesome Setup',
-  //     time: 'Now',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Gladys Murphy',
-  //     messageText: 'That\'s Great',
-  //     time: 'Yesterday',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Jorge Henry',
-  //     messageText: 'Hey where are you?',
-  //     time: '31 Mar',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Philip Fox',
-  //     messageText: 'Busy! Call me in 20 mins',
-  //     time: '28 Mar',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Debra Hawkins',
-  //     messageText: 'Thankyou, It\'s awesome',
-  //     time: '23 Mar',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Jacob Pena',
-  //     messageText: 'will update you in evening',
-  //     time: '17 Mar',
-  //   ),
-  //   ChatUsers(
-  //     name: 'Andrey Jones',
-  //     messageText: 'Can you please share the file?',
-  //     time: '24 Feb',
-  //   ),
-  //   ChatUsers(
-  //     name: 'John Wick',
-  //     messageText: 'How are you?',
-  //     time: '18 Feb',
-  //   ),
-  // ];
+  RxBool isSent = false.obs;
+  RxBool isReceived = false.obs;
 
   @override
   Widget build(BuildContext context) {
+    String roomId = _sharedPreference.getString('roomId').toString();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -134,7 +71,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                   children: [
                     Container(
                       child: Text(
-                        '#${widget.id}',
+                        '#$roomId',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -184,168 +121,179 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
           ),
         ),
       ),
-      body: buildChatUI(),
+      body: Obx(
+        () =>
+            isSent.value || isReceived.value ? refreshChatUI() : buildChatUI(),
+      ),
     );
   }
 
-  Widget buildLiveChatUI() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(top: 16.h),
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            'ha',
-            style: TextStyle(fontSize: 12.sp),
-          ),
-        ],
-      ),
-    );
+  Widget refreshChatUI() {
+    isSent.value = false;
+    isReceived.value = false;
+
+    return buildChatUI();
   }
 
   Widget buildChatUI() {
-    var today = DateFormat('d MMMM yyyy', 'ID').format(DateTime.now());
-    log(1.sh.toString());
+    String roomId = _sharedPreference.getString('roomId').toString();
+    log(
+        Timestamp(
+          Timestamp.now().seconds,
+          Timestamp.now().nanoseconds,
+        ).toDate().toLocal().toString(),
+        name: 'get-timestamp');
 
-    _firestoreUtils.getLiveChat(widget.id).then((value) {
-      if (textMessages.isNotEmpty) textMessages.clear();
+    return FutureBuilder<dynamic>(
+      future: _firestoreUtils.getLiveChat(roomId),
+      builder: (context, snapshot) {
+        RxList<Chats> dataset = <Chats>[].obs;
 
-      for (final data in _firestoreUtils.chatList) {
-        textMessages.add(
-          ChatMessage(
-            messageContent: data.message,
-            senderId: data.idSender,
-            receiverId: data.idReceiver,
-          ),
-        );
-      }
-    });
+        if (_firestoreUtils.chats.isNotEmpty) {
+          dataset = _firestoreUtils.chats;
+          log('data ${_firestoreUtils.chats}', name: 'log-chat');
+        } else {
+          log('no data', name: 'log-chat');
+        }
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(top: 16.h),
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                today,
-                style: TextStyle(fontSize: 12.sp),
-              ),
-              ListView.builder(
-                itemCount: textMessages.length,
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.only(
-                      left: 16.w,
-                      right: 16.w,
-                      top: 8.h,
-                      bottom: 8.h,
-                    ),
-                    child: Align(
-                      alignment:
-                          (textMessages[index].receiverId == widget.conseleeId
-                              ? Alignment.topLeft
-                              : Alignment.topRight),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: (textMessages[index].receiverId ==
-                                  widget.conseleeId
-                              ? Colors.grey.shade200
-                              : Colors.blue[200]),
-                        ),
-                        padding: EdgeInsets.all(16.w),
-                        child: Text(
-                          textMessages[index].messageContent,
-                          style: TextStyle(fontSize: 14.sp),
+        return Obx(
+          () => _firestoreUtils.chats.isNotEmpty
+              ? SingleChildScrollView(
+                  padding: EdgeInsets.only(top: 16.h),
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        itemCount: _firestoreUtils.chats.length,
+                        shrinkWrap: true,
+                        reverse: true,
+                        padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          DateTime timestamp = Timestamp(
+                            _firestoreUtils.chats[index].dateTime.seconds,
+                            _firestoreUtils.chats[index].dateTime.nanoseconds,
+                          ).toDate();
+
+                          String today = DateFormat(
+                            'd MMMM yyyy',
+                            'ID',
+                          ).format(timestamp);
+
+                          return Column(
+                            children: [
+                              Text(
+                                today,
+                                style: TextStyle(fontSize: 12.sp),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                  left: 16.w,
+                                  right: 16.w,
+                                  top: 8.h,
+                                  bottom: 8.h,
+                                ),
+                                child: Align(
+                                  alignment: (dataset[index].idReceiver ==
+                                          widget.conseleeId
+                                      ? Alignment.topLeft
+                                      : Alignment.topRight),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: (dataset[index].idReceiver ==
+                                              widget.conseleeId
+                                          ? Colors.grey.shade200
+                                          : Colors.blue[200]),
+                                    ),
+                                    padding: EdgeInsets.all(16.w),
+                                    child: Text(
+                                      dataset[index].message,
+                                      style: TextStyle(fontSize: 14.sp),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      if (1.sh > 100 && 1.sh < 800)
+                        SizedBox(height: 1.sh - 0.6.sh)
+                      else if (1.sh >= 800)
+                        SizedBox(height: 1.sh - 0.6.sh),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        padding:
+                            EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
+                        height: 50.h,
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: 30.w,
+                                width: 30.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.lightBlue,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 22.w,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            const Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: "Write message...",
+                                  hintStyle: TextStyle(color: Colors.black54),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            FloatingActionButton(
+                              onPressed: () async {
+                                Get.snackbar('Test Send', 'Coba');
+
+                                _firestoreUtils.postLiveChat(
+                                  roomId,
+                                  DateTime.now(),
+                                  widget.conselorId,
+                                  widget.conseleeId,
+                                  'test lg',
+                                  'text',
+                                );
+
+                                isSent.value = true;
+                              },
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                                size: 16.w,
+                              ),
+                              backgroundColor: Colors.blue,
+                              elevation: 0,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          if (1.sh > 100 && 1.sh < 800)
-            SizedBox(height: 1.sh - 0.6.sh)
-          else if (1.sh >= 800)
-            SizedBox(height: 1.sh - 0.4.sh),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
-            height: 50.h,
-            color: Colors.white,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 30.w,
-                    width: 30.w,
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 22.w,
-                    ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: const Text('No chat history'),
                   ),
                 ),
-                SizedBox(width: 16.w),
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Write message...",
-                      hintStyle: TextStyle(color: Colors.black54),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-                FloatingActionButton(
-                  onPressed: () async {
-                    Get.snackbar('Test Send', 'Coba');
-
-                    await _firestoreUtils
-                        .getLiveChat(widget.id)
-                        .then((value) {
-                      _firestoreUtils
-                          .postLiveChat(
-                            widget.id,
-                            widget.conselorId,
-                            widget.conseleeId,
-                            'testtt',
-                            value.type,
-                          )
-                          .then(
-                            (value) => log(
-                              value.toString(),
-                              name: 'post-live',
-                            ),
-                          );
-                    });
-                  },
-                  child: Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 16.w,
-                  ),
-                  backgroundColor: Colors.blue,
-                  elevation: 0,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

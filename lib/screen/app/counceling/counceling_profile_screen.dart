@@ -16,7 +16,7 @@ class CouncelingProfileScreen extends StatefulWidget {
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   final ProfileController _authController = Get.find();
-  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   @override
   Widget build(BuildContext context) {

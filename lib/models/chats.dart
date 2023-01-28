@@ -91,7 +91,7 @@ class Chats {
   @override
   String toString() {
     return '''
-    _dateTime : $dateTime
+    _dateTime : ${Timestamp(dateTime.seconds, dateTime.nanoseconds).toDate()}
     _idReceiver : $idReceiver
     _idRoom : $idRoom
     _idSender : $idSender

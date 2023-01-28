@@ -42,7 +42,7 @@ class WorldTheme extends StatefulWidget {
 class _WorldThemeState extends State<WorldTheme> {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  final ProfileSharedPreference _sharedPreference = ProfileSharedPreference();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,6 @@ class _WorldThemeState extends State<WorldTheme> {
             ),
           ),
         ),
-        // body: isLoading ? buildHomeLoading() : buildHomeBody(),
         body: Stack(
           children: [
             _backgroundContainer(),
@@ -226,7 +225,7 @@ class _WorldThemeState extends State<WorldTheme> {
               child: ListView.builder(
                 itemCount: 4,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: ((context, index) {
+                itemBuilder: (context, index) {
                   if (index == 0) {
                     return Container(
                       height: 55.h,
@@ -460,7 +459,7 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   }
-                }),
+                },
               ),
             ),
           ),
