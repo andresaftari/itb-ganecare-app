@@ -112,9 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Email field
                       TextFormField(
-                        // enabled: state is AuthenticationLoadingState
-                        //     ? false
-                        //     : true,
                         autocorrect: false,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -134,9 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Password field
                       TextFormField(
-                        // enabled: state is AuthenticationLoadingState
-                        //     ? false
-                        //     : true,
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -163,9 +157,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: FittedBox(
                             child: Text(
                               'Login',
-                              // state is AuthenticationLoadingState
-                              //     ? 'Processing...'
-                              //     : 'Login',
                               textDirection: TextDirection.ltr,
                               style: TextStyle(
                                 color: Colors.white,

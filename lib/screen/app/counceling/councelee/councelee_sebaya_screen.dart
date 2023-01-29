@@ -93,7 +93,6 @@ class CounceleeSebayaViews extends StatelessWidget {
 
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final CounselingController _councelingController = Get.find();
-
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   @override
@@ -229,69 +228,77 @@ class CounceleeSebayaViews extends StatelessWidget {
     );
   }
 
-  FutureBuilder buildCounceleeWidget(BuildContext context) {
+  StreamBuilder buildCounceleeWidget(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
 
-    RxList<String> roomIds = <String>[].obs;
-    RxList<String> lastMessages = <String>[].obs;
+    List<String> roomIds = [];
+    List<String> lastMessages = [];
     List<Rooms> rooms = [];
-
     List<int> counseleeIds = [];
     List<int> counselorIds = [];
 
-    _firestoreUtils.getLiveChatRoom().then(
-      (value) {
-        if (_firestoreUtils.chatRooms.isNotEmpty) {
-          rooms = _firestoreUtils.chatRooms;
-          log('$rooms', name: 'fs');
+    return StreamBuilder<List<Rooms>>(
+        stream: _firestoreUtils.getLiveChatRoom(),
+        initialData: const [],
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else {
+              log(snapshot.data.toString(), name: 'data snapshot');
+              if (snapshot.data.isNotEmpty) {
+                log('$rooms', name: 'fs');
+                rooms = snapshot.data;
+                for (final data in rooms) {
+                  if (roomIds.isNotEmpty) roomIds.clear();
+                  roomIds.add(data.id);
 
-          for (final data in _firestoreUtils.chatRooms) {
-            if (roomIds.isNotEmpty) roomIds.clear();
-            roomIds.add(data.id);
+                  if (counselorIds.isNotEmpty) counselorIds.clear();
+                  counselorIds.add(data.idConselor);
 
-            if (counselorIds.isNotEmpty) counselorIds.clear();
-            counselorIds.add(data.idConselor);
+                  if (counseleeIds.isNotEmpty) counseleeIds.clear();
+                  counseleeIds.add(data.idConselee);
 
-            if (counseleeIds.isNotEmpty) counseleeIds.clear();
-            counseleeIds.add(data.idConselee);
+                  _firestoreUtils.getLiveChat(data.id).first.then((chat) {
+                    log(chat.toString(), name: 'log-chat');
+                    _firestoreUtils.chatList = chat;
 
-            _firestoreUtils.getLiveChat(data.id).then((chat) {
-              for (final texts in _firestoreUtils.chats) {
-                if (lastMessages.isNotEmpty) lastMessages.clear();
-                lastMessages.add(texts.message);
+                    for (final texts in chat) {
+                      if (lastMessages.isNotEmpty) lastMessages.clear();
+                      lastMessages.add(texts.message);
+                    }
+                  });
+                }
               }
-              
-              log('test $lastMessages');
-            });
+            }
           }
-        }
-      },
-    );
 
-    return FutureBuilder<dynamic>(
-      future: Future.delayed(
-        const Duration(seconds: 2),
-        () => _councelingController.postPeerCounselee(nim, name),
-      ),
-      builder: ((context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator.adaptive(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            List dataset = snapshot.data.data;
-            log(dataset.toString(), name: 'log-dataset');
+          return FutureBuilder<dynamic>(
+            future: Future.delayed(
+              const Duration(seconds: 2),
+              () => _councelingController.postPeerCounselee(nim, name),
+            ),
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  List dataset = snapshot.data.data;
+                  log(dataset.toString(), name: 'log-dataset');
 
-            return Obx(
-              () => _firestoreUtils.chatRooms.isNotEmpty
-                  ? SizedBox(
+                  if (rooms.isNotEmpty) {
+                    return SizedBox(
                       width: 1.sw,
                       height: 260.h,
                       child: ListView.builder(
-                        itemCount: _firestoreUtils.chatRooms.length,
+                        itemCount: rooms.length,
                         shrinkWrap: true,
                         itemBuilder: ((context, index) {
                           return GestureDetector(
@@ -300,7 +307,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                               _sharedPreference.putString(
                                   'roomId', roomIds[index]);
 
-                              if (_firestoreUtils.chats.isEmpty) {
+                              if (_firestoreUtils.chatList.isEmpty) {
                                 Get.snackbar('Chat', 'Belum ada histori pesan');
                               } else {
                                 Navigator.push(
@@ -366,35 +373,18 @@ class CounceleeSebayaViews extends StatelessWidget {
                                         SizedBox(height: 2.h),
                                         Padding(
                                           padding: EdgeInsets.only(left: 8.h),
-                                          child: lastMessages.isNotEmpty
-                                              ? Text(
-                                                  lastMessages[index],
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 2,
-                                                  softWrap: true,
-                                                  style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 10.sp,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 2,
-                                                  softWrap: true,
-                                                  style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 10.sp,
-                                                  ),
-                                                ),
+                                          child: Text(
+                                            lastMessages[index],
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 10.sp,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -435,22 +425,24 @@ class CounceleeSebayaViews extends StatelessWidget {
                           );
                         }),
                       ),
-                    )
-                  : Center(
+                    );
+                  } else {
+                    return Center(
                       child: Padding(
                         padding: EdgeInsets.all(8.w),
                         child: const Text('No chat history'),
                       ),
-                    ),
-            );
-          } else {
-            return Container();
-          }
-        } else {
-          return Container();
-        }
-      }),
-    );
+                    );
+                  }
+                } else {
+                  return Container();
+                }
+              } else {
+                return Container();
+              }
+            }),
+          );
+        });
   }
 
   Widget buildHistoryCounceling(BuildContext context) {

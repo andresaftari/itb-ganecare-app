@@ -8,71 +8,61 @@ import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/models/chats.dart';
 
 class FirestoreUtils extends ChangeNotifier {
-  RxList<Rooms> chatRooms = <Rooms>[].obs;
-  // RxList<Rooms> get roomList => _chatRoomList;
+  final RxList<Rooms> _chatRoomList = <Rooms>[].obs;
 
-  RxList<Chats> chats = <Chats>[].obs;
-  // RxList<Chats> get chatList => chats;
+  List<Rooms> get roomList => _chatRoomList;
+  List<Chats> chatList = [];
 
-  Future getLiveChatRoom() async {
-    FirebaseFirestore.instance.collection('rooms').snapshots().listen((event) {
-      chatRooms = <Rooms>[].obs;
-
-      for (final documents in event.docs) {
-        chatRooms.add(
-          Rooms(
-            id: documents.id.toString(),
-            createdAtRoom: documents.data()['createdAtRoom'],
-            genderConselee: documents.data()['genderConselee'],
-            genderConselor: documents.data()['genderConselor'],
-            generationConselee: documents.data()['generationConselee'],
-            generationConselor: documents.data()['generationConselor'],
-            idConselee: documents.data()['idConselee'],
-            idConselor: documents.data()['idConselor'],
-            inRoomConselee: documents.data()['inRoomConselee'],
-            inRoomConselor: documents.data()['inRoomConselor'],
-            lastMessageConselee: documents.data()['lastMessageConselee'],
-            lastMessageConselor: documents.data()['lastMessageConselor'],
-            majorConselee: documents.data()['majorConselee'],
-            majorConselor: documents.data()['majorConselor'],
-            nameConselee: documents.data()['nameConselee'],
-            nameConselor: documents.data()['nameConselor'],
-            photoConselee: documents.data()['photoConselee'],
-            photoConselor: documents.data()['photoConselor'],
-            roomStatus: documents.data()['roomStatus'],
-          ),
-        );
-      }
-    });
-
-    return chatRooms;
+  Stream<List<Rooms>> getLiveChatRoom() async* {
+    yield* FirebaseFirestore.instance
+        .collection('rooms')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map(
+              (documents) => Rooms(
+                id: documents.id.toString(),
+                createdAtRoom: documents.data()['createdAtRoom'],
+                genderConselee: documents.data()['genderConselee'],
+                genderConselor: documents.data()['genderConselor'],
+                generationConselee: documents.data()['generationConselee'],
+                generationConselor: documents.data()['generationConselor'],
+                idConselee: documents.data()['idConselee'],
+                idConselor: documents.data()['idConselor'],
+                inRoomConselee: documents.data()['inRoomConselee'],
+                inRoomConselor: documents.data()['inRoomConselor'],
+                lastMessageConselee: documents.data()['lastMessageConselee'],
+                lastMessageConselor: documents.data()['lastMessageConselor'],
+                majorConselee: documents.data()['majorConselee'],
+                majorConselor: documents.data()['majorConselor'],
+                nameConselee: documents.data()['nameConselee'],
+                nameConselor: documents.data()['nameConselor'],
+                photoConselee: documents.data()['photoConselee'],
+                photoConselor: documents.data()['photoConselor'],
+                roomStatus: documents.data()['roomStatus'],
+              ),
+            )
+            .toList());
   }
 
-  Future getLiveChat(String roomId) async {
-    FirebaseFirestore.instance
+  Stream<List<Chats>> getLiveChat(String roomId) async* {
+    yield* FirebaseFirestore.instance
         .collection('rooms')
         .doc(roomId)
         .collection('chats')
         .snapshots()
-        .listen((event) {
-      chats = <Chats>[].obs;
-
-      for (final documents in event.docs) {
-        chats.add(
-          Chats(
-            dateTime: documents.data()['dateTime'],
-            idReceiver: documents.data()['idReceiver'],
-            idRoom: documents.data()['idRoom'],
-            idSender: documents.data()['idSender'],
-            isRead: documents.data()['isRead'],
-            message: documents.data()['message'],
-            type: documents.data()['type'],
-          ),
-        );
-      }
-    });
-
-    return chats;
+        .map((snapshot) => snapshot.docs
+            .map(
+              (documents) => Chats(
+                dateTime: documents.data()['dateTime'],
+                idReceiver: documents.data()['idReceiver'],
+                idRoom: documents.data()['idRoom'],
+                idSender: documents.data()['idSender'],
+                isRead: documents.data()['isRead'],
+                message: documents.data()['message'],
+                type: documents.data()['type'],
+              ),
+            )
+            .toList());
   }
 
   Future postLiveChat(

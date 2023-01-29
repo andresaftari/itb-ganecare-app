@@ -27,8 +27,8 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
-  RxBool isSent = false.obs;
-  RxBool isReceived = false.obs;
+  final _chatKey = GlobalKey<FormState>(debugLabel: 'chat');
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -121,22 +121,14 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
           ),
         ),
       ),
-      body: Obx(
-        () =>
-            isSent.value || isReceived.value ? refreshChatUI() : buildChatUI(),
-      ),
+      body: buildChatUI(),
     );
-  }
-
-  Widget refreshChatUI() {
-    isSent.value = false;
-    isReceived.value = false;
-
-    return buildChatUI();
   }
 
   Widget buildChatUI() {
     String roomId = _sharedPreference.getString('roomId').toString();
+    log(1.sh.toString());
+
     log(
         Timestamp(
           Timestamp.now().seconds,
@@ -144,156 +136,154 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
         ).toDate().toLocal().toString(),
         name: 'get-timestamp');
 
-    return FutureBuilder<dynamic>(
-      future: _firestoreUtils.getLiveChat(roomId),
-      builder: (context, snapshot) {
-        RxList<Chats> dataset = <Chats>[].obs;
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(top: 16.h),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          StreamBuilder<List<Chats>>(
+            stream: _firestoreUtils.getLiveChat(roomId),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                var textMessages = snapshot.data;
 
-        if (_firestoreUtils.chats.isNotEmpty) {
-          dataset = _firestoreUtils.chats;
-          log('data ${_firestoreUtils.chats}', name: 'log-chat');
-        } else {
-          log('no data', name: 'log-chat');
-        }
+                return ListView.builder(
+                  itemCount: textMessages.length,
+                  shrinkWrap: true,
+                  reverse: true,
+                  padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    DateTime timestamp = Timestamp(
+                      textMessages[index].dateTime.seconds,
+                      textMessages[index].dateTime.nanoseconds,
+                    ).toDate();
 
-        return Obx(
-          () => _firestoreUtils.chats.isNotEmpty
-              ? SingleChildScrollView(
-                  padding: EdgeInsets.only(top: 16.h),
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        itemCount: _firestoreUtils.chats.length,
-                        shrinkWrap: true,
-                        reverse: true,
-                        padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          DateTime timestamp = Timestamp(
-                            _firestoreUtils.chats[index].dateTime.seconds,
-                            _firestoreUtils.chats[index].dateTime.nanoseconds,
-                          ).toDate();
+                    String today = DateFormat(
+                      'd MMMM yyyy',
+                      'ID',
+                    ).format(timestamp);
 
-                          String today = DateFormat(
-                            'd MMMM yyyy',
-                            'ID',
-                          ).format(timestamp);
-
-                          return Column(
-                            children: [
-                              Text(
-                                today,
-                                style: TextStyle(fontSize: 12.sp),
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                  left: 16.w,
-                                  right: 16.w,
-                                  top: 8.h,
-                                  bottom: 8.h,
-                                ),
-                                child: Align(
-                                  alignment: (dataset[index].idReceiver ==
-                                          widget.conseleeId
-                                      ? Alignment.topLeft
-                                      : Alignment.topRight),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: (dataset[index].idReceiver ==
-                                              widget.conseleeId
-                                          ? Colors.grey.shade200
-                                          : Colors.blue[200]),
-                                    ),
-                                    padding: EdgeInsets.all(16.w),
-                                    child: Text(
-                                      dataset[index].message,
-                                      style: TextStyle(fontSize: 14.sp),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      if (1.sh > 100 && 1.sh < 800)
-                        SizedBox(height: 1.sh - 0.6.sh)
-                      else if (1.sh >= 800)
-                        SizedBox(height: 1.sh - 0.6.sh),
-                      Container(
-                        alignment: Alignment.bottomCenter,
-                        padding:
-                            EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
-                        height: 50.h,
-                        color: Colors.white,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 30.w,
-                                width: 30.w,
-                                decoration: BoxDecoration(
-                                  color: Colors.lightBlue,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 22.w,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 16.w),
-                            const Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Write message...",
-                                  hintStyle: TextStyle(color: Colors.black54),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 16.w),
-                            FloatingActionButton(
-                              onPressed: () async {
-                                Get.snackbar('Test Send', 'Coba');
-
-                                _firestoreUtils.postLiveChat(
-                                  roomId,
-                                  DateTime.now(),
-                                  widget.conselorId,
-                                  widget.conseleeId,
-                                  'test lg',
-                                  'text',
-                                );
-
-                                isSent.value = true;
-                              },
-                              child: Icon(
-                                Icons.send,
-                                color: Colors.white,
-                                size: 16.w,
-                              ),
-                              backgroundColor: Colors.blue,
-                              elevation: 0,
-                            ),
-                          ],
+                    return Column(
+                      children: [
+                        Text(
+                          today,
+                          style: TextStyle(fontSize: 12.sp),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              : Center(
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: 16.w,
+                            right: 16.w,
+                            top: 8.h,
+                            bottom: 8.h,
+                          ),
+                          child: Align(
+                            alignment: (textMessages[index].idReceiver ==
+                                    widget.conseleeId
+                                ? Alignment.topLeft
+                                : Alignment.topRight),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: (textMessages[index].idReceiver ==
+                                        widget.conseleeId
+                                    ? Colors.grey.shade200
+                                    : Colors.blue[200]),
+                              ),
+                              padding: EdgeInsets.all(16.w),
+                              child: Text(
+                                textMessages[index].message,
+                                style: TextStyle(fontSize: 14.sp),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                return Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.w),
                     child: const Text('No chat history'),
                   ),
+                );
+              }
+            },
+          ),
+          if (1.sh > 100 && 1.sh < 800)
+            SizedBox(height: 1.sh - 0.6.sh)
+          else if (1.sh >= 800)
+            SizedBox(height: 1.sh - 0.8.sh),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
+            height: 50.h,
+            color: Colors.white,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 30.w,
+                    width: 30.w,
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlue,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 22.w,
+                    ),
+                  ),
                 ),
-        );
-      },
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Form(
+                    key: _chatKey,
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: "Write message...",
+                        hintStyle: TextStyle(color: Colors.black54),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                FloatingActionButton(
+                  onPressed: () async {
+                    if (_messageController.value.text != '') {
+                      await _firestoreUtils.postLiveChat(
+                        roomId,
+                        DateTime.now(),
+                        widget.conselorId,
+                        widget.conseleeId,
+                        _messageController.value.text,
+                        'text',
+                      );
+
+                      Get.snackbar('Message', 'Pesan terkirim');
+                    } else {
+                      Get.snackbar('Message', 'Anda belum menuliskan pesan');
+                    }
+                  },
+                  child: Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    size: 16.w,
+                  ),
+                  backgroundColor: Colors.blue,
+                  elevation: 0,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
