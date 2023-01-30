@@ -127,6 +127,8 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
   Widget buildChatUI() {
     String roomId = _sharedPreference.getString('roomId').toString();
+    Set<String> setDate = <String>{};
+
     log(1.sh.toString());
 
     log(
@@ -145,63 +147,105 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
             stream: _firestoreUtils.getLiveChat(roomId),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                var textMessages = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator.adaptive();
+                } else if (snapshot.connectionState == ConnectionState.active) {
+                  var textMessages = snapshot.data;
 
-                return ListView.builder(
-                  itemCount: textMessages.length,
-                  shrinkWrap: true,
-                  reverse: true,
-                  padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    DateTime timestamp = Timestamp(
-                      textMessages[index].dateTime.seconds,
-                      textMessages[index].dateTime.nanoseconds,
-                    ).toDate();
+                  return ListView.builder(
+                    itemCount: textMessages.length,
+                    shrinkWrap: true,
+                    reverse: true,
+                    padding: EdgeInsets.only(top: 8.w, bottom: 8.h),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      DateTime timestamp = Timestamp(
+                        textMessages[index].dateTime.seconds,
+                        textMessages[index].dateTime.nanoseconds,
+                      ).toDate();
 
-                    String today = DateFormat(
-                      'd MMMM yyyy',
-                      'ID',
-                    ).format(timestamp);
+                      String date = DateFormat(
+                        'd MMMM yyyy',
+                        'ID',
+                      ).format(timestamp);
 
-                    return Column(
-                      children: [
-                        Text(
-                          today,
-                          style: TextStyle(fontSize: 12.sp),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: 16.w,
-                            right: 16.w,
-                            top: 8.h,
-                            bottom: 8.h,
-                          ),
-                          child: Align(
-                            alignment: (textMessages[index].idReceiver ==
-                                    widget.conseleeId
-                                ? Alignment.topLeft
-                                : Alignment.topRight),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: (textMessages[index].idReceiver ==
-                                        widget.conseleeId
-                                    ? Colors.grey.shade200
-                                    : Colors.blue[200]),
-                              ),
-                              padding: EdgeInsets.all(16.w),
-                              child: Text(
-                                textMessages[index].message,
-                                style: TextStyle(fontSize: 14.sp),
+
+                      setDate.add(date);
+
+                      // int count1 = 0;
+                      // int count2 = 0;
+                      // int count3 = 0;
+                      // int count4 = 0;
+                      // var tempMessages = [];
+
+                      // for (var i = 0; i < textMessages.length; i++) {
+                      //   if (setDate.elementAt(0) == date) {
+                      //     count1++;
+                      //   }
+                      //   if (setDate.elementAt(1) == date) {
+                      //     count2++;
+                      //   }
+                      //   if (setDate.elementAt(2) == date) {
+                      //     count3++;
+                      //   }
+                      //   if (setDate.elementAt(3) == date) {
+                      //     count4++;
+                      //   }
+                      // }
+
+                      // log('$count1 $count2 $count3 $count4', name: 'counter');
+
+                      return Column(
+                        children: [
+                          if (setDate.isNotEmpty)
+                            for (int i = 0; i < setDate.length; i++)
+                              if (date == setDate.elementAt(i))
+                                Text(
+                                  setDate.elementAt(i),
+                                  style: TextStyle(fontSize: 12.sp),
+                                )
+                              else
+                                Container(),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: 16.w,
+                              right: 16.w,
+                              top: 8.h,
+                              bottom: 8.h,
+                            ),
+                            child: Align(
+                              alignment: (textMessages[index].idReceiver ==
+                                      widget.conseleeId
+                                  ? Alignment.topLeft
+                                  : Alignment.topRight),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: (textMessages[index].idReceiver ==
+                                          widget.conseleeId
+                                      ? Colors.grey.shade200
+                                      : Colors.blue[200]),
+                                ),
+                                padding: EdgeInsets.all(16.w),
+                                child: Text(
+                                  textMessages[index].message,
+                                  style: TextStyle(fontSize: 14.sp),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: const Text('No chat history'),
+                    ),
+                  );
+                }
               } else {
                 return Center(
                   child: Padding(
