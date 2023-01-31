@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 
 class CounceleeListViewScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class CounceleeListViewScreen extends StatefulWidget {
 class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final CounselingController _councelingController = Get.find();
+  final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
         child: Column(
           children: [
             buildHeader(context),
-            buildCouncelee(context),
+            buildListCounselor(context),
             SizedBox(height: 8.h),
             buildPendingRequestList(context),
           ],
@@ -177,10 +179,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                   ),
                 );
               },
-              icon: const Icon(
-                CupertinoIcons.sort_down,
-                size: 24,
-              ),
+              icon: const Icon(CupertinoIcons.sort_down, size: 24),
             ),
           ],
         ),
@@ -188,7 +187,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     );
   }
 
-  FutureBuilder buildCouncelee(BuildContext context) {
+  FutureBuilder buildListCounselor(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
 

@@ -37,13 +37,10 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         toolbarHeight: 70.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: () => Navigator.pop(context),
           child: const Icon(
             Icons.close,
             color: Colors.white,
@@ -209,7 +206,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       );
                     },
                     indexedItemBuilder: (context, element, index) {
-                      // final reversed = chats.length;
+                      final reversed = chats.length - 1 - index;
 
                       Chats chat = Chats(
                         dateTime: chats[index].dateTime,
@@ -223,7 +220,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       return Container(
                         margin: EdgeInsets.only(
-                          bottom: index == chats.length - 1 ? 100.h : 0.h,
+                          bottom: reversed == chats.length - 1 ? 100.h : 0.h,
                         ),
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                         child: buildChatWidget(chat),
@@ -259,7 +256,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            alignment: Alignment.bottomCenter,
             padding: EdgeInsets.only(left: 8.w, bottom: 8.w, top: 8.h),
             height: 50.h,
             color: Colors.white,
@@ -309,7 +305,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       );
 
                       Get.snackbar('Message', 'Pesan terkirim');
-
                       _messageController.text = '';
                     } else {
                       Get.snackbar('Message', 'Anda belum menuliskan pesan');

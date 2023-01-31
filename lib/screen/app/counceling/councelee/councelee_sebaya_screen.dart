@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
+import 'package:itb_ganecare/models/counseling.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
@@ -202,8 +204,8 @@ class CounceleeSebayaViews extends StatelessWidget {
       body: Column(
         children: [
           buildHeader(context),
-          buildCounceleeWidget(context),
-          // buildHistoryCounceling(context),
+          buildCouncelee(context),
+          buildHistoryCounceling(context),
         ],
       ),
     );
@@ -228,12 +230,13 @@ class CounceleeSebayaViews extends StatelessWidget {
     );
   }
 
-  StreamBuilder buildCounceleeWidget(BuildContext context) {
+  StreamBuilder buildCouncelee(BuildContext context) {
     String nim = _sharedPreference.getString('nim').toString();
     String name = _sharedPreference.getString('name').toString();
 
     List<String> roomIds = [];
     List<String> lastMessages = [];
+    List<bool> isReads = [];
     List<Rooms> rooms = [];
     List<int> counseleeIds = [];
     List<int> counselorIds = [];
@@ -241,18 +244,17 @@ class CounceleeSebayaViews extends StatelessWidget {
     return StreamBuilder<List<Rooms>>(
         stream: _firestoreUtils.getLiveChatRoom(),
         initialData: const [],
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, AsyncSnapshot snap) {
+          if (snap.hasData) {
+            if (snap.connectionState == ConnectionState.waiting) {
               return const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CircularProgressIndicator.adaptive(),
               );
             } else {
-              log(snapshot.data.toString(), name: 'data snapshot');
-              if (snapshot.data.isNotEmpty) {
-                log('$rooms', name: 'fs');
-                rooms = snapshot.data;
+              if (snap.data.isNotEmpty) {
+                rooms = snap.data;
+
                 for (final data in rooms) {
                   if (roomIds.isNotEmpty) roomIds.clear();
                   roomIds.add(data.id);
@@ -264,12 +266,14 @@ class CounceleeSebayaViews extends StatelessWidget {
                   counseleeIds.add(data.idConselee);
 
                   _firestoreUtils.getLiveChat(data.id).first.then((chat) {
-                    log(chat.toString(), name: 'log-chat');
                     _firestoreUtils.chatList = chat;
 
                     for (final texts in chat) {
                       if (lastMessages.isNotEmpty) lastMessages.clear();
                       lastMessages.add(texts.message);
+
+                      if (isReads.isNotEmpty) isReads.clear();
+                      isReads.add(texts.isRead);
                     }
                   });
                 }
@@ -290,142 +294,30 @@ class CounceleeSebayaViews extends StatelessWidget {
                     child: CircularProgressIndicator.adaptive(),
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
-                  List dataset = snapshot.data.data;
+                  List<Counselee> dataset = snapshot.data.data;
                   log(dataset.toString(), name: 'log-dataset');
 
                   if (rooms.isNotEmpty) {
-                    return SizedBox(
-                      width: 1.sw,
-                      height: 260.h,
-                      child: ListView.builder(
-                        itemCount: rooms.length,
-                        shrinkWrap: true,
-                        itemBuilder: ((context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              log('Logged ${dataset[index].counseleeId}');
-                              _sharedPreference.putString(
-                                  'roomId', roomIds[index]);
-
-                              if (_firestoreUtils.chatList.isEmpty) {
-                                Get.snackbar('Chat', 'Belum ada histori pesan');
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return CouncelingChatScreen(
-                                        conseleeId: counseleeIds[index],
-                                        conselorId: counselorIds[index],
-                                      );
-                                    },
-                                  ),
-                                );
-                              }
-                            },
-                            child: Card(
-                              child: Container(
-                                width: 1.sw,
-                                height: 80.h,
-                                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                                padding: EdgeInsets.all(8.w),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(8.w),
-                                      child: Image.asset(
-                                        'assets/images/cat.png',
-                                        width: 46.w,
-                                        height: 46.h,
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            dataset[index].gender.toString() ==
-                                                    'P'
-                                                ? const Icon(
-                                                    Icons.female,
-                                                    color: Colors.pinkAccent,
-                                                  )
-                                                : const Icon(
-                                                    Icons.male,
-                                                    color: Colors.blueAccent,
-                                                  ),
-                                            Text(
-                                              'Anonymous',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Colors.black,
-                                                fontSize: 14.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 2.h),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 8.h),
-                                          child: Text(
-                                            lastMessages[index],
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            softWrap: true,
-                                            style: TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 10.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 24.w),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '${dataset[index].angkatan}',
-                                              style: TextStyle(
-                                                backgroundColor: Colors.grey
-                                                    .withOpacity(0.4),
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 8.sp,
-                                              ),
-                                            ),
-                                            SizedBox(width: 2.w),
-                                            Text(
-                                              '${dataset[index].jurusan}',
-                                              style: TextStyle(
-                                                backgroundColor: Colors.grey
-                                                    .withOpacity(0.4),
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 8.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
-                    );
+                    // if (isReads.contains(false)) {
+                    //   return buildHistoryCounceling(context);
+                    // } else {
+                    //   return buildCounceleeWidget(
+                    //     dataset,
+                    //     rooms,
+                    //     roomIds,
+                    //     lastMessages,
+                    //     counseleeIds,
+                    //     counselorIds,
+                    //   );
+                    // }
+                    return buildCounceleeWidget(
+                        dataset,
+                        rooms,
+                        roomIds,
+                        lastMessages,
+                        counseleeIds,
+                        counselorIds,
+                      );
                   } else {
                     return Center(
                       child: Padding(
@@ -435,14 +327,164 @@ class CounceleeSebayaViews extends StatelessWidget {
                     );
                   }
                 } else {
-                  return Container();
+                  return Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: const Text('No chat history'),
+                    ),
+                  );
                 }
               } else {
-                return Container();
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: const Text('No chat history'),
+                  ),
+                );
               }
             }),
           );
         });
+  }
+
+  Widget buildCounceleeWidget(
+    List<Counselee> dataset,
+    List<Rooms> rooms,
+    List<String> roomIds,
+    List<String> lastMessages,
+    List<int> counseleeIds,
+    List<int> counselorIds,
+  ) {
+    return SizedBox(
+      width: 1.sw,
+      height: 260.h,
+      child: ListView.builder(
+        itemCount: rooms.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              log('Logged ${dataset[index].counseleeId}');
+
+              _sharedPreference.putString(
+                'roomId',
+                roomIds[index],
+              );
+
+              if (_firestoreUtils.chatList.isEmpty) {
+                Get.snackbar('Chat', 'Belum ada histori pesan');
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return CouncelingChatScreen(
+                        conseleeId: counseleeIds[index],
+                        conselorId: counselorIds[index],
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+            child: Card(
+              child: Container(
+                width: 1.sw,
+                height: 80.h,
+                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                padding: EdgeInsets.all(8.w),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Image.asset(
+                        'assets/images/cat.png',
+                        width: 46.w,
+                        height: 46.h,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            dataset[index].gender.toString() == 'P'
+                                ? const Icon(
+                                    Icons.female,
+                                    color: Colors.pinkAccent,
+                                  )
+                                : const Icon(
+                                    Icons.male,
+                                    color: Colors.blueAccent,
+                                  ),
+                            Text(
+                              'Anonymous',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2.h),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.h),
+                          child: Text(
+                            lastMessages[index],
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            softWrap: true,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 24.w),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${dataset[index].angkatan}',
+                              style: TextStyle(
+                                backgroundColor: Colors.grey.withOpacity(0.4),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8.sp,
+                              ),
+                            ),
+                            SizedBox(width: 2.w),
+                            Text(
+                              dataset[index].jurusan,
+                              style: TextStyle(
+                                backgroundColor: Colors.grey.withOpacity(0.4),
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Widget buildHistoryCounceling(BuildContext context) {

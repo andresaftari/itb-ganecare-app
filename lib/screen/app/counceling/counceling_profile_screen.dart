@@ -68,11 +68,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       body: Stack(
         children: [
           buildHeader(),
-          1.sh >= 800
-              ? buildProfileFace()
-              : const Center(
-                  child: Text('Profile UI is in development'),
-                )
+          const Center(child: Text('Profile UI is in development')),
         ],
       ),
       floatingActionButton: buildFloatingActionButton(),
