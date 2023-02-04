@@ -97,6 +97,9 @@ class CounceleeSebayaViews extends StatelessWidget {
   final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
+  final RxList<String> isApproved = <String>[].obs;
+  final RxList<String> isEnded = <String>[].obs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,7 +208,6 @@ class CounceleeSebayaViews extends StatelessWidget {
         children: [
           buildHeader(context),
           buildCouncelee(context),
-          // buildHistoryCounceling(context),
         ],
       ),
     );
@@ -265,6 +267,12 @@ class CounceleeSebayaViews extends StatelessWidget {
                   if (counseleeIds.isNotEmpty) counseleeIds.clear();
                   counseleeIds.add(data.idConselee);
 
+                  if (isApproved.isNotEmpty) isApproved.clear();
+                  if (data.roomStatus == 'approve') isApproved.add(data.roomStatus);
+
+                  if (isEnded.isNotEmpty) isEnded.clear();
+                  if (data.roomStatus == 'ended') isEnded.add(data.roomStatus);
+
                   _firestoreUtils.getLiveChat(data.id).listen((event) {
                     _firestoreUtils.chatList = event;
 
@@ -307,7 +315,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                           lastMessages,
                           counseleeIds,
                           counselorIds,
-                          snap.data.roomStatus,
+                          isApproved,
                         ),
                         buildHistoryCounceling(
                           context,
@@ -317,7 +325,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                           lastMessages,
                           counseleeIds,
                           counselorIds,
-                          snap.data.roomStatus,
+                          isEnded,
                         ),
                       ],
                     );
@@ -357,9 +365,9 @@ class CounceleeSebayaViews extends StatelessWidget {
     List<String> lastMessages,
     List<int> counseleeIds,
     List<int> counselorIds,
-    String status,
+    List<String> status,
   ) {
-    if (status == 'approved') {
+    if (status.isNotEmpty) {
       return SizedBox(
         width: 1.sw,
         height: 260.h,
@@ -503,9 +511,9 @@ class CounceleeSebayaViews extends StatelessWidget {
     List<String> lastMessages,
     List<int> counseleeIds,
     List<int> counselorIds,
-    String status,
+    List<String> status,
   ) {
-    if (status == 'ended') {
+    if (status.isNotEmpty) {
       return SizedBox(
         width: 1.sw,
         height: 150.h,
