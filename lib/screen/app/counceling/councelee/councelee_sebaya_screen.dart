@@ -205,7 +205,7 @@ class CounceleeSebayaViews extends StatelessWidget {
         children: [
           buildHeader(context),
           buildCouncelee(context),
-          buildHistoryCounceling(context),
+          // buildHistoryCounceling(context),
         ],
       ),
     );
@@ -265,14 +265,14 @@ class CounceleeSebayaViews extends StatelessWidget {
                   if (counseleeIds.isNotEmpty) counseleeIds.clear();
                   counseleeIds.add(data.idConselee);
 
-                  _firestoreUtils.getLiveChat(data.id).first.then((chat) {
-                    _firestoreUtils.chatList = chat;
+                  _firestoreUtils.getLiveChat(data.id).listen((event) {
+                    _firestoreUtils.chatList = event;
 
-                    for (final texts in chat) {
+                    for (final texts in event) {
                       if (lastMessages.isNotEmpty) lastMessages.clear();
                       lastMessages.add(texts.message);
 
-                      if (isReads.isNotEmpty) isReads.clear();
+                      // if (isReads.isNotEmpty) isReads.clear();
                       isReads.add(texts.isRead);
                     }
                   });
@@ -286,7 +286,7 @@ class CounceleeSebayaViews extends StatelessWidget {
               const Duration(seconds: 2),
               () => _councelingController.postPeerCounselee(nim, name),
             ),
-            builder: ((context, snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Padding(
@@ -295,13 +295,34 @@ class CounceleeSebayaViews extends StatelessWidget {
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   List<Counselee> dataset = snapshot.data.data;
-                  log(dataset.toString(), name: 'log-dataset');
+                  log(isReads.toString(), name: 'log-dataset');
 
                   if (rooms.isNotEmpty) {
-                    // if (isReads.contains(false)) {
-                    //   return buildHistoryCounceling(context);
-                    // } else {
-                    //   return buildCounceleeWidget(
+                    return Column(
+                      children: [
+                        buildCounceleeWidget(
+                          dataset,
+                          rooms,
+                          roomIds,
+                          lastMessages,
+                          counseleeIds,
+                          counselorIds,
+                          isReads.contains(false),
+                        ),
+                        buildHistoryCounceling(
+                          context,
+                          dataset,
+                          rooms,
+                          roomIds,
+                          lastMessages,
+                          counseleeIds,
+                          counselorIds,
+                          isReads.contains(false),
+                        ),
+                      ],
+                    );
+
+                    // return buildCounceleeWidget(
                     //     dataset,
                     //     rooms,
                     //     roomIds,
@@ -309,15 +330,6 @@ class CounceleeSebayaViews extends StatelessWidget {
                     //     counseleeIds,
                     //     counselorIds,
                     //   );
-                    // }
-                    return buildCounceleeWidget(
-                        dataset,
-                        rooms,
-                        roomIds,
-                        lastMessages,
-                        counseleeIds,
-                        counselorIds,
-                      );
                   } else {
                     return Center(
                       child: Padding(
@@ -342,7 +354,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                   ),
                 );
               }
-            }),
+            },
           );
         });
   }
@@ -354,303 +366,327 @@ class CounceleeSebayaViews extends StatelessWidget {
     List<String> lastMessages,
     List<int> counseleeIds,
     List<int> counselorIds,
+    bool isReadFalse,
   ) {
-    return SizedBox(
-      width: 1.sw,
-      height: 260.h,
-      child: ListView.builder(
-        itemCount: rooms.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              log('Logged ${dataset[index].counseleeId}');
+    return isReadFalse
+        ? SizedBox(
+            width: 1.sw,
+            height: 260.h,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: rooms.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    log('Logged ${dataset[index].counseleeId}');
 
-              _sharedPreference.putString(
-                'roomId',
-                roomIds[index],
-              );
-
-              if (_firestoreUtils.chatList.isEmpty) {
-                Get.snackbar('Chat', 'Belum ada histori pesan');
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return CouncelingChatScreen(
-                        conseleeId: counseleeIds[index],
-                        conselorId: counselorIds[index],
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-            child: Card(
-              child: Container(
-                width: 1.sw,
-                height: 80.h,
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding: EdgeInsets.all(8.w),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: Image.asset(
-                        'assets/images/cat.png',
-                        width: 46.w,
-                        height: 46.h,
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            dataset[index].gender.toString() == 'P'
-                                ? const Icon(
-                                    Icons.female,
-                                    color: Colors.pinkAccent,
-                                  )
-                                : const Icon(
-                                    Icons.male,
-                                    color: Colors.blueAccent,
-                                  ),
-                            Text(
-                              'Anonymous',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 2.h),
-                        Padding(
-                          padding: EdgeInsets.only(left: 8.h),
-                          child: Text(
-                            lastMessages[index],
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            softWrap: true,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 24.w),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${dataset[index].angkatan}',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8.sp,
-                              ),
-                            ),
-                            SizedBox(width: 2.w),
-                            Text(
-                              dataset[index].jurusan,
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 8.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget buildHistoryCounceling(BuildContext context) {
-    return SizedBox(
-      width: 1.sw,
-      height: 250.h,
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'History Counceling',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        elevation: 1,
-                        backgroundColor: Colors.orange,
-                        content: Text(
-                          'Sorting still in development',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
+                    _sharedPreference.putString(
+                      'roomId',
+                      roomIds[index],
                     );
-                  },
-                  icon: const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListView.builder(
-            itemCount: 2,
-            shrinkWrap: true,
-            itemBuilder: ((context, index) {
-              return GestureDetector(
-                onTap: () {
-                  log('Logged');
 
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) {
-                  //       return const CouncelingChatScreen();
-                  //     },
-                  //   ),
-                  // );
-                  // Get.to(() => const CouncelingChatScreen());
-                },
-                child: Card(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 80,
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset('assets/images/cat.png'),
+                    if (_firestoreUtils.chatList.isEmpty) {
+                      Get.snackbar('Chat', 'Belum ada histori pesan');
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CouncelingChatScreen(
+                              conseleeId: counseleeIds[index],
+                              conselorId: counselorIds[index],
+                            );
+                          },
                         ),
-                        const SizedBox(width: 4),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '#21345',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                ),
-                              ),
+                      );
+                    }
+                  },
+                  child: Card(
+                    child: Container(
+                      width: 1.sw,
+                      height: 80.h,
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.all(8.w),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Image.asset(
+                              'assets/images/cat.png',
+                              width: 46.w,
+                              height: 46.h,
                             ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.female,
-                                  color: Colors.pinkAccent,
-                                ),
-                                Text(
-                                  'Anonymous',
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  dataset[index].gender.toString() == 'P'
+                                      ? const Icon(
+                                          Icons.female,
+                                          color: Colors.pinkAccent,
+                                        )
+                                      : const Icon(
+                                          Icons.male,
+                                          color: Colors.blueAccent,
+                                        ),
+                                  Text(
+                                    'Anonymous',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Colors.black,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 2.h),
+                              Padding(
+                                padding: EdgeInsets.only(left: 8.h),
+                                child: Text(
+                                  lastMessages[index],
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   softWrap: true,
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10.sp,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                'Saya seorang yang hiya hiya hiya',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                softWrap: true,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '2017',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
+                            ],
+                          ),
+                          SizedBox(width: 24.w),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${dataset[index].angkatan}',
+                                    style: TextStyle(
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.4),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 8.sp,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Beda Jurusan',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
+                                  SizedBox(width: 2.w),
+                                  Text(
+                                    dataset[index].jurusan,
+                                    style: TextStyle(
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.4),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 8.sp,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        : SizedBox(width: 1.sw, height: 260.h);
+  }
+
+  Widget buildHistoryCounceling(
+    BuildContext context,
+    List<Counselee> dataset,
+    List<Rooms> rooms,
+    List<String> roomIds,
+    List<String> lastMessages,
+    List<int> counseleeIds,
+    List<int> counselorIds,
+    bool isReadFalse,
+  ) {
+    return isReadFalse
+        ? SizedBox(
+            width: 1.sw,
+            height: 150.h,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'History Counceling',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
                     ),
                   ),
                 ),
-              );
-            }),
-          ),
-        ],
-      ),
-    );
+                Container(
+                  margin: EdgeInsets.only(top: 16.h),
+                  width: 1.sw,
+                  child: const Center(
+                    child: Text('No History'),
+                  ),
+                ),
+              ],
+            ))
+        : SizedBox(
+            width: 1.sw,
+            height: 150.h,
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    'History Counceling',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: rooms.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        log('Logged ${dataset[index].counseleeId}');
+
+                        _sharedPreference.putString(
+                          'roomId',
+                          roomIds[index],
+                        );
+
+                        if (_firestoreUtils.chatList.isEmpty) {
+                          Get.snackbar('Chat', 'Belum ada histori pesan');
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return CouncelingChatScreen(
+                                  conseleeId: counseleeIds[index],
+                                  conselorId: counselorIds[index],
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      child: Card(
+                        child: Container(
+                          width: 1.sw,
+                          height: 80.h,
+                          padding: EdgeInsets.all(8.w),
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.w),
+                                child: Image.asset(
+                                  'assets/images/cat.png',
+                                  width: 46.w,
+                                  height: 46.h,
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      dataset[index].gender.toString() == 'P'
+                                          ? const Icon(
+                                              Icons.female,
+                                              color: Colors.pinkAccent,
+                                            )
+                                          : const Icon(
+                                              Icons.male,
+                                              color: Colors.blueAccent,
+                                            ),
+                                      Text(
+                                        'Anonymous',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 8.h),
+                                    child: Text(
+                                      lastMessages[index],
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 24.w),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${dataset[index].angkatan}',
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 2.w),
+                                      Text(
+                                        dataset[index].jurusan,
+                                        style: TextStyle(
+                                          backgroundColor:
+                                              Colors.grey.withOpacity(0.4),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 8.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
   }
 }
