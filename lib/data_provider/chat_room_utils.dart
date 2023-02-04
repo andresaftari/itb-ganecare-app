@@ -111,4 +111,56 @@ class FirestoreUtils extends ChangeNotifier {
       return Left(failure);
     }
   }
+
+  Future updateInRoom({
+    required String roomId,
+    bool? isCounselorInRoom,
+    bool? isCounseleeInRoom,
+  }) async {
+    Failed failure;
+
+    try {
+      if (isCounseleeInRoom != null) {
+        FirebaseFirestore.instance.collection('rooms').doc(roomId).update(
+          {
+            'inRoomConselee': isCounseleeInRoom,
+          },
+        );
+      }
+
+      if (isCounselorInRoom != null) {
+        FirebaseFirestore.instance.collection('rooms').doc(roomId).update(
+          {
+            'inRoomConselor': isCounselorInRoom,
+          },
+        );
+      }
+    } catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  Future updateIsRead(
+    String roomId,
+    String chatId,
+  ) async {
+    Failed failure;
+
+    try {
+      FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(roomId)
+          .collection('chats')
+          .doc(chatId)
+          .update(
+        {
+          'isRead': true,
+        },
+      );
+    } catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
 }

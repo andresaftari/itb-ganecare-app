@@ -35,12 +35,54 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   Widget build(BuildContext context) {
     String roomId = _sharedPreference.getString('roomId').toString();
 
+    _firestoreUtils.getLiveChatRoom().listen((event) {
+      for (final room in event) {
+        if (room.idConselee == widget.conseleeId) {
+          Future(
+            () => _firestoreUtils.updateInRoom(
+              roomId: roomId,
+              isCounseleeInRoom: true,
+            ),
+          );
+        } else if (room.idConselor == widget.conselorId) {
+          Future(
+            () => _firestoreUtils.updateInRoom(
+              roomId: roomId,
+              isCounselorInRoom: true,
+            ),
+          );
+        }
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            _firestoreUtils.getLiveChatRoom().listen((event) {
+              for (final room in event) {
+                if (room.idConselee == widget.conseleeId) {
+                  Future(
+                    () => _firestoreUtils.updateInRoom(
+                      roomId: roomId,
+                      isCounseleeInRoom: false,
+                    ),
+                  );
+                } else if (room.idConselor == widget.conselorId) {
+                  Future(
+                    () => _firestoreUtils.updateInRoom(
+                      roomId: roomId,
+                      isCounselorInRoom: false,
+                    ),
+                  );
+                }
+              }
+            });
+
+            Navigator.pop(context);
+          },
           child: const Icon(
             Icons.close,
             color: Colors.white,
@@ -138,12 +180,12 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 if (snapshot.data != null && snapshot.data.length > 0) {
                   List<Chats> chats = snapshot.data.reversed.toList();
 
+                  log(chats.toString(), name: 'chat-dataset');
+
                   return GroupedListView<Chats, String>(
                     elements: chats,
-                    // useStickyGroupSeparators: true,
                     floatingHeader: true,
                     order: GroupedListOrder.ASC,
-                    // reverse: true,
                     groupBy: (element) {
                       DateTime timestamp = Timestamp(
                         element.dateTime.seconds,
@@ -206,7 +248,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       );
                     },
                     indexedItemBuilder: (context, element, index) {
-                      final reversed = chats.length - 1 - index;
+                      // final reversed = chats.length - 1 - index;
 
                       Chats chat = Chats(
                         dateTime: chats[index].dateTime,
@@ -220,7 +262,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       return Container(
                         margin: EdgeInsets.only(
-                          bottom: reversed == chats.length - 1 ? 100.h : 0.h,
+                          bottom: index == chats.length - 1 ? 100.h : 0.h,
                         ),
                         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                         child: buildChatWidget(chat),

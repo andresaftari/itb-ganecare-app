@@ -307,7 +307,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                           lastMessages,
                           counseleeIds,
                           counselorIds,
-                          isReads.contains(false),
+                          snap.data.roomStatus,
                         ),
                         buildHistoryCounceling(
                           context,
@@ -317,19 +317,10 @@ class CounceleeSebayaViews extends StatelessWidget {
                           lastMessages,
                           counseleeIds,
                           counselorIds,
-                          isReads.contains(false),
+                          snap.data.roomStatus,
                         ),
                       ],
                     );
-
-                    // return buildCounceleeWidget(
-                    //     dataset,
-                    //     rooms,
-                    //     roomIds,
-                    //     lastMessages,
-                    //     counseleeIds,
-                    //     counselorIds,
-                    //   );
                   } else {
                     return Center(
                       child: Padding(
@@ -366,13 +357,172 @@ class CounceleeSebayaViews extends StatelessWidget {
     List<String> lastMessages,
     List<int> counseleeIds,
     List<int> counselorIds,
-    bool isReadFalse,
+    String status,
   ) {
-    return isReadFalse
-        ? SizedBox(
-            width: 1.sw,
-            height: 260.h,
-            child: ListView.builder(
+    if (status == 'approved') {
+      return SizedBox(
+        width: 1.sw,
+        height: 260.h,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: rooms.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                log('Logged ${dataset[index].counseleeId}');
+
+                _sharedPreference.putString(
+                  'roomId',
+                  roomIds[index],
+                );
+
+                if (_firestoreUtils.chatList.isEmpty) {
+                  Get.snackbar('Chat', 'Belum ada histori pesan');
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return CouncelingChatScreen(
+                          conseleeId: counseleeIds[index],
+                          conselorId: counselorIds[index],
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
+              child: Card(
+                child: Container(
+                  width: 1.sw,
+                  height: 80.h,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.all(8.w),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: Image.asset(
+                          'assets/images/cat.png',
+                          width: 46.w,
+                          height: 46.h,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              dataset[index].gender.toString() == 'P'
+                                  ? const Icon(
+                                      Icons.female,
+                                      color: Colors.pinkAccent,
+                                    )
+                                  : const Icon(
+                                      Icons.male,
+                                      color: Colors.blueAccent,
+                                    ),
+                              Text(
+                                'Anonymous',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                softWrap: true,
+                                style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Colors.black,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 2.h),
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.h),
+                            child: Text(
+                              lastMessages[index],
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              softWrap: true,
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 24.w),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '${dataset[index].angkatan}',
+                                style: TextStyle(
+                                  backgroundColor: Colors.grey.withOpacity(0.4),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8.sp,
+                                ),
+                              ),
+                              SizedBox(width: 2.w),
+                              Text(
+                                dataset[index].jurusan,
+                                style: TextStyle(
+                                  backgroundColor: Colors.grey.withOpacity(0.4),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return SizedBox(width: 1.sw, height: 260.h);
+    }
+  }
+
+  Widget buildHistoryCounceling(
+    BuildContext context,
+    List<Counselee> dataset,
+    List<Rooms> rooms,
+    List<String> roomIds,
+    List<String> lastMessages,
+    List<int> counseleeIds,
+    List<int> counselorIds,
+    String status,
+  ) {
+    if (status == 'ended') {
+      return SizedBox(
+        width: 1.sw,
+        height: 150.h,
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Text(
+                'History Counceling',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
+                ),
+              ),
+            ),
+            ListView.builder(
               shrinkWrap: true,
               itemCount: rooms.length,
               itemBuilder: (context, index) {
@@ -405,8 +555,8 @@ class CounceleeSebayaViews extends StatelessWidget {
                     child: Container(
                       width: 1.sw,
                       height: 80.h,
-                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       padding: EdgeInsets.all(8.w),
+                      margin: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Row(
                         children: [
                           Padding(
@@ -500,193 +650,35 @@ class CounceleeSebayaViews extends StatelessWidget {
                 );
               },
             ),
-          )
-        : SizedBox(width: 1.sw, height: 260.h);
-  }
-
-  Widget buildHistoryCounceling(
-    BuildContext context,
-    List<Counselee> dataset,
-    List<Rooms> rooms,
-    List<String> roomIds,
-    List<String> lastMessages,
-    List<int> counseleeIds,
-    List<int> counselorIds,
-    bool isReadFalse,
-  ) {
-    return isReadFalse
-        ? SizedBox(
-            width: 1.sw,
-            height: 150.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Text(
-                    'History Counceling',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ),
-                  ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox(
+        width: 1.sw,
+        height: 150.h,
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Text(
+                'History Counceling',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 16.h),
-                  width: 1.sw,
-                  child: const Center(
-                    child: Text('No History'),
-                  ),
-                ),
-              ],
-            ))
-        : SizedBox(
-            width: 1.sw,
-            height: 150.h,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Text(
-                    'History Counceling',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: rooms.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        log('Logged ${dataset[index].counseleeId}');
-
-                        _sharedPreference.putString(
-                          'roomId',
-                          roomIds[index],
-                        );
-
-                        if (_firestoreUtils.chatList.isEmpty) {
-                          Get.snackbar('Chat', 'Belum ada histori pesan');
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CouncelingChatScreen(
-                                  conseleeId: counseleeIds[index],
-                                  conselorId: counselorIds[index],
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      child: Card(
-                        child: Container(
-                          width: 1.sw,
-                          height: 80.h,
-                          padding: EdgeInsets.all(8.w),
-                          margin: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: Image.asset(
-                                  'assets/images/cat.png',
-                                  width: 46.w,
-                                  height: 46.h,
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      dataset[index].gender.toString() == 'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                            ),
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 2.h),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.h),
-                                    child: Text(
-                                      lastMessages[index],
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 10.sp,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 24.w),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${dataset[index].angkatan}',
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
-                                        ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Text(
-                                        dataset[index].jurusan,
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-          );
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.w),
+                child: const Text('No chat history'),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
