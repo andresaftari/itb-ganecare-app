@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
-import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
+import 'package:itb_ganecare/models/chats.dart';
+import 'package:itb_ganecare/models/counseling.dart';
 
 class CounceleeListViewScreen extends StatefulWidget {
   const CounceleeListViewScreen({Key? key}) : super(key: key);
@@ -19,8 +20,12 @@ class CounceleeListViewScreen extends StatefulWidget {
 
 class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+
   final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
+
+  final RxList<String> isPending = <String>[].obs;
+  final RxList<String> isRejected = <String>[].obs;
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +140,8 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
         child: Column(
           children: [
             buildHeader(context),
-            buildListCounselor(context),
-            SizedBox(height: 8.h),
-            buildPendingRequestList(context),
+            buildCounselor(context),
+            // buildListCounselor(context),
           ],
         ),
       ),
@@ -187,329 +191,418 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     );
   }
 
-  FutureBuilder buildListCounselor(BuildContext context) {
-    String nim = _sharedPreference.getString('nim').toString();
-    String name = _sharedPreference.getString('name').toString();
+  Widget buildListCounselorWidget(
+    BuildContext context,
+    List<Counselor> councelorList,
+  ) {
+    // String name = _sharedPreference.getString('name').toString();
+    // String gender = _sharedPreference.getString('gender').toString();
+    // String angkatan = _sharedPreference.getInt('angkatan').toString();
+    // String jurusan = _sharedPreference.getString('major').toString();
+    // String counseleeId = _sharedPreference.getString('councelee_id').toString();
 
-    return FutureBuilder<dynamic>(
-        future: _councelingController.postPeerCounselee(nim, name),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator.adaptive();
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              List dataset = snapshot.data.data;
-              log(dataset.toString(), name: 'log-dataset');
+    if (councelorList.isNotEmpty) {
+      return SizedBox(
+        width: 1.sw,
+        height: 260.h,
+        child: ListView.builder(
+          itemCount: councelorList.length,
+          shrinkWrap: true,
+          itemBuilder: ((context, index) {
+            return GestureDetector(
+              onTap: () {
+                // _firestoreUtils.createNewRoom(
+                //   gender,
+                //   councelorList[index].gender,
+                //   angkatan,
+                //   councelorList[index].angkatan.toString(),
+                //   counseleeId,
+                //   councelorList[index].counselorId.toString(),
+                //   jurusan,
+                //   councelorList[index].jurusan.toString(),
+                //   name,
+                //   councelorList[index].counselorName,
+                // );
 
-              return SizedBox(
-                width: 1.sw,
-                height: 260.h,
-                child: ListView.builder(
-                  itemCount: dataset.length,
-                  shrinkWrap: true,
-                  itemBuilder: ((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        log('Logged ${dataset[index].counselee_name}');
-
-                        String roomId = dataset[index].id.toString();
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return CouncelingChatScreen(
-                                conseleeId: dataset[index].counseleeId,
-                                conselorId: dataset[index].counselorId,
-                              );
-                            },
+                Get.snackbar(
+                  'Counselee',
+                  'Create New Room still in development',
+                );
+              },
+              child: Card(
+                child: Container(
+                  width: 1.sw,
+                  height: 80.h,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.all(8.w),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: Image.asset(
+                          'assets/images/cat.png',
+                          width: 46.w,
+                          height: 46.h,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.w),
+                            child: Text(
+                              '#${councelorList[index].counselorId}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10.sp,
+                              ),
+                            ),
                           ),
-                        );
-                      },
-                      child: Card(
-                        child: Container(
-                          width: 1.sw,
-                          height: 80.h,
-                          margin: EdgeInsets.symmetric(horizontal: 16.w),
-                          padding: EdgeInsets.all(8.w),
-                          child: Row(
+                          SizedBox(height: 8.h),
+                          Row(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: Image.asset(
-                                  'assets/images/cat.png',
-                                  width: 46.w,
-                                  height: 46.h,
-                                ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.w),
-                                    child: Text(
-                                      '#${dataset[index].counseleeId}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 10.sp,
-                                      ),
+                              councelorList[index].gender.toString() == 'P'
+                                  ? const Icon(
+                                      Icons.female,
+                                      color: Colors.pinkAccent,
+                                    )
+                                  : const Icon(
+                                      Icons.male,
+                                      color: Colors.blueAccent,
                                     ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Row(
-                                    children: [
-                                      dataset[index].gender.toString() == 'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                            ),
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 2.h),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.h),
-                                    child: Text(
-                                      'Last chat dummy',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 10.sp,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 24.w),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${dataset[index].angkatan}',
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
-                                        ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Text(
-                                        '${dataset[index].jurusan}',
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 8.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              );
-            } else {
-              return Container();
-            }
-          } else {
-            return Container();
-          }
-        });
-  }
-
-  Widget buildPendingRequestList(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 260.h,
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Pending Request',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        elevation: 1,
-                        backgroundColor: Colors.orange,
-                        content: Text(
-                          'Sorting still in development',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListView.builder(
-            itemCount: 2,
-            shrinkWrap: true,
-            itemBuilder: ((context, index) {
-              return GestureDetector(
-                onTap: () {
-                  log('Logged');
-
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) {
-                  //       return const CouncelingChatScreen();
-                  //     },
-                  //   ),
-                  // );
-                  // Get.to(() => const CouncelingChatScreen());
-                },
-                child: Card(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 80,
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset('assets/images/cat.png'),
-                        ),
-                        const SizedBox(width: 4),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '#21345',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.female,
-                                  color: Colors.pinkAccent,
-                                ),
-                                Text(
-                                  'Anonymous',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                'Saya seorang yang hiya hiya hiya',
+                              Text(
+                                'Anonymous',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 softWrap: true,
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontSize: 14.sp,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '2017',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
+                            ],
+                          ),
+                          SizedBox(height: 2.h),
+                        ],
+                      ),
+                      SizedBox(width: 24.w),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '${councelorList[index].angkatan}',
+                                style: TextStyle(
+                                  backgroundColor: Colors.grey.withOpacity(0.4),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8.sp,
                                 ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Beda Jurusan',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
+                              ),
+                              SizedBox(width: 2.w),
+                              Text(
+                                councelorList[index].jurusan,
+                                style: TextStyle(
+                                  backgroundColor: Colors.grey.withOpacity(0.4),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8.sp,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              );
-            }),
+              ),
+            );
+          }),
+        ),
+      );
+    } else {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(8.w),
+          child: const Text('No counselor listed yet :('),
+        ),
+      );
+    }
+  }
+
+  StreamBuilder buildCounselor(BuildContext context) {
+    List<Rooms> rooms = [];
+    List<int> counseleeIds = [];
+
+    return StreamBuilder<List<Rooms>>(
+      stream: _firestoreUtils.getLiveChatRoom(),
+      initialData: const [],
+      builder: (context, AsyncSnapshot snap) {
+        if (snap.hasData) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Padding(
+              padding: EdgeInsets.all(8),
+              child: CircularProgressIndicator.adaptive(),
+            );
+          } else {
+            if (snap.data.isNotEmpty) {
+              rooms = snap.data;
+
+              for (final data in rooms) {
+                if (counseleeIds.isNotEmpty) counseleeIds.clear();
+                counseleeIds.add(data.idConselee);
+
+                if (isRejected.isNotEmpty) isRejected.clear();
+                if (data.roomStatus == 'rejected') {
+                  isRejected.add(data.roomStatus);
+                }
+
+                if (isPending.isNotEmpty) isPending.clear();
+                if (data.roomStatus == 'request' ||
+                    data.roomStatus == 'pending') {
+                  isPending.add(data.roomStatus);
+                }
+              }
+            }
+          }
+        }
+
+        return FutureBuilder<dynamic>(
+          future: Future.delayed(
+            const Duration(seconds: 1),
+            () => _councelingController.postPeerCounselor(
+              'Teknik Lingkungan',
+              '2019',
+              'P',
+            ),
           ),
-        ],
-      ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                List<Counselor> dataset = snapshot.data.data;
+
+                if (rooms.isNotEmpty) {
+                  return Column(
+                    children: [
+                      buildListCounselorWidget(context, dataset),
+                      buildPendingRequestWidget(context, dataset, isPending),
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: const Text('No counselor listed yet :('),
+                    ),
+                  );
+                }
+              } else {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: const Text('No counselor listed yet :('),
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: const Text('No counselor listed yet :('),
+                ),
+              );
+            }
+          },
+        );
+      },
     );
+  }
+
+  Widget buildPendingRequestWidget(
+    BuildContext context,
+    List<Counselor> dataset,
+    List<String> status,
+  ) {
+    if (status.isNotEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 260.h,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Pending Request',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          elevation: 1,
+                          backgroundColor: Colors.orange,
+                          content: Text(
+                            'Sorting still in development',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      CupertinoIcons.sort_down,
+                      size: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListView.builder(
+              itemCount: status.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    log('Logged');
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return const CouncelingChatScreen();
+                    //     },
+                    //   ),
+                    // );
+                    // Get.to(() => const CouncelingChatScreen());
+                  },
+                  child: Card(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 80,
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Image.asset('assets/images/cat.png'),
+                          ),
+                          SizedBox(width: 4.w),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 8.w),
+                                child: Text(
+                                  '#${dataset[index].counselorId}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.female,
+                                    color: Colors.pinkAccent,
+                                  ),
+                                  Text(
+                                    'Anonymous',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Colors.black,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              // const Padding(
+                              //   padding: EdgeInsets.only(left: 8.0),
+                              //   child: Text(
+                              //     'Saya seorang yang hiya hiya hiya',
+                              //     overflow: TextOverflow.ellipsis,
+                              //     maxLines: 2,
+                              //     softWrap: true,
+                              //     style: TextStyle(
+                              //       overflow: TextOverflow.ellipsis,
+                              //       color: Colors.grey,
+                              //       fontWeight: FontWeight.w400,
+                              //       fontSize: 10,
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${dataset[index].angkatan}',
+                                    style: TextStyle(
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.4),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 11.sp,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    dataset[index].jurusan,
+                                    style: TextStyle(
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.4),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 11.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(8.w),
+          child: const Text('No pending request'),
+        ),
+      );
+    }
   }
 }

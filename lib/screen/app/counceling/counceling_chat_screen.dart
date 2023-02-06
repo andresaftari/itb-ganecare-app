@@ -35,25 +35,25 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   Widget build(BuildContext context) {
     String roomId = _sharedPreference.getString('roomId').toString();
 
-    _firestoreUtils.getLiveChatRoom().listen((event) {
-      for (final room in event) {
-        if (room.idConselee == widget.conseleeId) {
-          Future(
-            () => _firestoreUtils.updateInRoom(
-              roomId: roomId,
-              isCounseleeInRoom: true,
-            ),
-          );
-        } else if (room.idConselor == widget.conselorId) {
-          Future(
-            () => _firestoreUtils.updateInRoom(
-              roomId: roomId,
-              isCounselorInRoom: true,
-            ),
-          );
-        }
-      }
-    });
+    // _firestoreUtils.getLiveChatRoom().listen((event) {
+    //   for (final room in event) {
+    //     if (room.idConselee == widget.conseleeId) {
+    //       Future(
+    //         () => _firestoreUtils.updateInRoom(
+    //           roomId: roomId,
+    //           isCounseleeInRoom: true,
+    //         ),
+    //       );
+    //     } else if (room.idConselor == widget.conselorId) {
+    //       Future(
+    //         () => _firestoreUtils.updateInRoom(
+    //           roomId: roomId,
+    //           isCounselorInRoom: true,
+    //         ),
+    //       );
+    //     }
+    //   }
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -61,25 +61,25 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
-            _firestoreUtils.getLiveChatRoom().listen((event) {
-              for (final room in event) {
-                if (room.idConselee == widget.conseleeId) {
-                  Future(
-                    () => _firestoreUtils.updateInRoom(
-                      roomId: roomId,
-                      isCounseleeInRoom: false,
-                    ),
-                  );
-                } else if (room.idConselor == widget.conselorId) {
-                  Future(
-                    () => _firestoreUtils.updateInRoom(
-                      roomId: roomId,
-                      isCounselorInRoom: false,
-                    ),
-                  );
-                }
-              }
-            });
+            // _firestoreUtils.getLiveChatRoom().listen((event) {
+            //   for (final room in event) {
+            //     if (room.idConselee == widget.conseleeId) {
+            //       Future(
+            //         () => _firestoreUtils.updateInRoom(
+            //           roomId: roomId,
+            //           isCounseleeInRoom: false,
+            //         ),
+            //       );
+            //     } else if (room.idConselor == widget.conselorId) {
+            //       Future(
+            //         () => _firestoreUtils.updateInRoom(
+            //           roomId: roomId,
+            //           isCounselorInRoom: false,
+            //         ),
+            //       );
+            //     }
+            //   }
+            // });
 
             Navigator.pop(context);
           },
@@ -178,13 +178,14 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 return const CircularProgressIndicator.adaptive();
               } else if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.data != null && snapshot.data.length > 0) {
-                  List<Chats> chats = snapshot.data.reversed.toList();
+                  List<Chats> chats = snapshot.data.toList();
 
                   log(chats.toString(), name: 'chat-dataset');
 
                   return GroupedListView<Chats, String>(
                     elements: chats,
                     floatingHeader: true,
+                    // reverse:,
                     order: GroupedListOrder.ASC,
                     groupBy: (element) {
                       DateTime timestamp = Timestamp(
@@ -194,7 +195,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       String date = DateFormat(
                         'd MMMM yyyy',
-                        'ID',
                       ).format(timestamp);
 
                       return date;
@@ -209,12 +209,10 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       String today = DateFormat(
                         'd MMMM yyyy',
-                        'ID',
                       ).format(timestamp);
 
                       String yesterday = DateFormat(
                         'd MMMM yyyy',
-                        'ID',
                       ).format(
                         timestamp.subtract(
                           const Duration(days: 1),
@@ -348,6 +346,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       Get.snackbar('Message', 'Pesan terkirim');
                       _messageController.text = '';
+                      
                     } else {
                       Get.snackbar('Message', 'Anda belum menuliskan pesan');
                     }

@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
+
 
 class CouncelorListViewScreen extends StatefulWidget {
   const CouncelorListViewScreen({Key? key}) : super(key: key);

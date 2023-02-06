@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -238,14 +236,13 @@ class CounceleeSebayaViews extends StatelessWidget {
 
     List<String> roomIds = [];
     List<String> lastMessages = [];
-    List<bool> isReads = [];
+    // List<bool> isReads = [];
     List<Rooms> rooms = [];
     List<int> counseleeIds = [];
     List<int> counselorIds = [];
 
     return StreamBuilder<List<Rooms>>(
         stream: _firestoreUtils.getLiveChatRoom(),
-        initialData: const [],
         builder: (context, AsyncSnapshot snap) {
           if (snap.hasData) {
             if (snap.connectionState == ConnectionState.waiting) {
@@ -268,7 +265,10 @@ class CounceleeSebayaViews extends StatelessWidget {
                   counseleeIds.add(data.idConselee);
 
                   if (isApproved.isNotEmpty) isApproved.clear();
-                  if (data.roomStatus == 'approve') isApproved.add(data.roomStatus);
+                  if (data.roomStatus == 'approve' ||
+                      data.roomStatus == 'accepted') {
+                    isApproved.add(data.roomStatus);
+                  }
 
                   if (isEnded.isNotEmpty) isEnded.clear();
                   if (data.roomStatus == 'ended') isEnded.add(data.roomStatus);
@@ -279,9 +279,6 @@ class CounceleeSebayaViews extends StatelessWidget {
                     for (final texts in event) {
                       if (lastMessages.isNotEmpty) lastMessages.clear();
                       lastMessages.add(texts.message);
-
-                      // if (isReads.isNotEmpty) isReads.clear();
-                      isReads.add(texts.isRead);
                     }
                   });
                 }
@@ -291,7 +288,7 @@ class CounceleeSebayaViews extends StatelessWidget {
 
           return FutureBuilder<dynamic>(
             future: Future.delayed(
-              const Duration(seconds: 2),
+              const Duration(seconds: 1),
               () => _councelingController.postPeerCounselee(nim, name),
             ),
             builder: (context, snapshot) {
@@ -303,7 +300,7 @@ class CounceleeSebayaViews extends StatelessWidget {
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   List<Counselee> dataset = snapshot.data.data;
-                  log(isReads.toString(), name: 'log-dataset');
+                  log(rooms.toString(), name: 'log-dataset');
 
                   if (rooms.isNotEmpty) {
                     return Column(
@@ -373,7 +370,7 @@ class CounceleeSebayaViews extends StatelessWidget {
         height: 260.h,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: rooms.length,
+          itemCount: dataset.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
@@ -516,7 +513,6 @@ class CounceleeSebayaViews extends StatelessWidget {
     if (status.isNotEmpty) {
       return SizedBox(
         width: 1.sw,
-        height: 150.h,
         child: Column(
           children: [
             Container(
@@ -532,7 +528,7 @@ class CounceleeSebayaViews extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: rooms.length,
+              itemCount: dataset.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {

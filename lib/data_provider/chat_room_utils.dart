@@ -14,10 +14,9 @@ class FirestoreUtils extends ChangeNotifier {
   List<Chats> chatList = [];
 
   Stream<List<Rooms>> getLiveChatRoom() async* {
-    yield* FirebaseFirestore.instance
-        .collection('rooms')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
+    yield* FirebaseFirestore.instance.collection('rooms').snapshots().map(
+      (snapshot) {
+        List<Rooms> data = snapshot.docs
             .map(
               (documents) => Rooms(
                 id: documents.id.toString(),
@@ -41,7 +40,10 @@ class FirestoreUtils extends ChangeNotifier {
                 roomStatus: documents.data()['roomStatus'],
               ),
             )
-            .toList());
+            .toList();
+        return data;
+      },
+    );
   }
 
   Stream<List<Chats>> getLiveChat(String roomId) async* {
@@ -105,6 +107,49 @@ class FirestoreUtils extends ChangeNotifier {
         'isRead': false,
         'message': message,
         'type': type,
+      });
+    } catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  Future createNewRoom(
+    String genderConselee,
+    String genderConselor,
+    String generationConselee,
+    String generationConselor,
+    String idConselee,
+    String idConselor,
+    String majorConselee,
+    String majorConselor,
+    String nameConselee,
+    String nameConselor,
+  ) async {
+    Failed failure;
+
+    try {
+      FirebaseFirestore.instance.collection('rooms').add({
+        'createdAtRoom': Timestamp.fromDate(DateTime.now()),
+        'genderConselee': genderConselee,
+        'genderConselor': genderConselor,
+        'generationConselee': generationConselee,
+        'generationConselor': generationConselor,
+        'idConselee': idConselee,
+        'idConselor': idConselee,
+        'inRoomConselee': false,
+        'inRoomConselor': false,
+        'lastMessageConselee': '',
+        'lastMessageConselor': '',
+        'majorConselee': majorConselee,
+        'majorConselor': majorConselor,
+        'nameConselee': nameConselee,
+        'nameConselor': nameConselor,
+        'photoConselee':
+            'https://kerma.widyatama.ac.id/wp-content/uploads/2021/05/blank-profile-picture-973460_1280.png',
+        'photoConselor':
+            'https://kerma.widyatama.ac.id/wp-content/uploads/2021/05/blank-profile-picture-973460_1280.png',
+        'roomStatus': 'request',
       });
     } catch (e) {
       failure = Failed(e.toString());
