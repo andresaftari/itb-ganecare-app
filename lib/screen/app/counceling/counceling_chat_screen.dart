@@ -346,7 +346,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
 
                       Get.snackbar('Message', 'Pesan terkirim');
                       _messageController.text = '';
-                      
                     } else {
                       Get.snackbar('Message', 'Anda belum menuliskan pesan');
                     }
