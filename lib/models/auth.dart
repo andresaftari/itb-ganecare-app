@@ -1,29 +1,45 @@
 import 'dart:convert';
 
-Login loginFromJson(String str) => Login.fromJson(json.decode(str));
-String loginToJson(Login data) => json.encode(data.toJson());
-
 class Login {
   Login({
     required this.statusCode,
     required this.data,
     required this.userGroup,
     required this.status,
-    required this.auth,
   });
 
   int statusCode;
   LoginData data;
   UserGroup userGroup;
   int status;
-  Auth auth;
+}
 
-  factory Login.fromJson(Map<String, dynamic> json) => Login(
+LoginCounselor loginCounselorFromJson(String str) =>
+    LoginCounselor.fromJson(json.decode(str));
+String loginCounselorToJson(LoginCounselor data) => json.encode(data.toJson());
+
+class LoginCounselor extends Login {
+  LoginCounselor({
+    required int statusCode,
+    required LoginData data,
+    required UserGroup userGroup,
+    required int status,
+    required this.auth,
+  }) : super(
+          statusCode: statusCode,
+          data: data,
+          userGroup: userGroup,
+          status: status,
+        );
+
+  AuthCounselor auth;
+
+  factory LoginCounselor.fromJson(Map<String, dynamic> json) => LoginCounselor(
         statusCode: json['status_code'],
         data: LoginData.fromJson(json['data']),
         userGroup: UserGroup.fromJson(json['user_group']),
         status: json['status'],
-        auth: Auth.fromJson(json['auth']),
+        auth: AuthCounselor.fromJson(json['auth']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,30 +51,89 @@ class Login {
       };
 }
 
-class Auth {
-  Auth({
+LoginCounselee loginCounseleeFromJson(String str) =>
+    LoginCounselee.fromJson(json.decode(str));
+String loginCounseleeToJson(LoginCounselee data) => json.encode(data.toJson());
+
+class LoginCounselee extends Login {
+  LoginCounselee({
+    required int statusCode,
+    required LoginData data,
+    required UserGroup userGroup,
+    required int status,
+    required this.auth,
+  }) : super(
+          statusCode: statusCode,
+          data: data,
+          userGroup: userGroup,
+          status: status,
+        );
+
+  AuthCounseee auth;
+
+  factory LoginCounselee.fromJson(Map<String, dynamic> json) => LoginCounselee(
+        statusCode: json['status_code'],
+        data: LoginData.fromJson(json['data']),
+        userGroup: UserGroup.fromJson(json['user_group']),
+        status: json['status'],
+        auth: AuthCounseee.fromJson(json['auth']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'status_code': statusCode,
+        'data': data.toJson(),
+        'user_group': userGroup.toJson(),
+        'status': status,
+        'auth': auth.toJson(),
+      };
+}
+
+class AuthCounseee {
+  AuthCounseee({
     required this.tokenMahasiswa,
     required this.user,
   });
 
   TokenMahasiswa tokenMahasiswa;
-  User user;
+  dynamic user;
 
-  factory Auth.fromJson(Map<String, dynamic> json) => Auth(
+  factory AuthCounseee.fromJson(Map<String, dynamic> json) => AuthCounseee(
         tokenMahasiswa: TokenMahasiswa.fromJson(json['token_mahasiswa']),
-        user: User.fromJson(json['user']),
+        user: UserCounselor.fromJson(json['user']),
       );
 
   Map<String, dynamic> toJson() => {
         'token_mahasiswa': tokenMahasiswa.toJson(),
-        'user': user.toJson(),
+        'user_mahasiswa': user.toJson(),
+      };
+}
+
+class AuthCounselor {
+  AuthCounselor({
+    required this.tokenMahasiswa,
+    required this.tokenListener,
+    required this.user,
+  });
+
+  TokenMahasiswa tokenMahasiswa;
+  late TokenListener tokenListener;
+  dynamic user;
+
+  factory AuthCounselor.fromJson(Map<String, dynamic> json) => AuthCounselor(
+        tokenMahasiswa: TokenMahasiswa.fromJson(json['token_mahasiswa']),
+        tokenListener: TokenListener.fromJson(json['token_listener']),
+        user: UserCounselor.fromJson(json['user_mahasiswa']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'token_mahasiswa': tokenMahasiswa.toJson(),
+        'token_listener': tokenListener.toJson(),
+        'user_mahasiswa': user.toJson(),
       };
 }
 
 class TokenMahasiswa {
-  TokenMahasiswa({
-    required this.token,
-  });
+  TokenMahasiswa({required this.token});
 
   String token;
 
@@ -69,83 +144,191 @@ class TokenMahasiswa {
   Map<String, dynamic> toJson() => {'token': token};
 }
 
-class User {
-  User({
-    required this.email,
+class TokenListener {
+  TokenListener({required this.token});
+
+  String token;
+
+  factory TokenListener.fromJson(Map<String, dynamic> json) => TokenListener(
+        token: json['token'],
+      );
+
+  Map<String, dynamic> toJson() => {'token': token};
+}
+
+// class User {
+//   User({
+//     required this.email,
+//     required this.inaId,
+//     required this.name,
+//     required this.affiliation,
+//     required this.nim,
+//     required this.deviceId,
+//     required this.gender,
+//     required this.jurusan,
+//     required this.angkatan,
+//     required this.nickname,
+//     required this.role,
+//     required this.description,
+//     required this.profilepicImage,
+//     required this.mahasiswaCount,
+//     required this.updatedAt,
+//     required this.createdAt,
+//     required this.id,
+//   });
+
+//   int id;
+//   int inaId;
+//   String deviceId;
+//   String name;
+//   String nickname;
+//   String email;
+//   int role;
+//   String affiliation;
+//   String description;
+//   String profilepicImage;
+//   DateTime createdAt;
+//   DateTime updatedAt;
+//   int mahasiswaCount;
+//   String jurusan;
+//   int angkatan;
+//   String gender;
+//   int nim;
+
+//   factory User.fromJson(Map<String, dynamic> json) => User(
+//         email: json['email'],
+//         inaId: json['ina_id'],
+//         name: json['name'],
+//         affiliation: json['affiliation'],
+//         nim: json['nim'],
+//         deviceId: json['device_id'],
+//         gender: json['gender'],
+//         jurusan: json['jurusan'],
+//         angkatan: json['angkatan'],
+//         nickname: json['nickname'],
+//         role: json['role'],
+//         description: json['description'],
+//         profilepicImage: json['profilepic_image'],
+//         mahasiswaCount: json['mahasiswa_count'],
+//         updatedAt: DateTime.parse(json['updated_at']),
+//         createdAt: DateTime.parse(json['created_at']),
+//         id: json['id'],
+//       );
+
+//   Map<String, dynamic> toJson() => {
+//         'email': email,
+//         'ina_id': inaId,
+//         'name': name,
+//         'affiliation': affiliation,
+//         'nim': nim,
+//         'device_id': deviceId,
+//         'gender': gender,
+//         'jurusan': jurusan,
+//         'angkatan': angkatan,
+//         'nickname': nickname,
+//         'role': role,
+//         'description': description,
+//         'profilepic_image': profilepicImage,
+//         'mahasiswa_count': mahasiswaCount,
+//         'updated_at': updatedAt.toIso8601String(),
+//         'created_at': createdAt.toIso8601String(),
+//         'id': id,
+//       };
+// }
+
+class UserCounselor {
+  UserCounselor({
+    required this.id,
     required this.inaId,
-    required this.name,
-    required this.affiliation,
-    required this.nim,
     required this.deviceId,
-    required this.gender,
-    required this.jurusan,
-    required this.angkatan,
+    required this.name,
     required this.nickname,
+    required this.email,
     required this.role,
+    required this.affiliation,
     required this.description,
     required this.profilepicImage,
-    required this.mahasiswaCount,
-    required this.updatedAt,
+    required this.emailVerifiedAt,
     required this.createdAt,
-    required this.id,
+    required this.updatedAt,
+    required this.schedule,
+    required this.mahasiswaCount,
+    required this.jurusan,
+    required this.angkatan,
+    required this.gender,
+    required this.nim,
+    required this.registerId,
+    required this.kuota,
   });
 
-  String email;
+  int id;
   int inaId;
-  String name;
-  String affiliation;
-  int nim;
   String deviceId;
-  String gender;
-  String jurusan;
-  int angkatan;
+  String name;
   String nickname;
+  String email;
   int role;
+  String affiliation;
   String description;
   String profilepicImage;
-  int mahasiswaCount;
-  DateTime updatedAt;
+  dynamic emailVerifiedAt;
   DateTime createdAt;
-  int id;
+  DateTime updatedAt;
+  dynamic schedule;
+  int mahasiswaCount;
+  String jurusan;
+  int angkatan;
+  String gender;
+  int nim;
+  String? registerId;
+  int? kuota;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        email: json['email'],
+  factory UserCounselor.fromJson(Map<String, dynamic> json) => UserCounselor(
+        id: json['id'],
         inaId: json['ina_id'],
-        name: json['name'],
-        affiliation: json['affiliation'],
-        nim: json['nim'],
         deviceId: json['device_id'],
-        gender: json['gender'],
-        jurusan: json['jurusan'],
-        angkatan: json['angkatan'],
+        name: json['name'],
         nickname: json['nickname'],
+        email: json['email'],
         role: json['role'],
+        affiliation: json['affiliation'],
         description: json['description'],
         profilepicImage: json['profilepic_image'],
-        mahasiswaCount: json['mahasiswa_count'],
-        updatedAt: DateTime.parse(json['updated_at']),
+        emailVerifiedAt: json['email_verified_at'] ?? '',
         createdAt: DateTime.parse(json['created_at']),
-        id: json['id'],
+        updatedAt: DateTime.parse(json['updated_at']),
+        schedule: json['schedule'] ?? '',
+        mahasiswaCount: json['mahasiswa_count'],
+        jurusan: json['jurusan'],
+        angkatan: json['angkatan'],
+        gender: json['gender'],
+        nim: json['nim'],
+        registerId: json['register_id'] ?? '',
+        kuota: json['kuota'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
-        'email': email,
+        'id': id,
         'ina_id': inaId,
-        'name': name,
-        'affiliation': affiliation,
-        'nim': nim,
         'device_id': deviceId,
-        'gender': gender,
-        'jurusan': jurusan,
-        'angkatan': angkatan,
+        'name': name,
         'nickname': nickname,
+        'email': email,
         'role': role,
+        'affiliation': affiliation,
         'description': description,
         'profilepic_image': profilepicImage,
-        'mahasiswa_count': mahasiswaCount,
-        'updated_at': updatedAt.toIso8601String(),
+        'email_verified_at': emailVerifiedAt,
         'created_at': createdAt.toIso8601String(),
-        'id': id,
+        'updated_at': updatedAt.toIso8601String(),
+        'schedule': schedule,
+        'mahasiswa_count': mahasiswaCount,
+        'jurusan': jurusan,
+        'angkatan': angkatan,
+        'gender': gender,
+        'nim': nim,
+        'register_id': registerId,
+        'kuota': kuota,
       };
 }
 
@@ -281,7 +464,6 @@ class UserGroup {
 }
 
 ProfileId profileIdFromJson(String str) => ProfileId.fromJson(json.decode(str));
-
 String profileIdToJson(ProfileId data) => json.encode(data.toJson());
 
 class ProfileId {

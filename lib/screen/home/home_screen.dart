@@ -406,93 +406,55 @@ class _WorldThemeState extends State<WorldTheme> {
                                                 ),
                                                 SizedBox(height: 24.h),
                                                 Text(
-                                                  'cobaaaa',
+                                                  'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n'
+                                                  'Data pribadi Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                                  'Pendamping Sebaya maupun pengguna lain',
                                                   style: TextStyle(
                                                     fontSize: 14.sp,
                                                     color: Colors.black,
                                                   ),
                                                 ),
-                                                // SizedBox(height: 8.h),
-                                                // const Center(
-                                                //   child:
-                                                //       Text('Masuk sebagai :'),
-                                                // ),
-                                                // SizedBox(height: 16.h),
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.center,
-                                                //   children: [
-                                                //     ElevatedButton(
-                                                //       child: Text(
-                                                //         'Councelee',
-                                                //         style: TextStyle(
-                                                //           color: Colors.white,
-                                                //           fontSize: 16.sp,
-                                                //         ),
-                                                //       ),
-                                                //       style: ElevatedButton
-                                                //           .styleFrom(
-                                                //         primary: const Color
-                                                //             .fromRGBO(
-                                                //           253,
-                                                //           143,
-                                                //           1,
-                                                //           1,
-                                                //         ),
-                                                //         shape:
-                                                //             RoundedRectangleBorder(
-                                                //           borderRadius:
-                                                //               BorderRadius
-                                                //                   .circular(
-                                                //             16.r,
-                                                //           ),
-                                                //         ),
-                                                //       ),
-                                                //       onPressed: () {
-                                                //         Navigator.push(
-                                                //           context,
-                                                //           MaterialPageRoute(
-                                                //             builder: (context) =>
-                                                //                 const CounceleeSebayaScreen(),
-                                                //           ),
-                                                //         );
-                                                //       },
-                                                //     ),
-                                                //     SizedBox(width: 8.w),
-                                                //     ElevatedButton(
-                                                //       child: Text(
-                                                //         'Councelor',
-                                                //         style: TextStyle(
-                                                //           color: Colors.white,
-                                                //           fontSize: 16.sp,
-                                                //         ),
-                                                //       ),
-                                                //       style: ElevatedButton
-                                                //           .styleFrom(
-                                                //         primary: const Color
-                                                //                 .fromRGBO(
-                                                //             253, 143, 1, 1),
-                                                //         shape:
-                                                //             RoundedRectangleBorder(
-                                                //           borderRadius:
-                                                //               BorderRadius
-                                                //                   .circular(
-                                                //             16.r,
-                                                //           ),
-                                                //         ),
-                                                //       ),
-                                                //       onPressed: () {
-                                                //         Navigator.push(
-                                                //           context,
-                                                //           MaterialPageRoute(
-                                                //             builder: (context) =>
-                                                //                 const CouncelorSebayaScreen(),
-                                                //           ),
-                                                //         );
-                                                //       },
-                                                //     ),
-                                                //   ],
-                                                // ),
+                                                SizedBox(height: 8.h),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: ElevatedButton(
+                                                    child: Text(
+                                                      'Lanjutkan',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary:
+                                                          const Color.fromRGBO(
+                                                        253,
+                                                        143,
+                                                        1,
+                                                        1,
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                          16.r,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const CounceleeSebayaScreen(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),

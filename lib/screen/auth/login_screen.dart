@@ -198,17 +198,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   _sharedPreference.putInt(
                                     'angkatan',
-                                    value.auth.user.angkatan,
+                                    value.auth.user?.angkatan ??
+                                        value.auth.counselor?.angkatan,
                                   );
 
                                   _sharedPreference.putString(
                                     'major',
-                                    value.auth.user.jurusan,
+                                    value.auth.user?.jurusan ??
+                                        value.auth.counselor?.jurusan.substring(
+                                            value.auth.counselor?.jurusan
+                                                    .length -
+                                                1,
+                                            value.auth.counselor?.jurusan - 5),
                                   );
 
                                   _sharedPreference.putString(
                                     'gender',
-                                    value.auth.user.gender,
+                                    value.auth.user?.gender ?? value.auth.counselor?.gender,
                                   );
 
                                   if (value.userGroup.conselee == '') {
