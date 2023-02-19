@@ -62,6 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     _showDialogLogin();
+
+    if (_sharedPreference.checkKey('isLogin') ||
+        _sharedPreference.getInt('isLogin') != null) {
+      if (_sharedPreference.getInt('isLogin') == 1) {
+        Get.off(
+          () => const HomePage(isDarkMode: false),
+        );
+      }
+    }
+
     return Scaffold(
       body: Container(
         color: const Color(0xff00acea),
@@ -214,7 +224,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                   _sharedPreference.putString(
                                     'gender',
-                                    value.auth.user?.gender ?? value.auth.counselor?.gender,
+                                    value.auth.user?.gender ??
+                                        value.auth.counselor?.gender,
                                   );
 
                                   if (value.userGroup.conselee == '') {
@@ -240,6 +251,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       value.userGroup.conselor,
                                     );
                                   }
+
+                                  _sharedPreference.putInt('isLogin', 1);
 
                                   Get.off(
                                     () => const HomePage(isDarkMode: false),

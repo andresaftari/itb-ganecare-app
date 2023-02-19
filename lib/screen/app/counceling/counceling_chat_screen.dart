@@ -13,11 +13,13 @@ import 'package:itb_ganecare/models/chats.dart';
 class CouncelingChatScreen extends StatefulWidget {
   final int conseleeId;
   final int conselorId;
+  final String currentId;
 
   const CouncelingChatScreen({
     Key? key,
     required this.conseleeId,
     required this.conselorId,
+    required this.currentId,
   }) : super(key: key);
 
   @override
@@ -180,17 +182,17 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 if (snapshot.data != null && snapshot.data.length > 0) {
                   List<Chats> chats = snapshot.data.toList();
 
-                  log(chats.toString(), name: 'chat-dataset');
+                  log(chats[0].message, name: 'chat-dataset');
 
                   return GroupedListView<Chats, String>(
                     elements: chats,
                     floatingHeader: true,
                     // reverse:,
                     order: GroupedListOrder.ASC,
-                    groupBy: (element) {
+                    groupBy: (check) {
                       DateTime timestamp = Timestamp(
-                        element.dateTime.seconds,
-                        element.dateTime.nanoseconds,
+                        check.dateTime.seconds,
+                        check.dateTime.nanoseconds,
                       ).toDate();
 
                       String date = DateFormat(
@@ -338,8 +340,10 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       await _firestoreUtils.postLiveChat(
                         roomId,
                         DateTime.now(),
-                        widget.conselorId,
-                        widget.conseleeId,
+                        int.parse(widget.currentId) == widget.conselorId
+                            ? widget.conselorId
+                            : widget.conseleeId,
+                        int.parse(widget.currentId),
                         _messageController.value.text,
                         'text',
                       );
@@ -377,13 +381,13 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
             bottom: 2.h,
           ),
           child: Align(
-            alignment: (chat.idReceiver == widget.conseleeId
+            alignment: (chat.idReceiver.toString() == widget.currentId
                 ? Alignment.topLeft
                 : Alignment.topRight),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
-                color: (chat.idReceiver == widget.conseleeId
+                color: (chat.idReceiver.toString() == widget.currentId
                     ? Colors.grey.shade200
                     : Colors.blue[200]),
               ),

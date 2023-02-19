@@ -1,15 +1,19 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +49,17 @@ class _WorldThemeState extends State<WorldTheme> {
   final ProfileController _profileController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
+  late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+
+  String deviceId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -53,6 +68,14 @@ class _WorldThemeState extends State<WorldTheme> {
     _homeController.getQuickHelp().then((value) {
       log(value.toString(), name: 'get-aja');
     });
+
+    if (Platform.isAndroid) {
+      deviceId = _deviceData['id'];
+      log(_deviceData['id'].toString(), name: 'id');
+    } else if (Platform.isIOS) {
+      deviceId = _deviceData['identifierForVendor'];
+      log(_deviceData['identifierForVendor'], name: 'id');
+    }
 
     return MaterialApp(
       theme: themeNotifier.getTheme(),
@@ -121,27 +144,46 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(
-                      width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5.w,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(3, 2),
+                    GestureDetector(
+                      onTap: () {
+                        // Sementara untuk logout
+                        _sharedPreference.putInt('isLogin', 0);
+
+                        Get.snackbar('GaneCare', 'Logging Out');
+                        Get.to(
+                          () => LoginScreen(
+                            deviceId: deviceId,
+                            alertMessage: '',
+                            forgotPassLink: LinkData(
+                              title: 'A',
+                              description: 'B',
+                              url: 'C',
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
+                        );
+                      },
+                      child: Container(
+                        width: 44.w,
+                        margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 0.5.w,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              blurRadius: 8,
+                              offset: const Offset(3, 2),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Image.asset('assets/images/cat.png'),
+                        ),
                       ),
                     ),
                   ],
@@ -414,7 +456,7 @@ class _WorldThemeState extends State<WorldTheme> {
                                                     color: Colors.black,
                                                   ),
                                                 ),
-                                                SizedBox(height: 8.h),
+                                                SizedBox(height: 32.h),
                                                 Align(
                                                   alignment:
                                                       Alignment.bottomCenter,
@@ -803,5 +845,45 @@ class _WorldThemeState extends State<WorldTheme> {
       backgroundColor: Colors.redAccent,
       child: const Icon(Icons.campaign_sharp),
     );
+  }
+
+  Future<void> initPlatformState() async {
+    var deviceData = <String, dynamic>{};
+
+    if (Platform.isAndroid) {
+      deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+    } else if (Platform.isIOS) {
+      deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+    }
+
+    setState(() {
+      _deviceData = deviceData;
+    });
+  }
+
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'id': build.id,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'isPhysicalDevice': build.isPhysicalDevice,
+    };
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'identifierForVendor': data.identifierForVendor,
+      'model': data.model,
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'localizedModel': data.localizedModel,
+      'isPhysicalDevice': data.isPhysicalDevice,
+    };
   }
 }

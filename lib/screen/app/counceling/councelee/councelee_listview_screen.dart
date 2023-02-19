@@ -140,7 +140,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
         child: Column(
           children: [
             buildHeader(context),
-            buildCounselor(context),
+            buildCounselorWidget(context),
             // buildListCounselor(context),
           ],
         ),
@@ -154,53 +154,70 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
       height: 52.h,
       color: const Color.fromRGBO(253, 143, 1, 1),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Pilih Pendamping Sebaya',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    elevation: 1,
-                    backgroundColor: Colors.orange,
-                    content: Text(
-                      'Sorting still in development',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(CupertinoIcons.sort_down, size: 24),
-            ),
-          ],
+        padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
+        child: Text(
+          'Pilih Pendamping Sebaya',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
 
-  Widget buildListCounselorWidget(
+  FutureBuilder buildCounselorWidget(BuildContext context) {
+    // String jurusan = _sharedPreference.getString('major').toString();
+    // String angkatan = _sharedPreference.getInt('angkatan').toString();
+    // String gender = _sharedPreference.getString('gender').toString();
+
+    return FutureBuilder<dynamic>(
+      future: _councelingController.postPeerCounselor(
+        'Teknik Lingkungan',
+        '2019',
+        'P',
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator.adaptive(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<Counselor> councelorList = snapshot.data.data;
+
+            return Column(
+              children: [
+                buildListCounselor(context, councelorList),
+                buildListRequest(context),
+              ],
+            );
+          } else {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.w),
+                child: const Text('No counselor listed yet :('),
+              ),
+            );
+          }
+        } else {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.w),
+              child: const Text('No counselor listed yet :('),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildListCounselor(
     BuildContext context,
     List<Counselor> councelorList,
   ) {
-    // String name = _sharedPreference.getString('name').toString();
-    // String gender = _sharedPreference.getString('gender').toString();
-    // String angkatan = _sharedPreference.getInt('angkatan').toString();
-    // String jurusan = _sharedPreference.getString('major').toString();
-    // String counseleeId = _sharedPreference.getString('councelee_id').toString();
-
     if (councelorList.isNotEmpty) {
       return SizedBox(
         width: 1.sw,
@@ -208,7 +225,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
         child: ListView.builder(
           itemCount: councelorList.length,
           shrinkWrap: true,
-          itemBuilder: ((context, index) {
+          itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
                 // _firestoreUtils.createNewRoom(
@@ -298,17 +315,40 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                   backgroundColor: Colors.grey.withOpacity(0.4),
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 8.sp,
+                                  fontSize: 9.sp,
                                 ),
                               ),
                               SizedBox(width: 2.w),
                               Text(
-                                councelorList[index].jurusan,
+                                councelorList[index]
+                                        .jurusan
+                                        .contains('Tahap Tahun Pertama')
+                                    ? councelorList[index].jurusan.substring(20)
+                                    : councelorList[index]
+                                            .jurusan
+                                            .contains('Tahap Tahun Kedua')
+                                        ? councelorList[index]
+                                            .jurusan
+                                            .substring(18)
+                                        : councelorList[index]
+                                                .jurusan
+                                                .contains('Tahap Tahun Ketiga')
+                                            ? councelorList[index]
+                                                .jurusan
+                                                .substring(19)
+                                            : councelorList[index]
+                                                    .jurusan
+                                                    .contains(
+                                                        'Tahap Tahun Keempat')
+                                                ? councelorList[index]
+                                                    .jurusan
+                                                    .substring(20)
+                                                : councelorList[index].jurusan,
                                 style: TextStyle(
                                   backgroundColor: Colors.grey.withOpacity(0.4),
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 8.sp,
+                                  fontSize: 9.sp,
                                 ),
                               ),
                             ],
@@ -320,7 +360,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                 ),
               ),
             );
-          }),
+          },
         ),
       );
     } else {
@@ -333,276 +373,455 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     }
   }
 
-  StreamBuilder buildCounselor(BuildContext context) {
+  StreamBuilder buildListRequest(BuildContext context) {
     List<Rooms> rooms = [];
-    List<int> counseleeIds = [];
+    List<Rooms> temp = [];
 
     return StreamBuilder<List<Rooms>>(
       stream: _firestoreUtils.getLiveChatRoom(),
-      initialData: const [],
       builder: (context, AsyncSnapshot snap) {
         if (snap.hasData) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator.adaptive(),
             );
-          } else {
-            if (snap.data.isNotEmpty) {
-              rooms = snap.data;
+          } else if (snap.connectionState == ConnectionState.done) {
+            rooms = snap.data;
 
-              for (final data in rooms) {
-                if (counseleeIds.isNotEmpty) counseleeIds.clear();
-                counseleeIds.add(data.idConselee);
+            if (temp.isNotEmpty) temp.clear();
 
-                if (isRejected.isNotEmpty) isRejected.clear();
-                if (data.roomStatus == 'rejected') {
-                  isRejected.add(data.roomStatus);
-                }
-
-                if (isPending.isNotEmpty) isPending.clear();
-                if (data.roomStatus == 'request' ||
-                    data.roomStatus == 'pending') {
-                  isPending.add(data.roomStatus);
-                }
+            for (final r in rooms) {
+              if (r.roomStatus == 'request' || r.roomStatus == 'pending') {
+                temp.add(r);
               }
             }
-          }
-        }
 
-        return FutureBuilder<dynamic>(
-          future: Future.delayed(
-            const Duration(seconds: 1),
-            () => _councelingController.postPeerCounselor(
-              'Teknik Lingkungan',
-              '2019',
-              'P',
-            ),
-          ),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                List<Counselor> dataset = snapshot.data.data;
-
-                if (rooms.isNotEmpty) {
-                  return Column(
-                    children: [
-                      buildListCounselorWidget(context, dataset),
-                      buildPendingRequestWidget(context, dataset, isPending),
-                    ],
-                  );
-                } else {
-                  return Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: const Text('No counselor listed yet :('),
-                    ),
-                  );
-                }
-              } else {
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: const Text('No counselor listed yet :('),
-                  ),
-                );
-              }
-            } else {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: const Text('No counselor listed yet :('),
-                ),
-              );
-            }
-          },
-        );
-      },
-    );
-  }
-
-  Widget buildPendingRequestWidget(
-    BuildContext context,
-    List<Counselor> dataset,
-    List<String> status,
-  ) {
-    if (status.isNotEmpty) {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 260.h,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return SizedBox(
+              width: 1.sw,
+              child: Column(
                 children: [
-                  const Text(
-                    'Pending Request',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: const Text(
+                      'Pending Request',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          elevation: 1,
-                          backgroundColor: Colors.orange,
-                          content: Text(
-                            'Sorting still in development',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                              fontSize: 16,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: temp.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          child: Container(
+                            width: 1.sw,
+                            height: 80.h,
+                            padding: EdgeInsets.all(8.w),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.w),
+                                  child: Image.asset(
+                                    'assets/images/cat.png',
+                                    width: 46.w,
+                                    height: 46.h,
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        temp[index].genderConselor.toString() ==
+                                                'P'
+                                            ? const Icon(
+                                                Icons.female,
+                                                color: Colors.pinkAccent,
+                                              )
+                                            : const Icon(
+                                                Icons.male,
+                                                color: Colors.blueAccent,
+                                              ),
+                                        Text(
+                                          'Anonymous',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.black,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 2.h),
+                                  ],
+                                ),
+                                SizedBox(width: 24.w),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          rooms[index].genderConselor,
+                                          style: TextStyle(
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.4),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9.sp,
+                                          ),
+                                        ),
+                                        SizedBox(width: 2.w),
+                                        Text(
+                                          temp[index].majorConselor.contains(
+                                                  'Tahap Tahun Pertama')
+                                              ? temp[index]
+                                                  .majorConselor
+                                                  .substring(20)
+                                              : temp[index]
+                                                      .majorConselor
+                                                      .contains(
+                                                          'Tahap Tahun Kedua')
+                                                  ? temp[index]
+                                                      .majorConselor
+                                                      .substring(18)
+                                                  : temp[index]
+                                                          .majorConselor
+                                                          .contains(
+                                                              'Tahap Tahun Ketiga')
+                                                      ? temp[index]
+                                                          .majorConselor
+                                                          .substring(19)
+                                                      : temp[index]
+                                                              .majorConselor
+                                                              .contains(
+                                                                  'Tahap Tahun Keempat')
+                                                          ? temp[index]
+                                                              .majorConselor
+                                                              .substring(20)
+                                                          : temp[index]
+                                                              .majorConselor,
+                                          style: TextStyle(
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.4),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       );
                     },
-                    icon: const Icon(
-                      CupertinoIcons.sort_down,
-                      size: 24,
-                    ),
                   ),
                 ],
               ),
+            );
+          } else {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.w),
+                child: const Text('No chat history'),
+              ),
+            );
+          }
+        } else {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.w),
+              child: const Text('No chat history'),
             ),
-            ListView.builder(
-              itemCount: status.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    log('Logged');
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return const CouncelingChatScreen();
-                    //     },
-                    //   ),
-                    // );
-                    // Get.to(() => const CouncelingChatScreen());
-                  },
-                  child: Card(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 80,
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Image.asset('assets/images/cat.png'),
-                          ),
-                          SizedBox(width: 4.w),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 8.w),
-                                child: Text(
-                                  '#${dataset[index].counselorId}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.female,
-                                    color: Colors.pinkAccent,
-                                  ),
-                                  Text(
-                                    'Anonymous',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Colors.black,
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              // const Padding(
-                              //   padding: EdgeInsets.only(left: 8.0),
-                              //   child: Text(
-                              //     'Saya seorang yang hiya hiya hiya',
-                              //     overflow: TextOverflow.ellipsis,
-                              //     maxLines: 2,
-                              //     softWrap: true,
-                              //     style: TextStyle(
-                              //       overflow: TextOverflow.ellipsis,
-                              //       color: Colors.grey,
-                              //       fontWeight: FontWeight.w400,
-                              //       fontSize: 10,
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '${dataset[index].angkatan}',
-                                    style: TextStyle(
-                                      backgroundColor:
-                                          Colors.grey.withOpacity(0.4),
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11.sp,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    dataset[index].jurusan,
-                                    style: TextStyle(
-                                      backgroundColor:
-                                          Colors.grey.withOpacity(0.4),
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 11.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.w),
-          child: const Text('No pending request'),
-        ),
-      );
-    }
+          );
+        }
+      },
+    );
   }
+
+  // StreamBuilder buildAvailableCounselor(BuildContext context) {
+  //   List<Rooms> rooms = [];
+  //   List<int> counseleeIds = [];
+
+  //   return StreamBuilder<List<Rooms>>(
+  //     stream: _firestoreUtils.getLiveChatRoom(),
+  //     initialData: const [],
+  //     builder: (context, AsyncSnapshot snap) {
+  //       if (snap.hasData) {
+  //         if (snap.connectionState == ConnectionState.waiting) {
+  //           return const Padding(
+  //             padding: EdgeInsets.all(8),
+  //             child: CircularProgressIndicator.adaptive(),
+  //           );
+  //         } else {
+  //           if (snap.data.isNotEmpty) {
+  //             rooms = snap.data;
+
+  //             for (final data in rooms) {
+  //               if (counseleeIds.isNotEmpty) counseleeIds.clear();
+  //               counseleeIds.add(data.idConselee);
+
+  //               if (isRejected.isNotEmpty) isRejected.clear();
+  //               if (data.roomStatus == 'rejected') {
+  //                 isRejected.add(data.roomStatus);
+  //               }
+
+  //               if (isPending.isNotEmpty) isPending.clear();
+  //               if (data.roomStatus == 'request' ||
+  //                   data.roomStatus == 'pending') {
+  //                 isPending.add(data.roomStatus);
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+
+  //       return FutureBuilder<dynamic>(
+  //         future: Future.delayed(
+  //           const Duration(seconds: 1),
+  //           () => _councelingController.postPeerCounselor(
+  //             'Teknik Lingkungan',
+  //             '2019',
+  //             'P',
+  //           ),
+  //         ),
+  //         builder: (context, snapshot) {
+  //           if (snapshot.hasData) {
+  //             if (snapshot.connectionState == ConnectionState.waiting) {
+  //               return const Padding(
+  //                 padding: EdgeInsets.all(8.0),
+  //                 child: CircularProgressIndicator.adaptive(),
+  //               );
+  //             } else if (snapshot.connectionState == ConnectionState.done) {
+  //               List<Counselor> dataset = snapshot.data.data;
+
+  //               if (rooms.isNotEmpty) {
+  //                 return Column(
+  //                   children: [
+  //                     buildListCounselorWidget(context, dataset),
+  //                     buildPendingRequestWidget(context, dataset, isPending),
+  //                   ],
+  //                 );
+  //               } else {
+  //                 return Center(
+  //                   child: Padding(
+  //                     padding: EdgeInsets.all(8.w),
+  //                     child: const Text('No counselor listed yet :('),
+  //                   ),
+  //                 );
+  //               }
+  //             } else {
+  //               return Center(
+  //                 child: Padding(
+  //                   padding: EdgeInsets.all(8.w),
+  //                   child: const Text('No counselor listed yet :('),
+  //                 ),
+  //               );
+  //             }
+  //           } else {
+  //             return Center(
+  //               child: Padding(
+  //                 padding: EdgeInsets.all(8.w),
+  //                 child: const Text('No counselor listed yet :('),
+  //               ),
+  //             );
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+  // Widget buildPendingRequestWidget(
+  //   BuildContext context,
+  //   List<Counselor> dataset,
+  //   List<String> status,
+  // ) {
+  //   if (status.isNotEmpty) {
+  //     return SizedBox(
+  //       width: MediaQuery.of(context).size.width,
+  //       height: 260.h,
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             margin: const EdgeInsets.symmetric(horizontal: 16),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 const Text(
+  //                   'Pending Request',
+  //                   style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontWeight: FontWeight.w600,
+  //                     fontSize: 16,
+  //                   ),
+  //                 ),
+  //                 IconButton(
+  //                   onPressed: () {
+  //                     ScaffoldMessenger.of(context).showSnackBar(
+  //                       const SnackBar(
+  //                         elevation: 1,
+  //                         backgroundColor: Colors.orange,
+  //                         content: Text(
+  //                           'Sorting still in development',
+  //                           style: TextStyle(
+  //                             fontWeight: FontWeight.w500,
+  //                             color: Colors.black,
+  //                             fontSize: 16,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     );
+  //                   },
+  //                   icon: const Icon(
+  //                     CupertinoIcons.sort_down,
+  //                     size: 24,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           ListView.builder(
+  //             itemCount: status.length,
+  //             shrinkWrap: true,
+  //             itemBuilder: (context, index) {
+  //               return GestureDetector(
+  //                 onTap: () {
+  //                   log('Logged');
+
+  //                   // Navigator.push(
+  //                   //   context,
+  //                   //   MaterialPageRoute(
+  //                   //     builder: (context) {
+  //                   //       return const CouncelingChatScreen();
+  //                   //     },
+  //                   //   ),
+  //                   // );
+  //                   // Get.to(() => const CouncelingChatScreen());
+  //                 },
+  //                 child: Card(
+  //                   child: Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     height: 80,
+  //                     padding: const EdgeInsets.all(8),
+  //                     child: Row(
+  //                       children: [
+  //                         Padding(
+  //                           padding: const EdgeInsets.all(8),
+  //                           child: Image.asset('assets/images/cat.png'),
+  //                         ),
+  //                         SizedBox(width: 4.w),
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.center,
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Padding(
+  //                               padding: EdgeInsets.only(left: 8.w),
+  //                               child: Text(
+  //                                 '#${dataset[index].counselorId}',
+  //                                 style: TextStyle(
+  //                                   color: Colors.black,
+  //                                   fontSize: 10.sp,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             const SizedBox(height: 8),
+  //                             Row(
+  //                               children: [
+  //                                 const Icon(
+  //                                   Icons.female,
+  //                                   color: Colors.pinkAccent,
+  //                                 ),
+  //                                 Text(
+  //                                   'Anonymous',
+  //                                   overflow: TextOverflow.ellipsis,
+  //                                   maxLines: 2,
+  //                                   softWrap: true,
+  //                                   style: TextStyle(
+  //                                     overflow: TextOverflow.ellipsis,
+  //                                     color: Colors.black,
+  //                                     fontSize: 14.sp,
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                             const SizedBox(height: 2),
+  //                             // const Padding(
+  //                             //   padding: EdgeInsets.only(left: 8.0),
+  //                             //   child: Text(
+  //                             //     'Saya seorang yang hiya hiya hiya',
+  //                             //     overflow: TextOverflow.ellipsis,
+  //                             //     maxLines: 2,
+  //                             //     softWrap: true,
+  //                             //     style: TextStyle(
+  //                             //       overflow: TextOverflow.ellipsis,
+  //                             //       color: Colors.grey,
+  //                             //       fontWeight: FontWeight.w400,
+  //                             //       fontSize: 10,
+  //                             //     ),
+  //                             //   ),
+  //                             // ),
+  //                           ],
+  //                         ),
+  //                         Column(
+  //                           children: [
+  //                             Row(
+  //                               children: [
+  //                                 Text(
+  //                                   '${dataset[index].angkatan}',
+  //                                   style: TextStyle(
+  //                                     backgroundColor:
+  //                                         Colors.grey.withOpacity(0.4),
+  //                                     color: Colors.black,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     fontSize: 11.sp,
+  //                                   ),
+  //                                 ),
+  //                                 const SizedBox(width: 4),
+  //                                 Text(
+  //                                   dataset[index].jurusan,
+  //                                   style: TextStyle(
+  //                                     backgroundColor:
+  //                                         Colors.grey.withOpacity(0.4),
+  //                                     color: Colors.black,
+  //                                     fontWeight: FontWeight.w500,
+  //                                     fontSize: 11.sp,
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return Center(
+  //       child: Padding(
+  //         padding: EdgeInsets.all(8.w),
+  //         child: const Text('No pending request'),
+  //       ),
+  //     );
+  //   }
+  // }
 }

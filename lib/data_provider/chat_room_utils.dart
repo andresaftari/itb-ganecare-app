@@ -51,20 +51,26 @@ class FirestoreUtils extends ChangeNotifier {
         .collection('rooms')
         .doc(roomId)
         .collection('chats')
+        .orderBy(
+          'dateTime',
+          descending: false,
+        )
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map(
-              (documents) => Chats(
-                dateTime: documents.data()['dateTime'],
-                idReceiver: documents.data()['idReceiver'],
-                idRoom: documents.data()['idRoom'],
-                idSender: documents.data()['idSender'],
-                isRead: documents.data()['isRead'],
-                message: documents.data()['message'],
-                type: documents.data()['type'],
-              ),
-            )
-            .toList());
+        .map((snapshot) {
+      return snapshot.docs
+          .map(
+            (documents) => Chats(
+              dateTime: documents.data()['dateTime'],
+              idReceiver: documents.data()['idReceiver'],
+              idRoom: documents.data()['idRoom'],
+              idSender: documents.data()['idSender'],
+              isRead: documents.data()['isRead'],
+              message: documents.data()['message'],
+              type: documents.data()['type'],
+            ),
+          )
+          .toList();
+    });
   }
 
   Future postLiveChat(
