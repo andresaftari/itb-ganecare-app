@@ -117,7 +117,7 @@ class _WorldThemeState extends State<WorldTheme> {
                     ),
                     Container(
                       child: Text(
-                        'Developer',
+                        _sharedPreference.getString('username').toString(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,

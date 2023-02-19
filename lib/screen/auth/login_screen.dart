@@ -66,8 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_sharedPreference.checkKey('isLogin') ||
         _sharedPreference.getInt('isLogin') != null) {
       if (_sharedPreference.getInt('isLogin') == 1) {
-        Get.off(
-          () => const HomePage(isDarkMode: false),
+        Future.delayed(
+          const Duration(seconds: 1),
+          () => Get.off(
+            () => const HomePage(isDarkMode: false),
+          ),
         );
       }
     }

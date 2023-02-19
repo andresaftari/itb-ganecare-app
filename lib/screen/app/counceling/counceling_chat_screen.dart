@@ -188,18 +188,14 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                     elements: chats,
                     floatingHeader: true,
                     // reverse:,
-                    order: GroupedListOrder.ASC,
+
                     groupBy: (check) {
                       DateTime timestamp = Timestamp(
                         check.dateTime.seconds,
                         check.dateTime.nanoseconds,
                       ).toDate();
 
-                      String date = DateFormat(
-                        'd MMMM yyyy',
-                      ).format(timestamp);
-
-                      return date;
+                      return timestamp.toString().substring(0, 11);
                     },
                     groupSeparatorBuilder: (value) {
                       String group = '';

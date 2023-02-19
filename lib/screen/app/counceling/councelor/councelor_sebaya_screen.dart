@@ -3,13 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
-import 'package:itb_ganecare/models/counseling.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
-import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
@@ -79,7 +76,8 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   static List<Widget> pages = [
     CouncelorSebayaViews(),
     const CouncelorListViewScreen(),
-    const CouncelingProfileScreen(),
+    // const CouncelingProfileScreen(),
+    Container(),
   ];
 }
 
@@ -87,7 +85,7 @@ class CouncelorSebayaViews extends StatelessWidget {
   CouncelorSebayaViews({Key? key}) : super(key: key);
 
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
-  final CounselingController _councelingController = Get.find();
+  // final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   // final RxList<String> isPending = <String>[].obs;
@@ -144,7 +142,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                     ),
                     Container(
                       child: Text(
-                        'Developer',
+                        _sharedPreference.getString('username').toString(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -241,18 +239,14 @@ class CouncelorSebayaViews extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator.adaptive(),
             );
-          } else if (snapshot.connectionState == ConnectionState.done) {
+          } else {
             rooms = snapshot.data;
 
             return Column(
-              children: [buildListWidget(rooms)],
-            );
-          } else {
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.w),
-                child: const Text('No chat history'),
-              ),
+              children: [
+                buildListWidget(rooms),
+                buildHistoryList(rooms),
+              ],
             );
           }
         } else {
@@ -270,6 +264,7 @@ class CouncelorSebayaViews extends StatelessWidget {
   Widget buildListWidget(List<Rooms> rooms) {
     String currentUserId =
         _sharedPreference.getString('councelor_id').toString();
+    log('test $currentUserId');
 
     if (rooms.isNotEmpty) {
       List<Rooms> temp = [];
@@ -286,8 +281,10 @@ class CouncelorSebayaViews extends StatelessWidget {
         width: 1.sw,
         height: 260.h,
         child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: temp.length,
           itemBuilder: (context, index) {
-            if (temp[index].idConselee.toString() == currentUserId) {
+            if (temp[index].idConselor.toString() == currentUserId) {
               return GestureDetector(
                 onTap: () {
                   log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
@@ -452,7 +449,7 @@ class CouncelorSebayaViews extends StatelessWidget {
 
   Widget buildHistoryList(List<Rooms> rooms) {
     String currentUserId =
-        _sharedPreference.getString('councelee_id').toString();
+        _sharedPreference.getString('councelor_id').toString();
 
     if (rooms.isNotEmpty) {
       List<Rooms> temp = [];
@@ -623,11 +620,24 @@ class CouncelorSebayaViews extends StatelessWidget {
         ),
       );
     } else {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.w),
-          child: const Text('No chat history'),
-        ),
+      return Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Text(
+              'History Counseling',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.sp,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.w),
+            child: const Text('No chat history'),
+          ),
+        ],
       );
     }
   }
