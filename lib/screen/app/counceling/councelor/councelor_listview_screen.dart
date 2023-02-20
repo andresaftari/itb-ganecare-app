@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
       extendBody: true,
       appBar: AppBar(
         elevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 80.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -53,7 +52,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
             ),
           ),
           child: Container(
-            margin: const EdgeInsets.only(left: 24),
+            margin: EdgeInsets.only(left: 24.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -145,6 +144,9 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   }
 
   StreamBuilder buildListRequest(BuildContext context) {
+    String currentUserId =
+        _sharedPreference.getString('councelor_id').toString();
+
     List<Rooms> rooms = [];
     List<Rooms> temp = [];
 
@@ -159,176 +161,181 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
             );
           } else {
             rooms = snap.data;
-            log(rooms.toString());
+            // log(rooms.toString(), name: 'test');
 
             if (temp.isNotEmpty) temp.clear();
-
             for (final r in rooms) {
-              if (r.roomStatus == 'request' || r.roomStatus == 'pending') {
+              if (r.roomStatus == 'request') {
                 temp.add(r);
               }
             }
 
             return SizedBox(
               width: 1.sw,
-              height: 260.h,
+              height: 1.sh,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 16.h),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Text(
-                      'Pending Request',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
                   ListView.builder(
+                    shrinkWrap: true,
                     itemCount: temp.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        child: Container(
-                          width: 1.sw,
-                          height: 80.h,
-                          padding: EdgeInsets.all(8.w),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: Image.asset(
-                                  'assets/images/cat.png',
-                                  width: 46.w,
-                                  height: 46.h,
+                      if (temp[index].idConselor.toString() == currentUserId) {
+                        return Card(
+                          child: Container(
+                            width: 1.sw,
+                            height: 80.h,
+                            padding: EdgeInsets.all(8.w),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.w),
+                                  child: Image.asset(
+                                    'assets/images/cat.png',
+                                    width: 46.w,
+                                    height: 46.h,
+                                  ),
                                 ),
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8.w),
-                                    child: Text(
-                                      '#${temp[index].idConselee}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 10.sp,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8.w),
+                                      child: Text(
+                                        '#${temp[index].idConselee}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10.sp,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Row(
-                                    children: [
-                                      temp[index].genderConselee.toString() ==
-                                              'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                            ),
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: TextStyle(
+                                    SizedBox(height: 8.h),
+                                    Row(
+                                      children: [
+                                        temp[index].genderConselee.toString() ==
+                                                'P'
+                                            ? const Icon(
+                                                Icons.female,
+                                                color: Colors.pinkAccent,
+                                              )
+                                            : const Icon(
+                                                Icons.male,
+                                                color: Colors.blueAccent,
+                                              ),
+                                        Text(
+                                          'Anonymous',
                                           overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 14.sp,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.black,
+                                            fontSize: 14.sp,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 24.w),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        rooms[index].generationConselee,
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 9.sp,
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 24.w),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          rooms[index].generationConselee,
+                                          style: TextStyle(
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.4),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9.sp,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Text(
-                                        temp[index]
-                                                .majorConselee
-                                                .contains('Tahap Tahun Pertama')
-                                            ? temp[index]
-                                                .majorConselee
-                                                .substring(20)
-                                            : temp[index]
-                                                    .majorConselee
-                                                    .contains(
-                                                        'Tahap Tahun Kedua')
-                                                ? temp[index]
-                                                    .majorConselee
-                                                    .substring(18)
-                                                : temp[index]
-                                                        .majorConselee
-                                                        .contains(
-                                                            'Tahap Tahun Ketiga')
-                                                    ? temp[index]
-                                                        .majorConselee
-                                                        .substring(19)
-                                                    : temp[index]
-                                                            .majorConselee
-                                                            .contains(
-                                                                'Tahap Tahun Keempat')
-                                                        ? temp[index]
-                                                            .majorConselee
-                                                            .substring(20)
-                                                        : temp[index]
-                                                            .majorConselee,
-                                        style: TextStyle(
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.4),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 9.sp,
+                                        SizedBox(width: 2.w),
+                                        Text(
+                                          temp[index].majorConselee.contains(
+                                                  'Tahap Tahun Pertama')
+                                              ? temp[index]
+                                                  .majorConselee
+                                                  .substring(20)
+                                              : temp[index]
+                                                      .majorConselee
+                                                      .contains(
+                                                          'Tahap Tahun Kedua')
+                                                  ? temp[index]
+                                                      .majorConselee
+                                                      .substring(18)
+                                                  : temp[index]
+                                                          .majorConselee
+                                                          .contains(
+                                                              'Tahap Tahun Ketiga')
+                                                      ? temp[index]
+                                                          .majorConselee
+                                                          .substring(19)
+                                                      : temp[index]
+                                                              .majorConselee
+                                                              .contains(
+                                                                  'Tahap Tahun Keempat')
+                                                          ? temp[index]
+                                                              .majorConselee
+                                                              .substring(20)
+                                                          : temp[index]
+                                                              .majorConselee,
+                                          style: TextStyle(
+                                            backgroundColor:
+                                                Colors.grey.withOpacity(0.4),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9.sp,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.check_circle,
-                                          color: Colors.greenAccent,
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await _firestoreUtils.updateRoom(
+                                              temp[index].id,
+                                              'approve',
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.greenAccent,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.cancel_rounded,
-                                          color: Colors.redAccent,
+                                        SizedBox(width: 2.w),
+                                        IconButton(
+                                          onPressed: () async {
+                                            await _firestoreUtils.updateRoom(
+                                              temp[index].id,
+                                              'ended',
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.cancel_rounded,
+                                            color: Colors.redAccent,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: const Text('No pending request'),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],
@@ -349,343 +356,316 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
 
   Widget buildHeader(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: 1.sw,
       height: 52.h,
       color: const Color.fromRGBO(253, 143, 1, 1),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Daftar Conselee',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    elevation: 1,
-                    backgroundColor: Colors.orange,
-                    content: Text(
-                      'Sorting still in development',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(
-                CupertinoIcons.sort_down,
-                size: 24,
-              ),
-            ),
-          ],
+        padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
+        child: Text(
+          'Daftar Request Conselee',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
 
-  Widget buildCouncelee(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 250,
-      child: ListView.builder(
-        itemCount: 2,
-        shrinkWrap: true,
-        itemBuilder: ((context, index) {
-          return GestureDetector(
-            onTap: () {
-              log('Logged');
+// Widget buildCouncelee(BuildContext context) {
+//   return SizedBox(
+//     width: MediaQuery.of(context).size.width,
+//     height: 250,
+//     child: ListView.builder(
+//       itemCount: 2,
+//       shrinkWrap: true,
+//       itemBuilder: ((context, index) {
+//         return GestureDetector(
+//           onTap: () {
+//             log('Logged');
+//
+//             // Navigator.push(
+//             //   context,
+//             //   MaterialPageRoute(
+//             //     builder: (context) {
+//             //       return const CouncelingChatScreen();
+//             //     },
+//             //   ),
+//             // );
+//             // Get.to(() => const CouncelingChatScreen());
+//           },
+//           child: Card(
+//             child: Container(
+//               width: MediaQuery.of(context).size.width,
+//               height: 80,
+//               padding: const EdgeInsets.all(8),
+//               child: Row(
+//                 children: [
+//                   Padding(
+//                     padding: const EdgeInsets.all(8),
+//                     child: Image.asset('assets/images/cat.png'),
+//                   ),
+//                   const SizedBox(width: 4),
+//                   Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       const Padding(
+//                         padding: EdgeInsets.only(left: 8.0),
+//                         child: Text(
+//                           '#21346',
+//                           style: TextStyle(
+//                             color: Colors.black,
+//                             fontSize: 10,
+//                           ),
+//                         ),
+//                       ),
+//                       const SizedBox(height: 8),
+//                       Row(
+//                         children: const [
+//                           Icon(
+//                             Icons.male,
+//                             color: Colors.blueAccent,
+//                           ),
+//                           Text(
+//                             'Anonymous',
+//                             overflow: TextOverflow.ellipsis,
+//                             maxLines: 2,
+//                             softWrap: true,
+//                             style: TextStyle(
+//                               overflow: TextOverflow.ellipsis,
+//                               color: Colors.black,
+//                               fontSize: 14,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       const SizedBox(height: 2),
+//                       const Padding(
+//                         padding: EdgeInsets.only(left: 8.0),
+//                         child: Text(
+//                           'Saya seorang yang hiya hiya hiya',
+//                           overflow: TextOverflow.ellipsis,
+//                           maxLines: 2,
+//                           softWrap: true,
+//                           style: TextStyle(
+//                             overflow: TextOverflow.ellipsis,
+//                             color: Colors.grey,
+//                             fontWeight: FontWeight.w400,
+//                             fontSize: 10,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   Column(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     children: [
+//                       Row(
+//                         children: [
+//                           Text(
+//                             '2017',
+//                             style: TextStyle(
+//                               backgroundColor: Colors.grey.withOpacity(0.4),
+//                               color: Colors.black,
+//                               fontWeight: FontWeight.w500,
+//                               fontSize: 11,
+//                             ),
+//                           ),
+//                           const SizedBox(width: 4),
+//                           Text(
+//                             'Beda Jurusan',
+//                             style: TextStyle(
+//                               backgroundColor: Colors.grey.withOpacity(0.4),
+//                               color: Colors.black,
+//                               fontWeight: FontWeight.w500,
+//                               fontSize: 11,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       const Icon(
+//                         Icons.arrow_right_alt_rounded,
+//                         color: Colors.black,
+//                         size: 28,
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         );
+//       }),
+//     ),
+//   );
+// }
 
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return const CouncelingChatScreen();
-              //     },
-              //   ),
-              // );
-              // Get.to(() => const CouncelingChatScreen());
-            },
-            child: Card(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 80,
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Image.asset('assets/images/cat.png'),
-                    ),
-                    const SizedBox(width: 4),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            '#21346',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: const [
-                            Icon(
-                              Icons.male,
-                              color: Colors.blueAccent,
-                            ),
-                            Text(
-                              'Anonymous',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: true,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            'Saya seorang yang hiya hiya hiya',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            softWrap: true,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '2017',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Beda Jurusan',
-                              style: TextStyle(
-                                backgroundColor: Colors.grey.withOpacity(0.4),
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Icons.arrow_right_alt_rounded,
-                          color: Colors.black,
-                          size: 28,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget buildPendingRequestList(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 260.h,
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Pending Request',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        elevation: 1,
-                        backgroundColor: Colors.orange,
-                        content: Text(
-                          'Sorting still in development',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 24,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListView.builder(
-            itemCount: 2,
-            shrinkWrap: true,
-            itemBuilder: ((context, index) {
-              return GestureDetector(
-                onTap: () {
-                  log('Logged');
-
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) {
-                  //       return const CouncelingChatScreen();
-                  //     },
-                  //   ),
-                  // );
-                  // Get.to(() => const CouncelingChatScreen());
-                },
-                child: Card(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 80,
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset('assets/images/cat.png'),
-                        ),
-                        const SizedBox(width: 4),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '#21345',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.female,
-                                  color: Colors.pinkAccent,
-                                ),
-                                Text(
-                                  'Anonymous',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                'Saya seorang yang hiya hiya hiya',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                softWrap: true,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '2017',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Beda Jurusan',
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
+// Widget buildPendingRequestList(BuildContext context) {
+//   return SizedBox(
+//     width: MediaQuery.of(context).size.width,
+//     height: 260.h,
+//     child: Column(
+//       children: [
+//         Container(
+//           margin: const EdgeInsets.symmetric(horizontal: 16),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               const Text(
+//                 'Pending Request',
+//                 style: TextStyle(
+//                   color: Colors.black,
+//                   fontWeight: FontWeight.w600,
+//                   fontSize: 16,
+//                 ),
+//               ),
+//               IconButton(
+//                 onPressed: () {
+//                   ScaffoldMessenger.of(context).showSnackBar(
+//                     const SnackBar(
+//                       elevation: 1,
+//                       backgroundColor: Colors.orange,
+//                       content: Text(
+//                         'Sorting still in development',
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.w500,
+//                           color: Colors.black,
+//                           fontSize: 16,
+//                         ),
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 icon: const Icon(
+//                   CupertinoIcons.sort_down,
+//                   size: 24,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         ListView.builder(
+//           itemCount: 2,
+//           shrinkWrap: true,
+//           itemBuilder: ((context, index) {
+//             return GestureDetector(
+//               onTap: () {
+//                 log('Logged');
+//
+//                 // Navigator.push(
+//                 //   context,
+//                 //   MaterialPageRoute(
+//                 //     builder: (context) {
+//                 //       return const CouncelingChatScreen();
+//                 //     },
+//                 //   ),
+//                 // );
+//                 // Get.to(() => const CouncelingChatScreen());
+//               },
+//               child: Card(
+//                 child: Container(
+//                   width: MediaQuery.of(context).size.width,
+//                   height: 80,
+//                   padding: const EdgeInsets.all(8),
+//                   child: Row(
+//                     children: [
+//                       Padding(
+//                         padding: const EdgeInsets.all(8),
+//                         child: Image.asset('assets/images/cat.png'),
+//                       ),
+//                       const SizedBox(width: 4),
+//                       Column(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           const Padding(
+//                             padding: EdgeInsets.only(left: 8.0),
+//                             child: Text(
+//                               '#21345',
+//                               style: TextStyle(
+//                                 color: Colors.black,
+//                                 fontSize: 10,
+//                               ),
+//                             ),
+//                           ),
+//                           const SizedBox(height: 8),
+//                           Row(
+//                             children: const [
+//                               Icon(
+//                                 Icons.female,
+//                                 color: Colors.pinkAccent,
+//                               ),
+//                               Text(
+//                                 'Anonymous',
+//                                 overflow: TextOverflow.ellipsis,
+//                                 maxLines: 2,
+//                                 softWrap: true,
+//                                 style: TextStyle(
+//                                   overflow: TextOverflow.ellipsis,
+//                                   color: Colors.black,
+//                                   fontSize: 14,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           const SizedBox(height: 2),
+//                           const Padding(
+//                             padding: EdgeInsets.only(left: 8.0),
+//                             child: Text(
+//                               'Saya seorang yang hiya hiya hiya',
+//                               overflow: TextOverflow.ellipsis,
+//                               maxLines: 2,
+//                               softWrap: true,
+//                               style: TextStyle(
+//                                 overflow: TextOverflow.ellipsis,
+//                                 color: Colors.grey,
+//                                 fontWeight: FontWeight.w400,
+//                                 fontSize: 10,
+//                               ),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Column(
+//                         children: [
+//                           Row(
+//                             children: [
+//                               Text(
+//                                 '2017',
+//                                 style: TextStyle(
+//                                   backgroundColor:
+//                                       Colors.grey.withOpacity(0.4),
+//                                   color: Colors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                   fontSize: 11,
+//                                 ),
+//                               ),
+//                               const SizedBox(width: 4),
+//                               Text(
+//                                 'Beda Jurusan',
+//                                 style: TextStyle(
+//                                   backgroundColor:
+//                                       Colors.grey.withOpacity(0.4),
+//                                   color: Colors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                   fontSize: 11,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             );
+//           }),
+//         ),
+//       ],
+//     ),
+//   );
+// }
 }

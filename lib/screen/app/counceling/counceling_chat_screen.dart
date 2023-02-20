@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
   final int conseleeId;
@@ -137,25 +138,22 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 ),
                 Container(
                   width: 44.w,
-                  margin: EdgeInsets.only(right: 24.w, top: 28.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 0.5.w,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 8.r,
-                        offset: const Offset(3, 2),
+                  margin: EdgeInsets.only(top: 32.h, right: 16.w),
+                  child: GestureDetector(
+                    onTap: () async {
+                      Get.snackbar('GaneCare', 'Mengakhiri Room');
+                      await _firestoreUtils.updateRoom(roomId, 'ended');
+
+                      Get.off(() => const CounceleeSebayaScreen());
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Icon(
+                        Icons.cancel_rounded,
+                        size: 32.r,
+                        color: Colors.redAccent,
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Image.asset('assets/images/cat.png'),
+                    ),
                   ),
                 ),
               ],
@@ -377,15 +375,15 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
             bottom: 2.h,
           ),
           child: Align(
-            alignment: (chat.idReceiver.toString() == widget.currentId
-                ? Alignment.topLeft
-                : Alignment.topRight),
+            alignment: (chat.idSender.toString() == widget.currentId
+                ? Alignment.topRight
+                : Alignment.topLeft),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
-                color: (chat.idReceiver.toString() == widget.currentId
-                    ? Colors.grey.shade200
-                    : Colors.blue[200]),
+                color: (chat.idSender.toString() == widget.currentId
+                    ? Colors.blue[200]
+                    : Colors.grey.shade200),
               ),
               padding: EdgeInsets.all(16.w),
               child: Text(

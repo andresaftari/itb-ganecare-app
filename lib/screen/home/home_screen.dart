@@ -203,7 +203,7 @@ class _WorldThemeState extends State<WorldTheme> {
                   children: [
                     buildHomeBody(context),
                     SizedBox(height: 16.h),
-                    buildConselee(context),
+                    buildQuickHelp(context),
                     SizedBox(height: 16.h),
                     buildScholarshipNews(context),
                   ],
@@ -571,6 +571,103 @@ class _WorldThemeState extends State<WorldTheme> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildQuickHelp(BuildContext context) {
+    return Column(
+      children: [
+        FutureBuilder<dynamic>(
+          future: _homeController.getQuickHelp(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return SizedBox(
+                  width: 1.sw,
+                  height: 160.h,
+                  child: ListView.builder(
+                    itemCount: snapshot.data.data.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8.w),
+                        child: Card(
+                          child: SizedBox(
+                            width: 1.sw <= 400 && 1.sw >= 300 ? 220.w : 195.w,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  margin: EdgeInsets.symmetric(horizontal: 8.w),
+                                  child: Center(
+                                    child: Text(
+                                      snapshot.data.data[index].anonymousName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if (1.sh > 100 && 1.sh < 800)
+                                  SizedBox(height: 24.h)
+                                else if (1.sh >= 800)
+                                  SizedBox(height: 33.h),
+                                Column(
+                                  children: [
+                                    Text(snapshot.data.data[index].quickHelp),
+                                    SizedBox(height: 46.6.h),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        width: 1.sw,
+                                        height: 30.h,
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromRGBO(253, 143, 1, 1),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Bantu',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: const Text('Lorem Ipsum Dolor Sit Amet'),
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: const Text('Lorem Ipsum Dolor Sit Amet'),
+                ),
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 

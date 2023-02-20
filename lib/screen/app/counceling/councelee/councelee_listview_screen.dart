@@ -373,7 +373,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     }
   }
 
-  // ================= DISINI NIH BRE :) =================
   StreamBuilder buildListRequest(BuildContext context) {
     List<Rooms> rooms = [];
     List<Rooms> temp = [];
@@ -387,11 +386,10 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
               padding: EdgeInsets.all(8.0),
               child: CircularProgressIndicator.adaptive(),
             );
-          } else if (snap.connectionState == ConnectionState.done) {
+          } else {
             rooms = snap.data;
 
             if (temp.isNotEmpty) temp.clear();
-
             for (final r in rooms) {
               if (r.roomStatus == 'request' || r.roomStatus == 'pending') {
                 temp.add(r);
@@ -438,6 +436,17 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 8.w),
+                                      child: Text(
+                                        '#${temp[index].idConselor}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
                                     Row(
                                       children: [
                                         temp[index].genderConselor.toString() ==
@@ -469,10 +478,11 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                 SizedBox(width: 24.w),
                                 Column(
                                   children: [
+
                                     Row(
                                       children: [
                                         Text(
-                                          rooms[index].genderConselor,
+                                          rooms[index].generationConselor,
                                           style: TextStyle(
                                             backgroundColor:
                                                 Colors.grey.withOpacity(0.4),
@@ -533,13 +543,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                 ],
               ),
             );
-          } else {
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.w),
-                child: const Text('No pending request'),
-              ),
-            );
           }
         } else {
           return Center(
@@ -552,5 +555,4 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
       },
     );
   }
-  // ================= DISINI NIH BRE :) =================
 }

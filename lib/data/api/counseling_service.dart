@@ -32,7 +32,7 @@ class CounselingService extends CounselingRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'post-counselee');
+        // log('${response.data}', name: 'post-counselee');
         return Right(PostCounselee.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
@@ -65,7 +65,7 @@ class CounselingService extends CounselingRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'post-counselor');
+        // log('${response.data}', name: 'post-counselor');
         return Right(PostCounselor.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

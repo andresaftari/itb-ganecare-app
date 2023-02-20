@@ -81,7 +81,7 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${(response.data)}', name: 'post-userid');
+        // log('${(response.data)}', name: 'post-userid');
         return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

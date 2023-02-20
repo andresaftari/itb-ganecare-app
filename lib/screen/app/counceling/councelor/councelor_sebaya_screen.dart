@@ -264,7 +264,7 @@ class CouncelorSebayaViews extends StatelessWidget {
   Widget buildListWidget(List<Rooms> rooms) {
     String currentUserId =
         _sharedPreference.getString('councelor_id').toString();
-    log('test $currentUserId');
+    // log('test $currentUserId');
 
     if (rooms.isNotEmpty) {
       List<Rooms> temp = [];
@@ -287,7 +287,7 @@ class CouncelorSebayaViews extends StatelessWidget {
             if (temp[index].idConselor.toString() == currentUserId) {
               return GestureDetector(
                 onTap: () {
-                  log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
+                  // log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
 
                   _sharedPreference.putString(
                     'roomId',
@@ -455,9 +455,8 @@ class CouncelorSebayaViews extends StatelessWidget {
       List<Rooms> temp = [];
 
       if (temp.isNotEmpty) temp.clear();
-
       for (final r in rooms) {
-        if (r.roomStatus == 'ended' || r.roomStatus == 'closed') temp.add(r);
+        if (r.roomStatus == 'ended') temp.add(r);
       }
 
       return SizedBox(
@@ -550,7 +549,7 @@ class CouncelorSebayaViews extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      temp[index].genderConselor,
+                                      temp[index].generationConselor,
                                       style: TextStyle(
                                         backgroundColor:
                                             Colors.grey.withOpacity(0.4),

@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     Future.delayed(const Duration(seconds: 5), () {
-      log('on delay 5s', name: 'loading');
+      // log('on delay 5s', name: 'loading');
 
       Navigator.pushReplacement(
         context,

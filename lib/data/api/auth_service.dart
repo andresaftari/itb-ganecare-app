@@ -36,7 +36,7 @@ class AuthService extends AuthRepository {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'post-login');
+        // log('${response.data}', name: 'post-login');
 
         if (response.data.contains('user_mahasiswa')) {
           return Right(loginCounselorFromJson(response.data));

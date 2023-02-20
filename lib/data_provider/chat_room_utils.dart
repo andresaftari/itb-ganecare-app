@@ -7,9 +7,13 @@ import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/models/chats.dart';
 
 class FirestoreUtils extends ChangeNotifier {
-  // Stream<List<Rooms>> getLiveChatRoom() {
-  //   return FirebaseFirestore.instance.collection('rooms').snapshots().map(
-  //         (snapshot) => snapshot.docs
+  // Stream<List<Rooms>> getLive() async* {
+  //   FirebaseFirestore.instance.collection('rooms').snapshots().listen((event) {
+  //     log(event.docs.length.toString(), name: 'bruh');
+  //   });
+  //
+  //   yield* FirebaseFirestore.instance.collection('rooms').snapshots().map(
+  //         (event) => event.docs
   //             .map(
   //               (documents) => Rooms(
   //                 id: documents.id.toString(),
@@ -35,6 +39,18 @@ class FirestoreUtils extends ChangeNotifier {
   //             )
   //             .toList(),
   //       );
+  // }
+
+  // final CollectionReference _collectionRef =
+  //     FirebaseFirestore.instance.collection('rooms');
+
+  // Future<void> testtt() async {
+  //   // Get docs from collection reference
+  //   QuerySnapshot querySnapshot = await _collectionRef.get();
+
+  //   // Get data from docs and convert map to List
+  //   final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  //   log(allData.toString(), name: 'bruh');
   // }
 
   Stream<List<Rooms>> getLiveChatRoom() async* {
@@ -87,7 +103,8 @@ class FirestoreUtils extends ChangeNotifier {
                 type: documents.data()['type'],
               ),
             )
-            .toList());
+            .toList()
+            .cast());
   }
 
   Future postLiveChat(
@@ -126,6 +143,26 @@ class FirestoreUtils extends ChangeNotifier {
         'message': message,
         'type': type,
       });
+
+      FirebaseFirestore.instance.collection('rooms').doc(roomId).update({
+        'lastMessageConselee': message,
+        'lastMessageConselor': message,
+      });
+    } catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  Future updateRoom(String roomId, String status) async {
+    Failed failure;
+
+    try {
+      FirebaseFirestore.instance.collection('rooms').doc(roomId).update(
+        {'roomStatus': status},
+      );
+
+      // FirebaseFirestore.instance.collection('rooms').doc(roomId).collection('chats').doc().collection('')
     } catch (e) {
       failure = Failed(e.toString());
       return Left(failure);
@@ -151,11 +188,11 @@ class FirestoreUtils extends ChangeNotifier {
         'createdAtRoom': Timestamp.fromDate(DateTime.now()),
         'genderConselee': genderConselee,
         // 'genderConselor': genderConselor,
-        'genderConselor': 'male',
+        'genderConselor': 'L',
         'generationConselee': generationConselee,
         // 'generationConselor': generationConselor,
         'generationConselor': '2020',
-        'idConselee': idConselee,
+        'idConselee': int.parse(idConselee),
         // 'idConselor': idConselor,
         'idConselor': 660,
         'inRoomConselee': false,
