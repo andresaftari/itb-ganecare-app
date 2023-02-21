@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +179,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 if (snapshot.data != null && snapshot.data.length > 0) {
                   List<Chats> chats = snapshot.data.toList();
 
-                  log(chats[0].message, name: 'chat-dataset');
+                  // log(chats[0].message, name: 'chat-dataset');
 
                   return GroupedListView<Chats, String>(
                     elements: chats,
