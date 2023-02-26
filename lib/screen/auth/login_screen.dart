@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,33 +34,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
 
-  void _showDialogLogin() {
-    alertMessage = widget.alertMessage;
-    _forgotPasswordLink = widget.forgotPassLink;
+  // void _showDialogLogin() {
+  //   alertMessage = widget.alertMessage;
+  //   _forgotPasswordLink = widget.forgotPassLink;
 
-    if (alertMessage != '') {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        final text = alertMessage;
+  //   if (alertMessage != '') {
+  //     Future.delayed(const Duration(milliseconds: 500), () {
+  //       final text = alertMessage;
 
-        log(alertMessage.toString(), name: 'Alert');
+  //       // log(alertMessage.toString(), name: 'Alert');
 
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Center(child: Text(text!)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        );
-        alertMessage = null;
-      });
-    }
-  }
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: Center(child: Text(text!)),
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(10),
+  //           ),
+  //         ),
+  //       );
+  //       alertMessage = null;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    _showDialogLogin();
+    // _showDialogLogin();
 
     if (_sharedPreference.checkKey('isLogin') ||
         _sharedPreference.getInt('isLogin') != null) {

@@ -1,10 +1,9 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:itb_ganecare/data/controllers/profile_controller.dart';
-import 'package:itb_ganecare/data/sharedprefs.dart';
+// import 'package:get/get.dart';
+// import 'package:itb_ganecare/data/controllers/profile_controller.dart';
+// import 'package:itb_ganecare/data/sharedprefs.dart';
 
 class CouncelingProfileScreen extends StatefulWidget {
   const CouncelingProfileScreen({Key? key}) : super(key: key);
@@ -15,8 +14,8 @@ class CouncelingProfileScreen extends StatefulWidget {
 }
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
-  final ProfileController _authController = Get.find();
-  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+  // final ProfileController _authController = Get.find();
+  // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +74,18 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     );
   }
 
-  void loadData() {
-    String nim = _sharedPreference.getString('nim').toString();
+  // void loadData() {
+  //   String nim = _sharedPreference.getString('nim').toString();
     // String username = _sharedPreference.getString('username').toString();
 
-    Future(
-      () => _authController.getProfile(nim).then(
-            (value) => log(
-              value.toString(),
-            ),
-          ),
-    );
-  }
+  //   Future(
+  //     () => _authController.getProfile(nim).then(
+  //           (value) => log(
+  //             value.toString(),
+  //           ),
+  //         ),
+  //   );
+  // }
 
   Widget buildHeader() {
     return Column(

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -65,16 +64,16 @@ class _WorldThemeState extends State<WorldTheme> {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
     // int page = 1;
-    _homeController.getQuickHelp().then((value) {
-      log(value.toString(), name: 'get-aja');
-    });
+    // _homeController.getQuickHelp().then((value) {
+      // log(value.toString(), name: 'get-aja');
+    // });
 
     if (Platform.isAndroid) {
       deviceId = _deviceData['id'];
-      log(_deviceData['id'].toString(), name: 'id');
+      // log(_deviceData['id'].toString(), name: 'id');
     } else if (Platform.isIOS) {
       deviceId = _deviceData['identifierForVendor'];
-      log(_deviceData['identifierForVendor'], name: 'id');
+      // log(_deviceData['identifierForVendor'], name: 'id');
     }
 
     return MaterialApp(
@@ -673,7 +672,7 @@ class _WorldThemeState extends State<WorldTheme> {
 
   // Widget loadCounseleeData(BuildContext context) {
   Widget buildConselee(BuildContext context) {
-    log('sw: ${1.sw} | sh: ${1.sh}', name: 'sw size | sh size');
+    // log('sw: ${1.sw} | sh: ${1.sh}', name: 'sw size | sh size');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
