@@ -33,7 +33,7 @@ class AuthService extends AuthRepository {
       final response = await _dio.postUri(
         Uri.http(kemahasiswaanBaseUrl_, loginUrl_),
         data: formData,
-      );
+      ).timeout(const Duration(minutes: 1));
 
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'post-login');

@@ -243,7 +243,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
 
                 Get.snackbar(
                   'Counselee',
-                  'Coba',
+                  'Counseling request sent!',
                 );
               },
               child: Card(
