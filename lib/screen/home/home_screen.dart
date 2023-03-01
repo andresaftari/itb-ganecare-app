@@ -65,7 +65,7 @@ class _WorldThemeState extends State<WorldTheme> {
 
     // int page = 1;
     // _homeController.getQuickHelp().then((value) {
-      // log(value.toString(), name: 'get-aja');
+    // log(value.toString(), name: 'get-aja');
     // });
 
     if (Platform.isAndroid) {
@@ -486,13 +486,31 @@ class _WorldThemeState extends State<WorldTheme> {
                                                       ),
                                                     ),
                                                     onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const CounceleeSebayaScreen(),
-                                                        ),
-                                                      );
+                                                      if (_sharedPreference
+                                                                  .getString(
+                                                                      'councelee_id')
+                                                                  .toString() !=
+                                                              '' &&
+                                                          _sharedPreference
+                                                                  .getString(
+                                                                      'councelee_id') !=
+                                                              null) {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const CounceleeSebayaScreen(),
+                                                          ),
+                                                        );
+                                                      } else {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const CouncelorSebayaScreen(),
+                                                          ),
+                                                        );
+                                                      }
                                                     },
                                                   ),
                                                 ),

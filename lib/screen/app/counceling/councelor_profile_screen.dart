@@ -11,15 +11,15 @@ import 'package:itb_ganecare/data/sharedprefs.dart';
 // import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 // import 'package:itb_ganecare/data/sharedprefs.dart';
 
-class CouncelingProfileScreen extends StatefulWidget {
-  const CouncelingProfileScreen({Key? key}) : super(key: key);
+class CouncelorProfileScreen extends StatefulWidget {
+  const CouncelorProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<CouncelingProfileScreen> createState() =>
-      _CouncelingProfileScreenState();
+  State<CouncelorProfileScreen> createState() =>
+      _CouncelorProfileScreenState();
 }
 
-class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
+class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   XFile? image;
   bool status = false;
 
@@ -330,10 +330,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                 ],
               ),
             ),
-            vConsele(),
-            // vConselor('Senin'),
-            // vConselor('Selasa'),
-            // vConselor('Rabu'),
+            vConselor('Senin'),
+            vConselor('Selasa'),
+            vConselor('Rabu'),
           ],
         ),
       ),

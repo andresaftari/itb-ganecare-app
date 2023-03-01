@@ -6,6 +6,9 @@ import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelor_profile_screen.dart';
+
+import '../counceling_profile_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
   const CouncelorSebayaScreen({Key? key}) : super(key: key);
@@ -74,8 +77,8 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   static List<Widget> pages = [
     CouncelorSebayaViews(),
     const CouncelorListViewScreen(),
-    // const CouncelingProfileScreen(),
-    Container(),
+    const CouncelorProfileScreen(),
+    // Container(),
   ];
 }
 
