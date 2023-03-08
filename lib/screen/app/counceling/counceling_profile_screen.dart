@@ -210,22 +210,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                         width: 10,
                       ),
                     ),
-                    // child: Stack(
-                    //   children: [
-                    //     Align(
-                    //       alignment: Alignment.bottomRight,
-                    //       child: GestureDetector(
-                    //         onTap: () {
-                    //           _showMyDialog();
-                    //         },
-                    //         child: const Icon(
-                    //           Icons.camera_alt,
-                    //           color: Colors.black,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   )
                 : Container(
                     height: 100.h,
@@ -242,93 +226,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                         width: 10,
                       ),
                     ),
-                    // child: Stack(
-                    //   children: [
-                    //     Align(
-                    //       alignment: Alignment.bottomRight,
-                    //       child: GestureDetector(
-                    //         onTap: () {
-                    //           _showMyDialog();
-                    //         },
-                    //         child: const Icon(
-                    //           Icons.camera_alt,
-                    //           color: Colors.black,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
-            // (image == null)
-            //     ? Container(
-            //         height: 100.h,
-            //         width: 100.h,
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(
-            //             100,
-            //           ),
-            //           image: DecorationImage(
-            //               image: AssetImage('assets/images/cat.png'),
-            //               fit: BoxFit.cover),
-            //           border: Border.all(
-            //             color: Colors.white,
-            //             width: 10,
-            //           ),
-            //         ),
-            //         child: Stack(
-            //           children: [
-            //             Align(
-            //               alignment: Alignment.bottomRight,
-            //               child: GestureDetector(
-            //                 onTap: () {
-            //                   _showMyDialog();
-            //                 },
-            //                 child: const Icon(
-            //                   Icons.camera_alt,
-            //                   color: Colors.black,
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       )
-            //     : Container(
-            //         height: 100.h,
-            //         width: 100.h,
-            //         decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(
-            //             100,
-            //           ),
-            //           image: DecorationImage(
-            //             fit: BoxFit.cover,
-            //             image: FileImage(
-            //               File(
-            //                 image!.path,
-            //               ),
-            //             ),
-            //           ),
-            //           border: Border.all(
-            //             color: Colors.white,
-            //             width: 10,
-            //           ),
-            //         ),
-            //         child: Stack(
-            //           children: [
-            //             Align(
-            //               alignment: Alignment.bottomRight,
-            //               child: GestureDetector(
-            //                 onTap: () {
-            //                   _showMyDialog();
-            //                 },
-            //                 child: const Icon(
-            //                   Icons.camera_alt,
-            //                   color: Colors.black,
-            //                 ),
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
             SizedBox(
               height: 120.h,
               width: 150.h,
