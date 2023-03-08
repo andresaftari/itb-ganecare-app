@@ -8,6 +8,7 @@ import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor_profile_screen.dart';
 
+import '../../../../data/controllers/profile_controller.dart';
 import '../counceling_profile_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
@@ -75,23 +76,47 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   void _onIconTapped(int index) => setState(() => currentIndex = index);
 
   static List<Widget> pages = [
-    CouncelorSebayaViews(),
+    const CouncelorSebayaViews(),
     const CouncelorListViewScreen(),
     const CouncelorProfileScreen(),
     // Container(),
   ];
 }
 
-class CouncelorSebayaViews extends StatelessWidget {
-  CouncelorSebayaViews({Key? key}) : super(key: key);
+class CouncelorSebayaViews extends StatefulWidget {
+  const CouncelorSebayaViews({Key? key}) : super(key: key);
 
+  @override
+  State<CouncelorSebayaViews> createState() => _CouncelorSebayaViewsState();
+}
+
+class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+
   // final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   // final RxList<String> isPending = <String>[].obs;
   final RxList<String> isApproved = <String>[].obs;
+
   final RxList<String> isEnded = <String>[].obs;
+  final ProfileController _profileController = Get.find();
+  String profilePicture = '';
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+  getProfileData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    _profileController.getProfile(nim).then((value) => {
+          setState(() {
+            profilePicture = value['data']['profile'];
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,29 +195,55 @@ class CouncelorSebayaViews extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(
-                      width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5.w,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(3, 2),
+                    (profilePicture != '')
+                        ? Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(profilePicture),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/images/cat.png'),
+                              ),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -641,536 +692,4 @@ class CouncelorSebayaViews extends StatelessWidget {
       );
     }
   }
-
-  // StreamBuilder buildCounselor(BuildContext context) {
-  //   // String jurusan = _sharedPreference.getString('major').toString();
-  //   // String angkatan = _sharedPreference.getInt('angkatan').toString();
-  //   // String gender = _sharedPreference.getString('gender').toString();
-
-  //   String nim = _sharedPreference.getString('nim').toString();
-  //   String name = _sharedPreference.getString('name').toString();
-
-  //   List<String> roomIds = [];
-  //   List<String> lastMessages = [];
-  //   // List<bool> isReads = [];
-  //   List<Rooms> rooms = [];
-  //   List<int> counseleeIds = [];
-  //   List<int> counselorIds = [];
-
-  //   return StreamBuilder<List<Rooms>>(
-  //     stream: _firestoreUtils.getLiveChatRoom(),
-  //     builder: (context, AsyncSnapshot snap) {
-  //       if (snap.hasData) {
-  //         if (snap.connectionState == ConnectionState.waiting) {
-  //           return const Padding(
-  //             padding: EdgeInsets.all(8.0),
-  //             child: CircularProgressIndicator.adaptive(),
-  //           );
-  //         } else {
-  //           if (snap.data.isNotEmpty) {
-  //             rooms = snap.data;
-
-  //             for (final data in rooms) {
-  //               if (roomIds.isNotEmpty) roomIds.clear();
-  //               roomIds.add(data.id);
-
-  //               if (counselorIds.isNotEmpty) counselorIds.clear();
-  //               counselorIds.add(data.idConselor);
-
-  //               if (counseleeIds.isNotEmpty) counseleeIds.clear();
-  //               counseleeIds.add(data.idConselee);
-
-  //               // if (isPending.isNotEmpty) isPending.clear();
-  //               // if (data.roomStatus == 'pending' ||
-  //               //     data.roomStatus == 'requested' ||
-  //               //     data.roomStatus == 'request') {
-  //               //   isPending.add(data.roomStatus);
-  //               // }
-
-  //               if (isApproved.isNotEmpty) isApproved.clear();
-  //               if (data.roomStatus == 'approve' ||
-  //                   data.roomStatus == 'accepted') {
-  //                 isApproved.add(data.roomStatus);
-  //               }
-
-  //               if (isEnded.isNotEmpty) isEnded.clear();
-  //               if (data.roomStatus == 'ended') isEnded.add(data.roomStatus);
-
-  //               _firestoreUtils.getLiveChat(data.id).listen((event) {
-  //                 _firestoreUtils.chatList = event;
-
-  //                 for (final texts in event) {
-  //                   if (lastMessages.isNotEmpty) lastMessages.clear();
-  //                   lastMessages.add(texts.message);
-  //                 }
-  //               });
-  //             }
-  //           }
-  //         }
-  //       }
-
-  //       return FutureBuilder<dynamic>(
-  //         future: Future.delayed(
-  //           const Duration(seconds: 1),
-  //           () => _councelingController.postPeerCounselee(nim, name),
-  //         ),
-  //         builder: (context, snapshot) {
-  //           if (snapshot.hasData) {
-  //             if (snapshot.connectionState == ConnectionState.waiting) {
-  //               return const Padding(
-  //                 padding: EdgeInsets.all(8.0),
-  //                 child: CircularProgressIndicator.adaptive(),
-  //               );
-  //             } else if (snapshot.connectionState == ConnectionState.done) {
-  //               List<Counselee> dataset = snapshot.data.data;
-  //               log(rooms.toString(), name: 'log-dataset');
-
-  //               if (rooms.isNotEmpty) {
-  //                 return Column(
-  //                   children: [
-  //                     buildCounselingWidget(
-  //                       dataset,
-  //                       rooms,
-  //                       roomIds,
-  //                       lastMessages,
-  //                       counseleeIds,
-  //                       counselorIds,
-  //                       isApproved,
-  //                     ),
-  //                     buildHistoryCounceling(
-  //                       context,
-  //                       dataset,
-  //                       rooms,
-  //                       roomIds,
-  //                       lastMessages,
-  //                       counseleeIds,
-  //                       counselorIds,
-  //                       isEnded,
-  //                     ),
-  //                   ],
-  //                 );
-  //               } else {
-  //                 return Center(
-  //                   child: Padding(
-  //                     padding: EdgeInsets.all(8.w),
-  //                     child: const Text('No chat history'),
-  //                   ),
-  //                 );
-  //               }
-  //             } else {
-  //               return Center(
-  //                 child: Padding(
-  //                   padding: EdgeInsets.all(8.w),
-  //                   child: const Text('No chat history'),
-  //                 ),
-  //               );
-  //             }
-  //           } else {
-  //             return Center(
-  //               child: Padding(
-  //                 padding: EdgeInsets.all(8.w),
-  //                 child: const Text('No chat history'),
-  //               ),
-  //             );
-  //           }
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget buildCounselingWidget(
-  //   List<Counselee> dataset,
-  //   List<Rooms> rooms,
-  //   List<String> roomIds,
-  //   List<String> lastMessages,
-  //   List<int> counseleeIds,
-  //   List<int> counselorIds,
-  //   List<String> status,
-  // ) {
-  //   String currentUserId =
-  //       _sharedPreference.getString('councelor_id').toString();
-  //   List<Rooms> tempRooms = [];
-
-  //   if (status.isNotEmpty) {
-  //     if (tempRooms.isNotEmpty) tempRooms.clear();
-
-  //     for (final x in rooms) {
-  //       if (x.idConselor.toString() == currentUserId) {
-  //         tempRooms.add(x);
-  //       }
-  //     }
-
-  //     return SizedBox(
-  //       width: 1.sw,
-  //       height: 260.h,
-  //       child: ListView.builder(
-  //         shrinkWrap: true,
-  //         itemCount: tempRooms.length,
-  //         itemBuilder: (context, index) {
-  //           log(dataset[index].counseleeName);
-
-  //           return GestureDetector(
-  //             onTap: () {
-  //               log('Logged ${dataset[index].counseleeId}', name: 'konselor');
-
-  //               _sharedPreference.putString(
-  //                 'roomId',
-  //                 roomIds[index],
-  //               );
-
-  //               if (_firestoreUtils.chatList.isEmpty) {
-  //                 Get.snackbar('Chat', 'Belum ada histori pesan');
-  //               } else {
-  //                 Navigator.push(
-  //                   context,
-  //                   MaterialPageRoute(
-  //                     builder: (context) {
-  //                       return CouncelingChatScreen(
-  //                         conseleeId: counseleeIds[index],
-  //                         conselorId: counselorIds[index],
-  //                         currentId: _sharedPreference
-  //                             .getString('councelor_id')
-  //                             .toString(),
-  //                       );
-  //                     },
-  //                   ),
-  //                 );
-  //               }
-  //             },
-  //             child: Card(
-  //               child: Container(
-  //                 width: 1.sw,
-  //                 height: 80.h,
-  //                 margin: EdgeInsets.symmetric(horizontal: 16.w),
-  //                 padding: EdgeInsets.all(8.w),
-  //                 child: Row(
-  //                   children: [
-  //                     Padding(
-  //                       padding: EdgeInsets.all(8.w),
-  //                       child: Image.asset(
-  //                         'assets/images/cat.png',
-  //                         width: 46.w,
-  //                         height: 46.h,
-  //                       ),
-  //                     ),
-  //                     Column(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: [
-  //                         Row(
-  //                           children: [
-  //                             dataset[index].gender.toString() == 'P'
-  //                                 ? const Icon(
-  //                                     Icons.female,
-  //                                     color: Colors.pinkAccent,
-  //                                   )
-  //                                 : const Icon(
-  //                                     Icons.male,
-  //                                     color: Colors.blueAccent,
-  //                                   ),
-  //                             Text(
-  //                               'Anonymous',
-  //                               overflow: TextOverflow.ellipsis,
-  //                               maxLines: 2,
-  //                               softWrap: true,
-  //                               style: TextStyle(
-  //                                 overflow: TextOverflow.ellipsis,
-  //                                 color: Colors.black,
-  //                                 fontSize: 14.sp,
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         SizedBox(height: 2.h),
-  //                         Padding(
-  //                           padding: EdgeInsets.only(left: 8.h),
-  //                           child: Text(
-  //                             lastMessages[index],
-  //                             overflow: TextOverflow.ellipsis,
-  //                             maxLines: 2,
-  //                             softWrap: true,
-  //                             style: TextStyle(
-  //                               overflow: TextOverflow.ellipsis,
-  //                               color: Colors.grey,
-  //                               fontWeight: FontWeight.w400,
-  //                               fontSize: 10.sp,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                     SizedBox(width: 24.w),
-  //                     Column(
-  //                       children: [
-  //                         Row(
-  //                           children: [
-  //                             Text(
-  //                               '${dataset[index].angkatan}',
-  //                               style: TextStyle(
-  //                                 backgroundColor: Colors.grey.withOpacity(0.4),
-  //                                 color: Colors.black,
-  //                                 fontWeight: FontWeight.w500,
-  //                                 fontSize: 8.sp,
-  //                               ),
-  //                             ),
-  //                             SizedBox(width: 2.w),
-  //                             Text(
-  //                               dataset[index]
-  //                                       .jurusan
-  //                                       .contains('Tahap Tahun Pertama')
-  //                                   ? dataset[index].jurusan.substring(20)
-  //                                   : dataset[index]
-  //                                           .jurusan
-  //                                           .contains('Tahap Tahun Kedua')
-  //                                       ? dataset[index].jurusan.substring(18)
-  //                                       : dataset[index]
-  //                                               .jurusan
-  //                                               .contains('Tahap Tahun Ketiga')
-  //                                           ? dataset[index]
-  //                                               .jurusan
-  //                                               .substring(19)
-  //                                           : dataset[index].jurusan.contains(
-  //                                                   'Tahap Tahun Keempat')
-  //                                               ? dataset[index]
-  //                                                   .jurusan
-  //                                                   .substring(20)
-  //                                               : dataset[index].jurusan,
-  //                               style: TextStyle(
-  //                                 backgroundColor: Colors.grey.withOpacity(0.4),
-  //                                 color: Colors.black,
-  //                                 fontWeight: FontWeight.w500,
-  //                                 fontSize: 8.sp,
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     );
-  //   } else {
-  //     return SizedBox(width: 1.sw, height: 260.h);
-  //   }
-  // }
-
-  // Widget buildHistoryCounceling(
-  //   BuildContext context,
-  //   List<Counselee> dataset,
-  //   List<Rooms> rooms,
-  //   List<String> roomIds,
-  //   List<String> lastMessages,
-  //   List<int> counseleeIds,
-  //   List<int> counselorIds,
-  //   List<String> status,
-  // ) {
-  //   String currentUserId =
-  //       _sharedPreference.getString('councelor_id').toString();
-  //   List<Rooms> tempRooms = [];
-
-  //   if (status.isNotEmpty) {
-  //     if (tempRooms.isNotEmpty) tempRooms.clear();
-
-  //     for (final x in rooms) {
-  //       if (x.idConselee.toString() == currentUserId) {
-  //         tempRooms.add(x);
-  //       }
-  //     }
-
-  //     return SizedBox(
-  //       width: 1.sw,
-  //       child: Column(
-  //         children: [
-  //           Container(
-  //             margin: EdgeInsets.symmetric(horizontal: 16.w),
-  //             child: Text(
-  //               'History Counceling',
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.w600,
-  //                 fontSize: 16.sp,
-  //               ),
-  //             ),
-  //           ),
-  //           ListView.builder(
-  //             shrinkWrap: true,
-  //             itemCount: tempRooms.length,
-  //             itemBuilder: (context, index) {
-  //               return GestureDetector(
-  //                 onTap: () {
-  //                   log('Logged ${dataset[index].counseleeId}',
-  //                       name: 'Konselor');
-
-  //                   _sharedPreference.putString(
-  //                     'roomId',
-  //                     roomIds[index],
-  //                   );
-
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) {
-  //                         return CouncelingChatScreen(
-  //                           conseleeId: counseleeIds[index],
-  //                           conselorId: counselorIds[index],
-  //                           currentId: _sharedPreference
-  //                               .getString('councelor_id')
-  //                               .toString(),
-  //                         );
-  //                       },
-  //                     ),
-  //                   );
-
-  //                   // if (_firestoreUtils.chatList.isEmpty) {
-  //                   //   Get.snackbar('Chat', 'Belum ada histori pesan');
-  //                   // } else {
-  //                   //   Navigator.push(
-  //                   //     context,
-  //                   //     MaterialPageRoute(
-  //                   //       builder: (context) {
-  //                   //         return CouncelingChatScreen(
-  //                   //           conseleeId: counseleeIds[index],
-  //                   //           conselorId: counselorIds[index],
-  //                   //         );
-  //                   //       },
-  //                   //     ),
-  //                   //   );
-  //                   // }
-  //                 },
-  //                 child: Card(
-  //                   child: Container(
-  //                     width: 1.sw,
-  //                     height: 80.h,
-  //                     padding: EdgeInsets.all(8.w),
-  //                     margin: EdgeInsets.symmetric(horizontal: 16.w),
-  //                     child: Row(
-  //                       children: [
-  //                         Padding(
-  //                           padding: EdgeInsets.all(8.w),
-  //                           child: Image.asset(
-  //                             'assets/images/cat.png',
-  //                             width: 46.w,
-  //                             height: 46.h,
-  //                           ),
-  //                         ),
-  //                         Column(
-  //                           mainAxisAlignment: MainAxisAlignment.center,
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Row(
-  //                               children: [
-  //                                 dataset[index].gender.toString() == 'P'
-  //                                     ? const Icon(
-  //                                         Icons.female,
-  //                                         color: Colors.pinkAccent,
-  //                                       )
-  //                                     : const Icon(
-  //                                         Icons.male,
-  //                                         color: Colors.blueAccent,
-  //                                       ),
-  //                                 Text(
-  //                                   'Anonymous',
-  //                                   overflow: TextOverflow.ellipsis,
-  //                                   maxLines: 2,
-  //                                   softWrap: true,
-  //                                   style: TextStyle(
-  //                                     overflow: TextOverflow.ellipsis,
-  //                                     color: Colors.black,
-  //                                     fontSize: 14.sp,
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                             SizedBox(height: 2.h),
-  //                             Padding(
-  //                               padding: EdgeInsets.only(left: 8.h),
-  //                               child: Text(
-  //                                 lastMessages[index],
-  //                                 overflow: TextOverflow.ellipsis,
-  //                                 maxLines: 2,
-  //                                 softWrap: true,
-  //                                 style: TextStyle(
-  //                                   overflow: TextOverflow.ellipsis,
-  //                                   color: Colors.grey,
-  //                                   fontWeight: FontWeight.w400,
-  //                                   fontSize: 10.sp,
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           ],
-  //                         ),
-  //                         SizedBox(width: 24.w),
-  //                         Column(
-  //                           children: [
-  //                             Row(
-  //                               children: [
-  //                                 Text(
-  //                                   '${dataset[index].angkatan}',
-  //                                   style: TextStyle(
-  //                                     backgroundColor:
-  //                                         Colors.grey.withOpacity(0.4),
-  //                                     color: Colors.black,
-  //                                     fontWeight: FontWeight.w500,
-  //                                     fontSize: 8.sp,
-  //                                   ),
-  //                                 ),
-  //                                 SizedBox(width: 2.w),
-  //                                 Text(
-  //                                   dataset[index].jurusan,
-  //                                   style: TextStyle(
-  //                                     backgroundColor:
-  //                                         Colors.grey.withOpacity(0.4),
-  //                                     color: Colors.black,
-  //                                     fontWeight: FontWeight.w500,
-  //                                     fontSize: 8.sp,
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   } else {
-  //     return SizedBox(
-  //       width: 1.sw,
-  //       height: 150.h,
-  //       child: Column(
-  //         children: [
-  //           Container(
-  //             margin: EdgeInsets.symmetric(horizontal: 16.w),
-  //             child: Text(
-  //               'History Counceling',
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.w600,
-  //                 fontSize: 16.sp,
-  //               ),
-  //             ),
-  //           ),
-  //           Center(
-  //             child: Padding(
-  //               padding: EdgeInsets.all(8.w),
-  //               child: const Text('No chat history'),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //   }
-  // }
 }

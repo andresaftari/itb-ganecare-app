@@ -92,7 +92,6 @@ class CounceleeSebayaViews extends StatefulWidget {
 }
 
 class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
-
   // final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
@@ -196,31 +195,55 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(
-                      width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5.w,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(3, 2),
+                    (profilePicture != '')
+                        ? Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(profilePicture),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/images/cat.png'),
+                              ),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: (profilePicture != '')
-                            ? Image.network(profilePicture)
-                            : Image.asset('assets/images/cat.png'),
-                      ),
-                    ),
                   ],
                 ),
               ],

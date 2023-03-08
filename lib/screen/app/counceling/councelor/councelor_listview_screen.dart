@@ -7,6 +7,8 @@ import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 
+import '../../../../data/controllers/profile_controller.dart';
+
 class CouncelorListViewScreen extends StatefulWidget {
   const CouncelorListViewScreen({Key? key}) : super(key: key);
 
@@ -21,6 +23,23 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
 
   final RxList<String> isApproved = <String>[].obs;
   final RxList<String> isEnded = <String>[].obs;
+  final ProfileController _profileController = Get.find();
+  String profilePicture = '';
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+  getProfileData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    _profileController.getProfile(nim).then((value) => {
+          setState(() {
+            profilePicture = value['data']['profile'];
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,29 +119,55 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(
-                      width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5.w,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(3, 2),
+                    (profilePicture != '')
+                        ? Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(profilePicture),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/images/cat.png'),
+                              ),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
-                      ),
-                    ),
                   ],
                 ),
               ],
