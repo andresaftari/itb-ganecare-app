@@ -7,6 +7,8 @@ import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 import 'package:itb_ganecare/models/counseling.dart';
 
+import '../../../../data/controllers/profile_controller.dart';
+
 class CounceleeListViewScreen extends StatefulWidget {
   const CounceleeListViewScreen({Key? key}) : super(key: key);
 
@@ -16,13 +18,30 @@ class CounceleeListViewScreen extends StatefulWidget {
 }
 
 class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
-  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
-
   final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   final RxList<String> isPending = <String>[].obs;
   final RxList<String> isRejected = <String>[].obs;
+
+  final ProfileController _profileController = Get.find();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+  String profilePicture = '';
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+  getProfileData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    _profileController.getProfile(nim).then((value) => {
+          setState(() {
+            profilePicture = value['data']['profile'];
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +141,9 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
+                        child: (profilePicture != '')
+                            ? Image.network(profilePicture)
+                            : Image.asset('assets/images/cat.png'),
                       ),
                     ),
                   ],
@@ -478,7 +499,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                                 SizedBox(width: 24.w),
                                 Column(
                                   children: [
-
                                     Row(
                                       children: [
                                         Text(

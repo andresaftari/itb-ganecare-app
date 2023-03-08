@@ -5,8 +5,13 @@ import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+
+import '../../../data/controllers/profile_controller.dart';
+import 'counceling_edit_profile_screen.dart';
 // import 'package:get/get.dart';
 // import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 // import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -112,7 +117,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     );
   }
 
-  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   // handle stepper
   int _currentState = 0;
   List<StepperData> stepperData = [
@@ -165,15 +169,65 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   ];
   // final ProfileController _authController = Get.find();
   // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+  final ProfileController _profileController = Get.find();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+  String profilePicture = '';
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+  getProfileData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    _profileController.getProfile(nim).then((value) => {
+          setState(() {
+            profilePicture = value['data']['profile'];
+          })
+        });
+  }
+
   Widget contentAvatar() {
-    
     return Padding(
       padding: EdgeInsets.only(top: 70.h),
       child: Center(
         child: Column(
           children: [
-            (image == null)
+            (profilePicture != "")
                 ? Container(
+                    height: 100.h,
+                    width: 100.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        100,
+                      ),
+                      image: DecorationImage(
+                          image: NetworkImage(profilePicture),
+                          fit: BoxFit.cover),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 10,
+                      ),
+                    ),
+                    // child: Stack(
+                    //   children: [
+                    //     Align(
+                    //       alignment: Alignment.bottomRight,
+                    //       child: GestureDetector(
+                    //         onTap: () {
+                    //           _showMyDialog();
+                    //         },
+                    //         child: const Icon(
+                    //           Icons.camera_alt,
+                    //           color: Colors.black,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                  )
+                : Container(
                     height: 100.h,
                     width: 100.h,
                     decoration: BoxDecoration(
@@ -188,60 +242,93 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                         width: 10,
                       ),
                     ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              _showMyDialog();
-                            },
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(
-                    height: 100.h,
-                    width: 100.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: FileImage(
-                          File(
-                            image!.path,
-                          ),
-                        ),
-                      ),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 10,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              _showMyDialog();
-                            },
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // child: Stack(
+                    //   children: [
+                    //     Align(
+                    //       alignment: Alignment.bottomRight,
+                    //       child: GestureDetector(
+                    //         onTap: () {
+                    //           _showMyDialog();
+                    //         },
+                    //         child: const Icon(
+                    //           Icons.camera_alt,
+                    //           color: Colors.black,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
+            // (image == null)
+            //     ? Container(
+            //         height: 100.h,
+            //         width: 100.h,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(
+            //             100,
+            //           ),
+            //           image: DecorationImage(
+            //               image: AssetImage('assets/images/cat.png'),
+            //               fit: BoxFit.cover),
+            //           border: Border.all(
+            //             color: Colors.white,
+            //             width: 10,
+            //           ),
+            //         ),
+            //         child: Stack(
+            //           children: [
+            //             Align(
+            //               alignment: Alignment.bottomRight,
+            //               child: GestureDetector(
+            //                 onTap: () {
+            //                   _showMyDialog();
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.camera_alt,
+            //                   color: Colors.black,
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       )
+            //     : Container(
+            //         height: 100.h,
+            //         width: 100.h,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(
+            //             100,
+            //           ),
+            //           image: DecorationImage(
+            //             fit: BoxFit.cover,
+            //             image: FileImage(
+            //               File(
+            //                 image!.path,
+            //               ),
+            //             ),
+            //           ),
+            //           border: Border.all(
+            //             color: Colors.white,
+            //             width: 10,
+            //           ),
+            //         ),
+            //         child: Stack(
+            //           children: [
+            //             Align(
+            //               alignment: Alignment.bottomRight,
+            //               child: GestureDetector(
+            //                 onTap: () {
+            //                   _showMyDialog();
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.camera_alt,
+            //                   color: Colors.black,
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
             SizedBox(
               height: 120.h,
               width: 150.h,
@@ -273,12 +360,12 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          _showMyDialog();
-                        },
-                        icon: const Icon(Icons.edit),
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     _showMyDialog();
+                      //   },
+                      //   icon: const Icon(Icons.edit),
+                      // ),
                     ],
                   ),
                   Row(
@@ -331,9 +418,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
               ),
             ),
             vConsele(),
-            // vConselor('Senin'),
-            // vConselor('Selasa'),
-            // vConselor('Rabu'),
           ],
         ),
       ),
@@ -715,16 +799,43 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 46.w, top: 44.h),
-                  child: Text(
-                    'Profile',
-                    style: TextStyle(
-                      color: const Color.fromRGBO(255, 255, 255, 1),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          color: const Color.fromRGBO(255, 255, 255, 1),
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CouncelingEditProfileScreen(
+                                profilePicture: profilePicture,
+                                noReg: '123',
+                                about: 'about',
+                                nickName: 'hello',
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

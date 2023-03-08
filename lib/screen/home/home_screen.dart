@@ -50,13 +50,23 @@ class _WorldThemeState extends State<WorldTheme> {
 
   late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-
+  String profilePicture = '';
   String deviceId = '';
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    getProfileData();
+  }
+
+  getProfileData() {
+    String nim = _sharedPreference.getString('nim').toString();
+    _profileController.getProfile(nim).then((value) => {
+          setState(() {
+            profilePicture = value['data']['profile'];
+          })
+        });
   }
 
   @override
@@ -181,7 +191,9 @@ class _WorldThemeState extends State<WorldTheme> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8),
-                          child: Image.asset('assets/images/cat.png'),
+                          child: (profilePicture != '')
+                              ? Image.network(profilePicture)
+                              : Image.asset('assets/images/cat.png'),
                         ),
                       ),
                     ),
