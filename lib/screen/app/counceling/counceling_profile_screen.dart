@@ -172,6 +172,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   final ProfileController _profileController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   String profilePicture = '';
+  String idReg = '';
+  String about = '';
+  String nickName = '';
 
   @override
   void initState() {
@@ -184,6 +187,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     _profileController.getProfile(nim).then((value) => {
           setState(() {
             profilePicture = value['data']['profile'];
+            idReg = value['data']['id'];
           })
         });
   }
@@ -720,9 +724,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                             MaterialPageRoute(
                               builder: (context) => CouncelingEditProfileScreen(
                                 profilePicture: profilePicture,
-                                noReg: '123',
-                                about: 'about',
-                                nickName: 'hello',
+                                noReg: idReg,
+                                about: 'Hello bandung',
+                                nickName: 'Zuhahaha',
                               ),
                             ),
                           );

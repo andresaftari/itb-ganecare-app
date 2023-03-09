@@ -1,9 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/data/controllers/profile_controller.dart';
+import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
 
 class CouncelingEditProfileScreen extends StatefulWidget {
   final String profilePicture;
@@ -25,9 +32,16 @@ class CouncelingEditProfileScreen extends StatefulWidget {
 
 class _CouncelingEditProfileScreenState
     extends State<CouncelingEditProfileScreen> {
-  final TextEditingController _noReg = TextEditingController();
-  final TextEditingController _nickName = TextEditingController();
-  final TextEditingController _about = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String noReg = '';
+  String nickName = '';
+  String about = '';
+  bool isLoading = false;
+
+  final ProfileController _profileController = Get.find();
+  // final TextEditingController _noReg = TextEditingController();
+  // final TextEditingController _nickName = TextEditingController();
+  // final TextEditingController _about = TextEditingController();
 
   XFile? image;
   bool status = false;
@@ -247,82 +261,279 @@ class _CouncelingEditProfileScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 50,
-            ),
-            TextField(
-              controller: _noReg..text = widget.noReg,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                labelText: 'No Registrasi',
-                labelStyle: TextStyle(
-                  // color: Colors.white,
-                  fontSize: 14,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  TextFormField(
+                    readOnly: true,
+                    initialValue: widget.noReg,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      labelText: 'No Reg',
+                      labelStyle: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    initialValue: widget.nickName,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some nickname';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        nickName = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      labelText: 'Enter nickname',
+                      labelStyle: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    initialValue: widget.about,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some about';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        about = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      labelText: 'Enter about',
+                      labelStyle: const TextStyle(
+                        fontSize: 14,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _nickName..text = widget.nickName,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                labelText: 'Nickname',
-                labelStyle: TextStyle(
-                  // color: Colors.white,
-                  fontSize: 14,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _about..text = widget.about,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                labelText: 'About',
-                labelStyle: TextStyle(
-                  // color: Colors.white,
-                  fontSize: 14,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Container(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                style: style,
-                onPressed: () {
-                  print(_noReg);
-                  print(_nickName);
-                  print(_about);
-                },
-                child: const Text('Update'),
-              ),
-            ),
+            // TextField(
+            //   enabled: false,
+            //   controller: _noReg..text = widget.noReg,
+            //   decoration: InputDecoration(
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(20.0),
+            //     ),
+            //     labelText: 'No Registrasi',
+            //     labelStyle: TextStyle(
+            //       // color: Colors.white,
+            //       fontSize: 14,
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+            //       borderRadius: BorderRadius.circular(25.0),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // TextField(
+            //   controller: _nickName..text = widget.nickName,
+            //   decoration: InputDecoration(
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(20.0),
+            //     ),
+            //     labelText: 'Nickname',
+            //     labelStyle: TextStyle(
+            //       // color: Colors.white,
+            //       fontSize: 14,
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+            //       borderRadius: BorderRadius.circular(25.0),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // TextField(
+            //   controller: _about..text = widget.about,
+            //   decoration: InputDecoration(
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(20.0),
+            //     ),
+            //     labelText: 'About',
+            //     labelStyle: TextStyle(
+            //       // color: Colors.white,
+            //       fontSize: 14,
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+            //       borderRadius: BorderRadius.circular(25.0),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 50,
+            // ),
+
+            isLoading
+                ? const SpinKitFadingCircle(
+                    size: 40,
+                    color: Colors.blue,
+                  )
+                : SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      style: style,
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          setState(() {
+                            isLoading = true;
+                          });
+                          _profileController
+                              .updateProfile(
+                                widget.noReg,
+                                nickName,
+                                about,
+                              )
+                              .then((value) => {
+                                    if (value == 200)
+                                      {
+                                        Flushbar(
+                                          duration: const Duration(
+                                              milliseconds: 3000),
+                                          flushbarPosition:
+                                              FlushbarPosition.TOP,
+                                          backgroundColor: Colors.green,
+                                          titleText: const Text(
+                                            'Update Success',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          messageText: const Text(
+                                            'Berhasil melakukan update',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ).show(context),
+                                        setState(() {
+                                          isLoading = false;
+                                        })
+                                      }
+                                    else
+                                      {
+                                        Flushbar(
+                                          duration: const Duration(
+                                              milliseconds: 2000),
+                                          flushbarPosition:
+                                              FlushbarPosition.TOP,
+                                          backgroundColor: Colors.red,
+                                          titleText: const Text(
+                                            'Update failed',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          messageText: const Text(
+                                            'Gagal melakukan update',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ).show(context),
+                                        setState(() {
+                                          isLoading = false;
+                                        })
+                                      }
+                                  });
+
+                          // var duration = const Duration(milliseconds: 3000);
+                          // Timer(duration, () {
+                          //   Navigator.pop(context);
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           const CouncelingProfileScreen(),
+                          //     ),
+                          //   );
+                          // });
+                        } else {
+                          Flushbar(
+                            duration: const Duration(milliseconds: 2000),
+                            flushbarPosition: FlushbarPosition.TOP,
+                            backgroundColor: Colors.red,
+                            titleText: const Text(
+                              'Update failed!',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            messageText: const Text(
+                              'Terdapat inputan kosong',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ).show(context);
+                          setState(() {
+                            isLoading = true;
+                          });
+                          var duration = const Duration(milliseconds: 500);
+                          Timer(duration, () {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          });
+                        }
+                      },
+                      child: const Text('Update'),
+                    ),
+                  ),
           ],
         ),
       );

@@ -7,6 +7,7 @@ const String loginUrl_ = '/api/v1/sso';
 
 // DATA PROFILE API
 const String profileUrl_ = '/api/v1/dashboard/myprofile';
+const String profileUpdateUrl_ = '/api/v1/user/update_profile';
 const String quickHelpUrl_ = '/api/v1/dashboard/quick_help';
 const String getQuickHelpUrl_ = '/api/v1/dashboard/get_quick_help';
 

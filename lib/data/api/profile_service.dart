@@ -31,4 +31,36 @@ class ProfileService extends ProfileRepository {
       return Left(failure);
     }
   }
+
+  Future<Either<Failed, int>> updateProfileService(
+      String noReg, String nickName, String about) async {
+    Failed failure;
+
+    FormData formData = FormData.fromMap(
+      {
+        'no_reg': noReg,
+        'nickname': nickName,
+        'about': about,
+      },
+    );
+
+    try {
+      final response = await _dio.postUri(
+        Uri.http(kemahasiswaanBaseUrl_, profileUpdateUrl_),
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        // log('${response.data}', name: 'post-login');
+        print("Response 200");
+        print(200);
+        return const Right(200);
+      } else {
+        throw '${response.statusCode}: ${response.statusMessage}';
+      }
+    } on DioError catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
 }
