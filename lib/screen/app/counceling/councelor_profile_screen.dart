@@ -51,6 +51,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   final ProfileController _profileController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   String profilePicture = '';
+  String idReg = '';
+  String about = '';
+  String nickName = '';
+  int role = 0;
 
   @override
   void initState() {
@@ -59,10 +63,14 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   }
 
   getProfileData() {
-    String nim = _sharedPreference.getString('nim').toString();
-    _profileController.getProfile(nim).then((value) => {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
-            profilePicture = value['data']['profile'];
+            profilePicture = value['data']['conselor']['profilepic_image'];
+            idReg = value['data']['conselor']['register_id'];
+            about = value['data']['conselor']['about'];
+            nickName = value['data']['conselor']['nickname'];
+            role = value['data']['conselor']['role'];
           })
         });
   }
@@ -721,9 +729,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             MaterialPageRoute(
                               builder: (context) => ConcelorEditProfileScreen(
                                 profilePicture: profilePicture,
-                                noReg: '123',
-                                about: 'about',
-                                nickName: 'hello',
+                                noReg: idReg,
+                                about: about,
+                                nickName: nickName,
+                                role: role.toString(),
                               ),
                             ),
                           );

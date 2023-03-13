@@ -12,17 +12,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
 
+import '../../../data/sharedprefs.dart';
+
 class CouncelingEditProfileScreen extends StatefulWidget {
   final String profilePicture;
   final String noReg;
   final String about;
   final String nickName;
+  final String role;
   const CouncelingEditProfileScreen({
     Key? key,
     required this.profilePicture,
     required this.noReg,
     required this.about,
     required this.nickName,
+    required this.role,
   }) : super(key: key);
 
   @override
@@ -39,6 +43,7 @@ class _CouncelingEditProfileScreenState
   bool isLoading = false;
 
   final ProfileController _profileController = Get.find();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   // final TextEditingController _noReg = TextEditingController();
   // final TextEditingController _nickName = TextEditingController();
   // final TextEditingController _about = TextEditingController();
@@ -135,12 +140,17 @@ class _CouncelingEditProfileScreenState
     );
   }
 
+  getProfileData() {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg);
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
       return Row(
         children: [
-          Container(
+          SizedBox(
             height: 50,
             width: 50,
             child: IconButton(
@@ -432,12 +442,13 @@ class _CouncelingEditProfileScreenState
                           setState(() {
                             isLoading = true;
                           });
+                          // print(widget.noReg);
+                          // print(widget.role);
+                          // print(nickName);
+                          // print(about);
                           _profileController
                               .updateProfile(
-                                widget.noReg,
-                                nickName,
-                                about,
-                              )
+                                  widget.noReg, nickName, about, widget.role)
                               .then((value) => {
                                     if (value == 200)
                                       {

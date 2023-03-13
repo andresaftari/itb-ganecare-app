@@ -33,10 +33,10 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
   }
 
   getProfileData() {
-    String nim = _sharedPreference.getString('nim').toString();
-    _profileController.getProfile(nim).then((value) => {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
-            profilePicture = value['data']['profile'];
+            profilePicture = value['data']['conselor']['profilepic_image'];
           })
         });
   }

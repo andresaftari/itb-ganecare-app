@@ -175,6 +175,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   String idReg = '';
   String about = '';
   String nickName = '';
+  int role = 0;
 
   @override
   void initState() {
@@ -183,11 +184,14 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   }
 
   getProfileData() {
-    String nim = _sharedPreference.getString('nim').toString();
-    _profileController.getProfile(nim).then((value) => {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
-            profilePicture = value['data']['profile'];
-            idReg = value['data']['id'];
+            profilePicture = value['data']['conselee']['profilepic_image'];
+            idReg = value['data']['conselee']['register_id'];
+            about = value['data']['conselee']['about'];
+            nickName =  value['data']['conselee']['nickname'];
+            role =  value['data']['conselee']['role'];
           })
         });
   }
@@ -725,13 +729,14 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                               builder: (context) => CouncelingEditProfileScreen(
                                 profilePicture: profilePicture,
                                 noReg: idReg,
-                                about: 'Hello bandung',
-                                nickName: 'Zuhahaha',
+                                about: about,
+                                nickName: nickName,
+                                role: role.toString(),
                               ),
                             ),
                           );
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.edit,
                           color: Colors.white,
                         ),
