@@ -166,52 +166,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         ),
       ),
     ),
-    StepperData(
-      title: StepperText(
-        "Stresss",
-        textStyle: const TextStyle(
-          color: Colors.red,
-        ),
-      ),
-      subtitle: StepperText(
-        "Jangan lupa maen epep",
-        textStyle: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      iconWidget: Container(
-        padding: const EdgeInsets.all(1),
-        decoration: const BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: const Center(
-          child: Icon(Icons.adb, color: Colors.white),
-        ),
-      ),
-    ),
-    StepperData(
-      title: StepperText(
-        "Stresss",
-        textStyle: const TextStyle(
-          color: Colors.red,
-        ),
-      ),
-      subtitle: StepperText(
-        "Jangan lupa maen epep",
-        textStyle: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      iconWidget: Container(
-        padding: const EdgeInsets.all(1),
-        decoration: const BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: const Center(
-          child: Icon(Icons.adb, color: Colors.white),
-        ),
-      ),
-    ),
   ];
   // final ProfileController _authController = Get.find();
   // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
@@ -631,8 +585,8 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   Widget vConsele() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Container(
-        height: 200.h,
+      child: SizedBox(
+        height: 250.h,
         width: double.infinity,
         child: ListView(
           scrollDirection: Axis.vertical,
@@ -643,7 +597,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                   height: 30.h,
                   width: double.infinity,
                   color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini, Januari 22')),
+                  child: const Center(child: Text('Hari ini,13 Maret 22')),
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 5, right: 5),
@@ -668,7 +622,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                   height: 30.h,
                   width: double.infinity,
                   color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini, Januari 22')),
+                  child: const Center(child: Text('Hari ini,12 Januari 22')),
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 5, right: 5),

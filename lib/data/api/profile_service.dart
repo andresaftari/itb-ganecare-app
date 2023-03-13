@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -32,7 +33,6 @@ class ProfileService extends ProfileRepository {
       return Left(failure);
     }
   }
-
 
   @override
   Future<Either<Failed, Map<String, dynamic>>> getProfileV2(
@@ -84,6 +84,43 @@ class ProfileService extends ProfileRepository {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
     } on DioError catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failed, int>> updatePhotoService(
+      String noReg, File file, String role) async {
+    Failed failure;
+
+    FormData uploadData = FormData.fromMap({
+      'no_reg': noReg,
+      'file': await MultipartFile.fromFile(file.path, filename: file.path),
+      'token': token_,
+      'role': role,
+    });
+
+    try {
+      final response = await Dio()
+          .post('https://kemahasiswaan.itb.ac.id/api/person/update_foto',
+              data: uploadData,
+              options: Options(
+                  followRedirects: false,
+                  validateStatus: (status) {
+                    return status! < 500;
+                  }));
+
+      if (response.statusCode == 200) {
+        // log('${response.data}', name: 'post-login');
+        print("Response 200");
+        print(200);
+        return const Right(200);
+      } else {
+        throw '${response.statusCode}: ${response.statusMessage}';
+      }
+    } on DioError catch (e) {
+      print(e);
       failure = Failed(e.toString());
       return Left(failure);
     }

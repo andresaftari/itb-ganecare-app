@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -44,32 +45,47 @@ class _CouncelingEditProfileScreenState
 
   final ProfileController _profileController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
-  // final TextEditingController _noReg = TextEditingController();
-  // final TextEditingController _nickName = TextEditingController();
-  // final TextEditingController _about = TextEditingController();
 
-  XFile? image;
+  XFile? img;
   bool status = false;
 
   final ImagePicker picker = ImagePicker();
+  File? _image;
 
-  //we can upload image from camera or from gallery based on parameter
-  Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
+  Future getImage() async {
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      // ignore: unnecessary_null_comparison
+      if (image == null) return;
 
-    setState(() {
-      image = img;
-      status = true;
-    });
+      final imageTemp = File(image.path);
+
+      setState(() {
+        img = image;
+        _image = imageTemp;
+      });
+    } on PlatformException catch (e) {
+      print('Failed cause: $e');
+    }
   }
 
-  Future getCamera(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
+  Future getCamera() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    try {
+      // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      // ignore: unnecessary_null_comparison
+      if (image == null) return;
 
-    setState(() {
-      image = img;
-      status = true;
-    });
+      final imageTemp = File(image.path);
+
+      setState(() {
+        img = image;
+        _image = imageTemp;
+      });
+    } on PlatformException catch (e) {
+      print('Failed cause: $e');
+    }
   }
 
   Future<void> _showMyDialog() async {
@@ -89,7 +105,7 @@ class _CouncelingEditProfileScreenState
                       children: [
                         IconButton(
                           onPressed: () {
-                            getImage(ImageSource.camera);
+                            getCamera();
                             Navigator.pop(context);
                           },
                           icon: Icon(
@@ -105,7 +121,7 @@ class _CouncelingEditProfileScreenState
                       children: [
                         IconButton(
                           onPressed: () {
-                            getImage(ImageSource.gallery);
+                            getImage();
                             Navigator.pop(context);
                           },
                           icon: Icon(
@@ -157,13 +173,13 @@ class _CouncelingEditProfileScreenState
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 // color: Colors.white,
               ),
             ),
           ),
-          Expanded(
+          const Expanded(
             child: Text(
               'Update Profile',
               textAlign: TextAlign.center,
@@ -172,7 +188,7 @@ class _CouncelingEditProfileScreenState
                   ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 50,
             width: 50,
           ),
@@ -183,7 +199,7 @@ class _CouncelingEditProfileScreenState
     Widget content() {
       return Column(
         children: [
-          (image == null)
+          (img == null)
               ? Container(
                   height: 100.h,
                   width: 100.h,
@@ -227,7 +243,7 @@ class _CouncelingEditProfileScreenState
                       fit: BoxFit.cover,
                       image: FileImage(
                         File(
-                          image!.path,
+                          img!.path,
                         ),
                       ),
                     ),
@@ -275,7 +291,7 @@ class _CouncelingEditProfileScreenState
               key: _formKey,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   TextFormField(
@@ -296,7 +312,7 @@ class _CouncelingEditProfileScreenState
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
@@ -327,7 +343,7 @@ class _CouncelingEditProfileScreenState
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
@@ -358,7 +374,7 @@ class _CouncelingEditProfileScreenState
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                 ],
@@ -442,65 +458,124 @@ class _CouncelingEditProfileScreenState
                           setState(() {
                             isLoading = true;
                           });
-                          // print(widget.noReg);
-                          // print(widget.role);
-                          // print(nickName);
-                          // print(about);
-                          _profileController
-                              .updateProfile(
-                                  widget.noReg, nickName, about, widget.role)
-                              .then((value) => {
-                                    if (value == 200)
-                                      {
-                                        Flushbar(
-                                          duration: const Duration(
-                                              milliseconds: 3000),
-                                          flushbarPosition:
-                                              FlushbarPosition.TOP,
-                                          backgroundColor: Colors.green,
-                                          titleText: const Text(
-                                            'Update Success',
-                                            style: TextStyle(
-                                              color: Colors.white,
+                          if (_image == null) {
+                            _profileController
+                                .updateProfile(
+                                    widget.noReg, nickName, about, widget.role)
+                                .then((value) => {
+                                      if (value == 200)
+                                        {
+                                          Flushbar(
+                                            duration: const Duration(
+                                                milliseconds: 3000),
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            backgroundColor: Colors.green,
+                                            titleText: const Text(
+                                              'Update Success',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                          messageText: const Text(
-                                            'Berhasil melakukan update',
-                                            style: TextStyle(
-                                              color: Colors.white,
+                                            messageText: const Text(
+                                              'Berhasil melakukan update',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                        ).show(context),
-                                        setState(() {
-                                          isLoading = false;
-                                        })
-                                      }
-                                    else
-                                      {
-                                        Flushbar(
-                                          duration: const Duration(
-                                              milliseconds: 2000),
-                                          flushbarPosition:
-                                              FlushbarPosition.TOP,
-                                          backgroundColor: Colors.red,
-                                          titleText: const Text(
-                                            'Update failed',
-                                            style: TextStyle(
-                                              color: Colors.white,
+                                          ).show(context),
+                                          setState(() {
+                                            isLoading = false;
+                                          })
+                                        }
+                                      else
+                                        {
+                                          Flushbar(
+                                            duration: const Duration(
+                                                milliseconds: 2000),
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            backgroundColor: Colors.red,
+                                            titleText: const Text(
+                                              'Update failed',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                          messageText: const Text(
-                                            'Gagal melakukan update',
-                                            style: TextStyle(
-                                              color: Colors.white,
+                                            messageText: const Text(
+                                              'Gagal melakukan update',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                        ).show(context),
-                                        setState(() {
-                                          isLoading = false;
-                                        })
-                                      }
-                                  });
+                                          ).show(context),
+                                          setState(() {
+                                            isLoading = false;
+                                          })
+                                        }
+                                    });
+                          } else {
+                            _profileController
+                                .updatePhoto(widget.noReg, _image!, widget.role)
+                                .then((value) {
+                              print('Berhasil brow');
+                            });
+                            _profileController
+                                .updateProfile(
+                                    widget.noReg, nickName, about, widget.role)
+                                .then((value) => {
+                                      if (value == 200)
+                                        {
+                                          Flushbar(
+                                            duration: const Duration(
+                                                milliseconds: 3000),
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            backgroundColor: Colors.green,
+                                            titleText: const Text(
+                                              'Update Success',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            messageText: const Text(
+                                              'Berhasil melakukan update',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ).show(context),
+                                          setState(() {
+                                            isLoading = false;
+                                          })
+                                        }
+                                      else
+                                        {
+                                          Flushbar(
+                                            duration: const Duration(
+                                                milliseconds: 2000),
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            backgroundColor: Colors.red,
+                                            titleText: const Text(
+                                              'Update failed',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            messageText: const Text(
+                                              'Gagal melakukan update',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ).show(context),
+                                          setState(() {
+                                            isLoading = false;
+                                          })
+                                        }
+                                    });
+                          }
 
                           // var duration = const Duration(milliseconds: 3000);
                           // Timer(duration, () {
