@@ -240,9 +240,9 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '#21345',
-                    style: TextStyle(
+                  Text(
+                    (idReg != '') ?  '#'+idReg : '00000',
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
                     ),
@@ -259,9 +259,9 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                           color: Colors.blue,
                         ),
                       ),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Anonymous Anonymous Anonymous Anonymous',
+                          (nickName != '') ? nickName : 'Anonymous',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -309,9 +309,9 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                         margin: EdgeInsets.only(right: 10.h),
                         height: 20.h,
                         width: 70.w,
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            'Hello world Hello world Hello worldHello world',
+                            (about != '') ? about : 'Anonymous',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 12),
                           ),
@@ -825,7 +825,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         ),
         SizedBox(height: 24.h),
         Text(
-          'Anonymous',
+          (nickName != '') ? nickName : 'Anonymous',
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,

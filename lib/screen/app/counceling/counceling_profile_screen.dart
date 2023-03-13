@@ -190,8 +190,8 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             profilePicture = value['data']['conselee']['profilepic_image'];
             idReg = value['data']['conselee']['register_id'];
             about = value['data']['conselee']['about'];
-            nickName =  value['data']['conselee']['nickname'];
-            role =  value['data']['conselee']['role'];
+            nickName = value['data']['conselee']['nickname'];
+            role = value['data']['conselee']['role'];
           })
         });
   }
@@ -241,9 +241,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '#21345',
-                    style: TextStyle(
+                  Text(
+                    (idReg != '') ? '#' + idReg : '00000',
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
                     ),
@@ -260,9 +260,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                           color: Colors.blue,
                         ),
                       ),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Anonymous Anonymous Anonymous Anonymous',
+                          (nickName != '') ? nickName : 'Anonymous',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -309,12 +309,12 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                       Container(
                         margin: EdgeInsets.only(right: 10.h),
                         height: 20.h,
-                        width: 70.w,
-                        child: const Center(
+                        width: 150.w,
+                        child: Center(
                           child: Text(
-                            'Hello world Hello world Hello worldHello world',
+                            (about != '') ? about : 'Anonymous',
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ),
                       ),
@@ -824,7 +824,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         ),
         SizedBox(height: 24.h),
         Text(
-          'Anonymous',
+          (nickName != '') ? nickName : 'Anonymous',
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
