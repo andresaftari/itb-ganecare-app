@@ -166,6 +166,52 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         ),
       ),
     ),
+    StepperData(
+      title: StepperText(
+        "Stresss",
+        textStyle: const TextStyle(
+          color: Colors.red,
+        ),
+      ),
+      subtitle: StepperText(
+        "Jangan lupa maen epep",
+        textStyle: const TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      iconWidget: Container(
+        padding: const EdgeInsets.all(1),
+        decoration: const BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: const Center(
+          child: Icon(Icons.adb, color: Colors.white),
+        ),
+      ),
+    ),
+    StepperData(
+      title: StepperText(
+        "Stresss",
+        textStyle: const TextStyle(
+          color: Colors.red,
+        ),
+      ),
+      subtitle: StepperText(
+        "Jangan lupa maen epep",
+        textStyle: const TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      iconWidget: Container(
+        padding: const EdgeInsets.all(1),
+        decoration: const BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: const Center(
+          child: Icon(Icons.adb, color: Colors.white),
+        ),
+      ),
+    ),
   ];
   // final ProfileController _authController = Get.find();
   // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
@@ -585,82 +631,70 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   Widget vConsele() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        children: [
-          Container(
-            height: 30.h,
-            width: double.infinity,
-            color: const Color.fromRGBO(255, 195, 70, 1),
-            child: const Center(child: Text('Hari ini, Januari 22')),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            height: 170.h,
-            color: Colors.white,
-            width: double.infinity,
-            child: Center(
-              child: AnotherStepper(
-                stepperList: stepperData,
-                stepperDirection: Axis.vertical,
-                iconWidth:
-                    25, // Height that will be applied to all the stepper icons
-                iconHeight:
-                    25, // Width that will be applied to all the stepper icons
-              ),
+      child: Container(
+        height: 200.h,
+        width: double.infinity,
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [
+            Column(
+              children: [
+                Container(
+                  height: 30.h,
+                  width: double.infinity,
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  child: const Center(child: Text('Hari ini, Januari 22')),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  height: 170.h,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      AnotherStepper(
+                        stepperList: stepperData,
+                        stepperDirection: Axis.vertical,
+                        iconWidth:
+                            25, // Height that will be applied to all the stepper icons
+                        iconHeight:
+                            25, // Width that will be applied to all the stepper icons
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 30.h,
+                  width: double.infinity,
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  child: const Center(child: Text('Hari ini, Januari 22')),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  height: 170.h,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      AnotherStepper(
+                        stepperList: stepperData,
+                        stepperDirection: Axis.vertical,
+                        iconWidth:
+                            25, // Height that will be applied to all the stepper icons
+                        iconHeight:
+                            25, // Width that will be applied to all the stepper icons
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
-    // return Container(
-    //   height: 245.h,
-    //   width: double.infinity,
-    //   child: Center(
-    //     child: Stepper(
-    //       controlsBuilder: (BuildContext context, ControlsDetails controls) {
-    //         return Row(
-    //           children: <Widget>[
-    //             Container(),
-    //           ],
-    //         );
-    //       },
-    //       steps: const [
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //       ],
-    //       onStepTapped: (int newIndex) {
-    //         setState(() {
-    //           _currentState = newIndex;
-    //         });
-    //       },
-    //       currentStep: _currentState,
-    //       onStepContinue: () {
-    //         if (_currentState != 2) {
-    //           setState(() {
-    //             _currentState += 1;
-    //           });
-    //         }
-    //       },
-    //       onStepCancel: () {
-    //         if (_currentState != 0) {
-    //           setState(() {
-    //             _currentState -= 1;
-    //           });
-    //         }
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 
   @override
