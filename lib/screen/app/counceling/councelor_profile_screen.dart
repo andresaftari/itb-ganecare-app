@@ -9,22 +9,21 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/screen/app/counceling/concelor_edit_profile_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
-import 'counceling_edit_profile_screen.dart';
 // import 'package:get/get.dart';
 // import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 // import 'package:itb_ganecare/data/sharedprefs.dart';
 
-class CouncelingProfileScreen extends StatefulWidget {
-  const CouncelingProfileScreen({Key? key}) : super(key: key);
+class CouncelorProfileScreen extends StatefulWidget {
+  const CouncelorProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<CouncelingProfileScreen> createState() =>
-      _CouncelingProfileScreenState();
+  State<CouncelorProfileScreen> createState() => _CouncelorProfileScreenState();
 }
 
-class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
+class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   XFile? image;
   bool status = false;
 
@@ -47,6 +46,33 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       image = img;
       status = true;
     });
+  }
+
+  final ProfileController _profileController = Get.find();
+  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+  String profilePicture = '';
+  String idReg = '';
+  String about = '';
+  String nickName = '';
+  int role = 0;
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+  getProfileData() {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg).then((value) => {
+          setState(() {
+            profilePicture = value['data']['conselor']['profilepic_image'];
+            idReg = value['data']['conselor']['register_id'];
+            about = value['data']['conselor']['about'];
+            nickName = value['data']['conselor']['nickname'];
+            role = value['data']['conselor']['role'];
+          })
+        });
   }
 
   Future<void> _showMyDialog() async {
@@ -169,33 +195,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   ];
   // final ProfileController _authController = Get.find();
   // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
-  final ProfileController _profileController = Get.find();
-  final SharedPrefUtils _sharedPreference = SharedPrefUtils();
-  String profilePicture = '';
-  String idReg = '';
-  String about = '';
-  String nickName = '';
-  int role = 0;
-
-  @override
-  void initState() {
-    getProfileData();
-    return super.initState();
-  }
-
-  getProfileData() {
-    String noreg = _sharedPreference.getString('noreg').toString();
-    _profileController.getProfileV2(noreg).then((value) => {
-          setState(() {
-            profilePicture = value['data']['conselee']['profilepic_image'];
-            idReg = value['data']['conselee']['register_id'];
-            about = value['data']['conselee']['about'];
-            nickName = value['data']['conselee']['nickname'];
-            role = value['data']['conselee']['role'];
-          })
-        });
-  }
-
   Widget contentAvatar() {
     return Padding(
       padding: EdgeInsets.only(top: 70.h),
@@ -242,7 +241,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (idReg != '') ? '#' + idReg : '00000',
+                    (idReg != '') ?  '#'+idReg : '00000',
                     style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -309,12 +308,12 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                       Container(
                         margin: EdgeInsets.only(right: 10.h),
                         height: 20.h,
-                        width: 150.w,
+                        width: 70.w,
                         child: Center(
                           child: Text(
                             (about != '') ? about : 'Anonymous',
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 12),
                           ),
                         ),
                       ),
@@ -323,7 +322,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                 ],
               ),
             ),
-            vConsele(),
+            vConselor('Senin'),
+            vConselor('Selasa'),
+            vConselor('Rabu'),
           ],
         ),
       ),
@@ -585,70 +586,82 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   Widget vConsele() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: SizedBox(
-        height: 250.h,
-        width: double.infinity,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            Column(
-              children: [
-                Container(
-                  height: 30.h,
-                  width: double.infinity,
-                  color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini,13 Maret 22')),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  height: 170.h,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      AnotherStepper(
-                        stepperList: stepperData,
-                        stepperDirection: Axis.vertical,
-                        iconWidth:
-                            25, // Height that will be applied to all the stepper icons
-                        iconHeight:
-                            25, // Width that will be applied to all the stepper icons
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 30.h,
-                  width: double.infinity,
-                  color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini,12 Januari 22')),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  height: 170.h,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      AnotherStepper(
-                        stepperList: stepperData,
-                        stepperDirection: Axis.vertical,
-                        iconWidth:
-                            25, // Height that will be applied to all the stepper icons
-                        iconHeight:
-                            25, // Width that will be applied to all the stepper icons
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      child: Column(
+        children: [
+          Container(
+            height: 30.h,
+            width: double.infinity,
+            color: const Color.fromRGBO(255, 195, 70, 1),
+            child: const Center(child: Text('Hari ini, Januari 22')),
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            height: 170.h,
+            color: Colors.white,
+            width: double.infinity,
+            child: Center(
+              child: AnotherStepper(
+                stepperList: stepperData,
+                stepperDirection: Axis.vertical,
+                iconWidth:
+                    25, // Height that will be applied to all the stepper icons
+                iconHeight:
+                    25, // Width that will be applied to all the stepper icons
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+    // return Container(
+    //   height: 245.h,
+    //   width: double.infinity,
+    //   child: Center(
+    //     child: Stepper(
+    //       controlsBuilder: (BuildContext context, ControlsDetails controls) {
+    //         return Row(
+    //           children: <Widget>[
+    //             Container(),
+    //           ],
+    //         );
+    //       },
+    //       steps: const [
+    //         Step(
+    //           title: Text('Step 01'),
+    //           content: SizedBox(),
+    //         ),
+    //         Step(
+    //           title: Text('Step 01'),
+    //           content: SizedBox(),
+    //         ),
+    //         Step(
+    //           title: Text('Step 01'),
+    //           content: SizedBox(),
+    //         ),
+    //       ],
+    //       onStepTapped: (int newIndex) {
+    //         setState(() {
+    //           _currentState = newIndex;
+    //         });
+    //       },
+    //       currentStep: _currentState,
+    //       onStepContinue: () {
+    //         if (_currentState != 2) {
+    //           setState(() {
+    //             _currentState += 1;
+    //           });
+    //         }
+    //       },
+    //       onStepCancel: () {
+    //         if (_currentState != 0) {
+    //           setState(() {
+    //             _currentState -= 1;
+    //           });
+    //         }
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   @override
@@ -714,7 +727,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CouncelingEditProfileScreen(
+                              builder: (context) => ConcelorEditProfileScreen(
                                 profilePicture: profilePicture,
                                 noReg: idReg,
                                 about: about,

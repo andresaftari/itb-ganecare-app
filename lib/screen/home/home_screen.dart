@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -12,6 +13,7 @@ import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/prestasi_screen.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
@@ -50,13 +52,24 @@ class _WorldThemeState extends State<WorldTheme> {
 
   late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-
+  String profilePicture = '';
   String deviceId = '';
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    getProfileData();
+  }
+
+  getProfileData() {
+    String noreg = _sharedPreference.getString('noreg').toString();
+
+    _profileController.getProfileV2(noreg).then((value) => {
+          setState(() {
+            profilePicture = value['data']['conselee']['profilepic_image'];
+          })
+        });
   }
 
   @override
@@ -65,7 +78,7 @@ class _WorldThemeState extends State<WorldTheme> {
 
     // int page = 1;
     // _homeController.getQuickHelp().then((value) {
-      // log(value.toString(), name: 'get-aja');
+    // log(value.toString(), name: 'get-aja');
     // });
 
     if (Platform.isAndroid) {
@@ -161,29 +174,55 @@ class _WorldThemeState extends State<WorldTheme> {
                           ),
                         );
                       },
-                      child: Container(
-                        width: 44.w,
-                        margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 0.5.w,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.5),
-                              blurRadius: 8,
-                              offset: const Offset(3, 2),
+                      child: (profilePicture != '')
+                          ? Container(
+                              height: 50.h,
+                              width: 44.w,
+                              margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 0.5.w,
+                                ),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(profilePicture),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    blurRadius: 8,
+                                    offset: const Offset(3, 2),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              height: 50.h,
+                              width: 44.w,
+                              margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                image: const DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('assets/images/cat.png'),
+                                ),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 0.5.w,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    blurRadius: 8,
+                                    offset: const Offset(3, 2),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Image.asset('assets/images/cat.png'),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -486,13 +525,31 @@ class _WorldThemeState extends State<WorldTheme> {
                                                       ),
                                                     ),
                                                     onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const CounceleeSebayaScreen(),
-                                                        ),
-                                                      );
+                                                      if (_sharedPreference
+                                                                  .getString(
+                                                                      'councelee_id')
+                                                                  .toString() !=
+                                                              '' &&
+                                                          _sharedPreference
+                                                                  .getString(
+                                                                      'councelee_id') !=
+                                                              null) {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const CounceleeSebayaScreen(),
+                                                          ),
+                                                        );
+                                                      } else {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const CouncelorSebayaScreen(),
+                                                          ),
+                                                        );
+                                                      }
                                                     },
                                                   ),
                                                 ),
@@ -540,15 +597,25 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   } else if (index == 3) {
-                    return Container(
-                      height: 60.h,
-                      width: 60.w,
-                      padding: EdgeInsets.all(4.w),
-                      margin: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Image.asset('assets/images/achievement.png'),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8.r),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PrestasiScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.w,
+                        padding: EdgeInsets.all(4.w),
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Image.asset('assets/images/achievement.png'),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(253, 143, 1, 1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
                     );
                   } else {

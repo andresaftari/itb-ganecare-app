@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -31,10 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (Platform.isAndroid) {
       deviceId = _deviceData['id'];
-      // log(_deviceData['id'].toString(), name: 'id');
+      log(_deviceData['id'].toString(), name: 'id');
     } else if (Platform.isIOS) {
       deviceId = _deviceData['identifierForVendor'];
-      // log(_deviceData['identifierForVendor'], name: 'id');
+      log(_deviceData['identifierForVendor'], name: 'id');
     }
 
     Future.delayed(const Duration(seconds: 5), () {
