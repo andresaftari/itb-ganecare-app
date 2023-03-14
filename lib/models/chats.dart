@@ -101,3 +101,23 @@ class Chats {
     ''';
   }
 }
+
+class EndChat {
+  EndChat({
+    required this.success,
+    required this.message,
+  });
+
+  bool success;
+  String message;
+
+  factory EndChat.fromJson(Map<String, dynamic> json) => EndChat(
+        success: json["success"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "success": success,
+        "message": message,
+      };
+}
