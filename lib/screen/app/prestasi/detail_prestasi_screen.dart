@@ -3,15 +3,56 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../../data/controllers/prestasi_controller.dart';
 
 class DetailPrestasi extends StatefulWidget {
-  const DetailPrestasi({Key? key}) : super(key: key);
+  final String idPenghargaan;
+  const DetailPrestasi({
+    Key? key,
+    required this.idPenghargaan,
+  }) : super(key: key);
 
   @override
   State<DetailPrestasi> createState() => _DetailPrestasiState();
 }
 
 class _DetailPrestasiState extends State<DetailPrestasi> {
+  final PrestasiController _prestasiController = Get.find();
+  @override
+  void initState() {
+    getPrestasiData();
+    return super.initState();
+  }
+
+  String namaPrestasi = '';
+  String lingkup = '';
+  String penyelenggara = '';
+  String deskripsi = '';
+  String fotoKegiatan = '';
+  String startDate = '';
+  String endDate = '';
+
+  getPrestasiData() {
+    _prestasiController
+        .getDetailPrestasi(widget.idPenghargaan)
+        .then((value) => {
+              setState(() {
+                for (var data in value['data']) {
+                  namaPrestasi = data['nama_penghargaan'];
+                  lingkup = data['tingkat'];
+                  penyelenggara = data['lembaga'];
+                  deskripsi = data['penghargaan_deskripsi'];
+                  startDate = data['penghargaan_tanggal'];
+                  endDate = data['penghargaan_tanggal_berakhir'];
+                  fotoKegiatan = data['foto_kegiatan'];
+                }
+              }),
+            });
+  }
+
   Widget contentOne() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,21 +60,31 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
         SizedBox(
           height: 20.h,
         ),
-        const Text(
-          'Nama prestasi',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Text(
+          (namaPrestasi != '') ? namaPrestasi : 'Data kosong',
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 20.h,
         ),
-        Container(
-          height: 250.h,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
+        (fotoKegiatan != "")
+            ? Container(
+                height: 250.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(fotoKegiatan), fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              )
+            : Container(
+                height: 250.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
       ],
     );
   }
@@ -46,8 +97,8 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               width: 150,
               height: 20,
               child: Text('Lingkup/Tingkat'),
@@ -55,7 +106,7 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
             Expanded(
               child: SizedBox(
                 height: 20,
-                child: Text(': Internasional'),
+                child: Text(': $lingkup'),
               ),
             ),
           ],
@@ -64,8 +115,8 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
           height: 10.h,
         ),
         Row(
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               width: 150,
               height: 20,
               child: Text('Tanggal'),
@@ -73,7 +124,7 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
             Expanded(
               child: SizedBox(
                 height: 20,
-                child: Text(': 2020-12-11 sd 2021-10-12'),
+                child: Text(': $startDate sd $endDate'),
               ),
             ),
           ],
@@ -82,22 +133,26 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
           height: 10.h,
         ),
         Row(
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               width: 150,
               height: 20,
               child: Text('Penyelenggara'),
             ),
             Expanded(
               child: SizedBox(
-                height: 20,
-                child: Text(': Ristek Dikti'),
+                height: 30,
+                child: Text(
+                  ': $penyelenggara',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
               ),
             ),
           ],
         ),
         SizedBox(
-          height: 10.h,
+          height: 20.h,
         ),
       ],
     );
@@ -105,13 +160,15 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
 
   Widget contenThree() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 3.5,
+      height: MediaQuery.of(context).size.height / 4,
       width: double.infinity,
       child: SingleChildScrollView(
         child: Column(
-          children: const [
-            Text(
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.')
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            (deskripsi != '')
+                ? Text(deskripsi)
+                : const Text('Belum terdapat deskripsi'),
           ],
         ),
       ),

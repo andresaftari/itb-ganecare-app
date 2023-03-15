@@ -4,6 +4,9 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/models/dummy_prestasi.dart';
 import 'package:itb_ganecare/screen/app/prestasi/detail_prestasi_screen.dart';
 
@@ -15,80 +18,135 @@ class PrestasiScreen extends StatefulWidget {
 }
 
 class _PrestasiScreenState extends State<PrestasiScreen> {
-  Widget contentData() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height / 1,
-      width: double.infinity,
-      child: ListView.builder(
-        itemCount: mockPrestasi.length,
-        itemBuilder: ((context, index) {
-          var dataPrestasi = mockPrestasi[index];
-          return Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DetailPrestasi(),
+  final PrestasiController _prestasiController = Get.find();
+
+  Widget getDataPrestasi(BuildContext context) {
+    return Column(
+      children: [
+        FutureBuilder<dynamic>(
+          future: _prestasiController.getPretasi(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.2,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
                   ),
                 );
-              },
-              child: Card(
-                child: ListTile(
-                  leading: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/images/cat.png'),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    dataPrestasi.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        dataPrestasi.subtitle,
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.calendar_today,
-                            color: Colors.blue,
-                            size: 10,
-                          ),
-                          Text(
-                            dataPrestasi.date,
-                            style: const TextStyle(
-                              fontSize: 12,
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height / 1,
+                  child: ListView.builder(
+                    itemCount: snapshot.data.data.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPrestasi(
+                                  idPenghargaan:
+                                      snapshot.data.data[index].idPenghargaan,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            child: ListTile(
+                              leading: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      snapshot.data.data[index].fotoKegiatan,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                snapshot.data.data[index].namaPenghargaan,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data.data[index].eventPenghargaan,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.blue,
+                                        size: 10,
+                                      ),
+                                      Text(
+                                        snapshot
+                                            .data.data[index].tahunPerolehan,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              isThreeLine: true,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      );
+                    },
                   ),
-                  isThreeLine: true,
+                );
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.2,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Data kosong'),
+                  ),
+                );
+              }
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                width: double.infinity,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
                 ),
-              ),
-            ),
-          );
-        }),
-      ),
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -119,7 +177,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              contentData(),
+              getDataPrestasi(context),
             ],
           ),
         ),

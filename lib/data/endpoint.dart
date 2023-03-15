@@ -12,6 +12,8 @@ const String profileUpdateUrl_ = '/api/v1/user/update_profile';
 const String profileUpdatePhotoUrl_ = '/api/person/update_foto';
 const String quickHelpUrl_ = '/api/v1/dashboard/quick_help';
 const String getQuickHelpUrl_ = '/api/v1/dashboard/get_quick_help';
+const String gePrestasiUrl_ = '/api/prestasi/ganecare_best5penghargaan';
+const String detailPrestasiUrl_ = '/api/prestasi/ganecare_detail_penghargaan';
 
 // USERID API
 const String userIdUrl_ = '/api/beasiswa/getuserid';
