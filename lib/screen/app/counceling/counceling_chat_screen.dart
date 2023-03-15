@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:itb_ganecare/data/controllers/chat_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
@@ -29,6 +30,8 @@ class CouncelingChatScreen extends StatefulWidget {
 class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
+
+  final ChatController _chatController = Get.find();
 
   final _chatKey = GlobalKey<FormState>(debugLabel: 'chat');
   final TextEditingController _messageController = TextEditingController();
@@ -122,6 +125,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                     onTap: () async {
                       Get.snackbar('GaneCare', 'Mengakhiri Room');
                       await _firestoreUtils.updateRoom(roomId, 'ended');
+                      await _endCurrentChat();
 
                       Get.off(() => const CounceleeSebayaScreen());
                     },
@@ -372,6 +376,28 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
         ),
       ],
     );
+  }
+
+  Future _endCurrentChat() async {
+    String roomId = _sharedPreference.getString('roomId').toString();
+
+    _firestoreUtils.getLiveChat(roomId).listen((event) { 
+      for (var element in event) {
+        DateTime today = Timestamp(
+          element.dateTime.seconds,
+          element.dateTime.nanoseconds,
+        ).toDate();
+
+        _chatController.postEndChat(
+          element.idRoom, 
+          widget.conselorId, 
+          widget.conseleeId, 
+          today, 
+          roomId, 
+          event
+        );
+      }
+    });
   }
 }
 

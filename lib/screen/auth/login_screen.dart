@@ -293,12 +293,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  _launchLupaPassword() async {
-    if (await canLaunch(_forgotPasswordLink!.url)) {
-      await launch(_forgotPasswordLink!.url, forceWebView: false);
-    } else {
-      throw 'Could not launch ${_forgotPasswordLink!.url}';
-    }
-  }
 }
