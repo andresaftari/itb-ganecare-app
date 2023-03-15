@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:itb_ganecare/models/dummy_prestasi.dart';
+import 'package:itb_ganecare/screen/app/prestasi/detail_prestasi_screen.dart';
 
 class PrestasiScreen extends StatefulWidget {
   const PrestasiScreen({Key? key}) : super(key: key);
@@ -24,55 +25,65 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
           var dataPrestasi = mockPrestasi[index];
           return Padding(
             padding: const EdgeInsets.all(2.0),
-            child: Card(
-              child: ListTile(
-                leading: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/images/cat.png'),
-                    ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DetailPrestasi(),
                   ),
-                ),
-                title: Text(
-                  dataPrestasi.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      dataPrestasi.subtitle,
-                      style: const TextStyle(
-                        fontSize: 12,
+                );
+              },
+              child: Card(
+                child: ListTile(
+                  leading: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/images/cat.png'),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                  ),
+                  title: Text(
+                    dataPrestasi.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          color: Colors.blue,
-                          size: 10,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dataPrestasi.subtitle,
+                        style: const TextStyle(
+                          fontSize: 12,
                         ),
-                        Text(
-                          dataPrestasi.date,
-                          style: const TextStyle(
-                            fontSize: 12,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_today,
+                            color: Colors.blue,
+                            size: 10,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Text(
+                            dataPrestasi.date,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  isThreeLine: true,
                 ),
-                isThreeLine: true,
               ),
             ),
           );
