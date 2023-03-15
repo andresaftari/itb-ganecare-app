@@ -37,26 +37,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   Widget build(BuildContext context) {
     String roomId = _sharedPreference.getString('roomId').toString();
 
-    // _firestoreUtils.getLiveChatRoom().listen((event) {
-    //   for (final room in event) {
-    //     if (room.idConselee == widget.conseleeId) {
-    //       Future(
-    //         () => _firestoreUtils.updateInRoom(
-    //           roomId: roomId,
-    //           isCounseleeInRoom: true,
-    //         ),
-    //       );
-    //     } else if (room.idConselor == widget.conselorId) {
-    //       Future(
-    //         () => _firestoreUtils.updateInRoom(
-    //           roomId: roomId,
-    //           isCounselorInRoom: true,
-    //         ),
-    //       );
-    //     }
-    //   }
-    // });
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70.h,
@@ -241,8 +221,6 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       );
                     },
                     indexedItemBuilder: (context, element, index) {
-                      // final reversed = chats.length - 1 - index;
-
                       Chats chat = Chats(
                         dateTime: chats[index].dateTime,
                         idReceiver: chats[index].idReceiver,
