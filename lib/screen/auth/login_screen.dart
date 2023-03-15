@@ -6,7 +6,6 @@ import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   final String deviceId, alertMessage;
@@ -25,7 +24,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late String? alertMessage;
-  late LinkData? _forgotPasswordLink;
 
   String username = '', password = '';
 
