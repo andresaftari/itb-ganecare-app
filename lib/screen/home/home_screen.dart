@@ -13,7 +13,7 @@ import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
-import 'package:itb_ganecare/screen/app/prestasi_screen.dart';
+import 'package:itb_ganecare/screen/app/prestasi/prestasi_screen.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
