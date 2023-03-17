@@ -28,7 +28,7 @@ class ProfileController {
 
     return res;
   }
-  
+
   Future getProfileV2(String noReg) async {
     var res;
 
@@ -46,11 +46,12 @@ class ProfileController {
     return res;
   }
 
-  Future updateProfile(String noReg, String nickName, String about,String role) async {
+  Future updateProfile(
+      String noReg, String nickName, String about, String role) async {
     var res;
 
-    final result =
-        await _profileService.updateProfileService(noReg, nickName, about,role);
+    final result = await _profileService.updateProfileService(
+        noReg, nickName, about, role);
 
     result.fold((l) {
       log('failed to get profile ${l.message}', name: 'get-profile');
@@ -64,11 +65,11 @@ class ProfileController {
 
     return res;
   }
+  
   Future updatePhoto(String noReg, File file, String role) async {
     var res;
 
-    final result =
-        await _profileService.updatePhotoService(noReg, file, role);
+    final result = await _profileService.updatePhotoService(noReg, file, role);
 
     result.fold((l) {
       log('failed to get profile ${l.message}', name: 'get-profile');

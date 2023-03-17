@@ -1,16 +1,22 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/screen/home/home_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
+import '../../../models/profile_v2.dart';
 import 'counceling_edit_profile_screen.dart';
 // import 'package:get/get.dart';
 // import 'package:itb_ganecare/data/controllers/profile_controller.dart';
@@ -25,98 +31,6 @@ class CouncelingProfileScreen extends StatefulWidget {
 }
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
-  XFile? image;
-  bool status = false;
-
-  final ImagePicker picker = ImagePicker();
-
-  //we can upload image from camera or from gallery based on parameter
-  Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
-
-    setState(() {
-      image = img;
-      status = true;
-    });
-  }
-
-  Future getCamera(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
-
-    setState(() {
-      image = img;
-      status = true;
-    });
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          // title: const Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            getImage(ImageSource.camera);
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.camera,
-                          ),
-                        ),
-                        Text(
-                          'Pilih kamera',
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            getImage(ImageSource.gallery);
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.image,
-                          ),
-                        ),
-                        Text(
-                          'Pilih galeri',
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Tutup',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   // handle stepper
   int _currentState = 0;
   List<StepperData> stepperData = [
@@ -196,9 +110,63 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         });
   }
 
+  Widget appBarCustom() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              _sharedPreference.removeKey('councelor_status');
+              _sharedPreference.removeKey('councelee_status');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HomePage(isDarkMode: false)),
+              );
+            },
+            icon: const Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            'Profile',
+            style: TextStyle(
+              color: const Color.fromRGBO(255, 255, 255, 1),
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CouncelingEditProfileScreen(
+                    profilePicture: profilePicture,
+                    noReg: idReg,
+                    about: about,
+                    nickName: nickName,
+                    role: role.toString(),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget contentAvatar() {
     return Padding(
-      padding: EdgeInsets.only(top: 70.h),
+      padding: EdgeInsets.only(top: 120.h),
       child: Center(
         child: Column(
           children: [
@@ -330,258 +298,6 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     );
   }
 
-  Widget vConselor(title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(255, 195, 70, 1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ExpandablePanel(
-              theme: const ExpandableThemeData(crossFadePoint: 0),
-              header: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Text(title),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                ],
-              ),
-              collapsed: const SizedBox(),
-              expanded: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 60.w,
-                        child: Text('Pagi'),
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                        child: Text(':'),
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(width: 0.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  '07:00',
-                                ),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(width: 0.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  '08:00',
-                                ),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(width: 0.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  '09:00',
-                                ),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(width: 0.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  '10:00',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 60.w,
-                          child: Text('Siang'),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                          child: Text(':'),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '12:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '13:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '14:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '15:00',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 60.w,
-                          child: Text('Sore'),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                          child: Text(':'),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '16:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '08:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '17:00',
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(width: 0.5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '18:00',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget vConsele() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -655,87 +371,87 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _sharedPreference.removeKey('councelor_status');
-        _sharedPreference.removeKey('councelee_status');
-        Navigator.pop(context);
-        Navigator.pop(context);
+        // _sharedPreference.removeKey('councelor_status');
+        // _sharedPreference.removeKey('councelee_status');
+        // // Navigator.pop(context);
+        // Navigator.pop(context);
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: 75.h,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              _sharedPreference.removeKey('councelor_status');
-              _sharedPreference.removeKey('councelee_status');
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
-          ),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(0, 171, 233, 1),
-                  Color.fromRGBO(6, 146, 196, 1),
-                ],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
-                      child: Text(
-                        'Profile',
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1),
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CouncelingEditProfileScreen(
-                                profilePicture: profilePicture,
-                                noReg: idReg,
-                                about: about,
-                                nickName: nickName,
-                                role: role.toString(),
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   toolbarHeight: 75.h,
+        //   automaticallyImplyLeading: false,
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       _sharedPreference.removeKey('councelor_status');
+        //       _sharedPreference.removeKey('councelee_status');
+        //       Navigator.pop(context);
+        //       Navigator.pop(context);
+        //     },
+        //     child: const Icon(
+        //       Icons.close,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        //   flexibleSpace: Container(
+        //     decoration: const BoxDecoration(
+        //       gradient: LinearGradient(
+        //         colors: [
+        //           Color.fromRGBO(0, 171, 233, 1),
+        //           Color.fromRGBO(6, 146, 196, 1),
+        //         ],
+        //         begin: Alignment.centerRight,
+        //         end: Alignment.centerLeft,
+        //       ),
+        //     ),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Container(
+        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
+        //               child: Text(
+        //                 'Profile',
+        //                 style: TextStyle(
+        //                   color: const Color.fromRGBO(255, 255, 255, 1),
+        //                   fontSize: 18.sp,
+        //                   fontWeight: FontWeight.w600,
+        //                 ),
+        //               ),
+        //             ),
+        //             Container(
+        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
+        //               child: IconButton(
+        //                 onPressed: () {
+        //                   Navigator.push(
+        //                     context,
+        //                     MaterialPageRoute(
+        //                       builder: (context) => CouncelingEditProfileScreen(
+        //                         profilePicture: profilePicture,
+        //                         noReg: idReg,
+        //                         about: about,
+        //                         nickName: nickName,
+        //                         role: role.toString(),
+        //                       ),
+        //                     ),
+        //                   );
+        //                 },
+        //                 icon: const Icon(
+        //                   Icons.edit,
+        //                   color: Colors.white,
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         body: Stack(
           children: [
             Container(
@@ -743,6 +459,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             ),
             buildHeader(),
             // buildProfileFace(),
+            appBarCustom(),
             contentAvatar(),
           ],
         ),
@@ -768,9 +485,14 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Column(
       children: [
         Container(
+          color: const Color.fromRGBO(0, 171, 233, 1),
+          width: 1.sw,
+          height: 60.h,
+        ),
+        Container(
           color: const Color.fromRGBO(255, 195, 70, 1),
           width: 1.sw,
-          height: 120.h,
+          height: 110.h,
         ),
         Container(
           color: Colors.white,
@@ -869,7 +591,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
 
   Widget buildFloatingActionButton() {
     return Container(
-      margin: EdgeInsets.only(bottom: 48.h),
+      margin: EdgeInsets.only(bottom: 55.h),
       child: FloatingActionButton(
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(

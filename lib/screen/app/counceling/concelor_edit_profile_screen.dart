@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelor.dart';
 
 import '../../../data/controllers/profile_controller.dart';
 
@@ -159,20 +160,20 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
     Widget header() {
       return Row(
         children: [
-          Container(
+          SizedBox(
             height: 50,
             width: 50,
             child: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Get.to(const MainPageCouncelor(initialPage: 2));
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 // color: Colors.white,
               ),
             ),
           ),
-          Expanded(
+          const Expanded(
             child: Text(
               'Update Profile',
               textAlign: TextAlign.center,
@@ -181,7 +182,7 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                   ),
             ),
           ),
-          Container(
+          const SizedBox(
             height: 50,
             width: 50,
           ),
@@ -389,7 +390,7 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                           setState(() {
                             isLoading = true;
                           });
-                        if (_image == null) {
+                          if (_image == null) {
                             _profileController
                                 .updateProfile(
                                     widget.noReg, nickName, about, widget.role)
@@ -416,8 +417,18 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                                             ),
                                           ).show(context),
                                           setState(() {
-                                            isLoading = false;
-                                          })
+                                            var duration = const Duration(
+                                                milliseconds: 3000);
+                                            Timer(duration, () {
+                                              setState(() {
+                                                isLoading = false;
+                                                Get.to(
+                                                  const MainPageCouncelor(
+                                                      initialPage: 2),
+                                                );
+                                              });
+                                            });
+                                          }),
                                         }
                                       else
                                         {
@@ -477,8 +488,18 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                                             ),
                                           ).show(context),
                                           setState(() {
-                                            isLoading = false;
-                                          })
+                                            var duration = const Duration(
+                                                milliseconds: 3000);
+                                            Timer(duration, () {
+                                              setState(() {
+                                                isLoading = false;
+                                                Get.to(
+                                                  const MainPageCouncelor(
+                                                      initialPage: 2),
+                                                );
+                                              });
+                                            });
+                                          }),
                                         }
                                       else
                                         {
@@ -507,8 +528,6 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                                         }
                                     });
                           }
-   
-                      
                         } else {
                           Flushbar(
                             duration: const Duration(milliseconds: 2000),
