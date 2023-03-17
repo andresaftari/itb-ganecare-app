@@ -12,6 +12,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_profile_screen.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 
 import '../../../data/sharedprefs.dart';
 
@@ -171,7 +172,7 @@ class _CouncelingEditProfileScreenState
             width: 50,
             child: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Get.to(const MainPageCouncelee(initialPage: 2));
               },
               icon: const Icon(
                 Icons.arrow_back,
@@ -380,68 +381,6 @@ class _CouncelingEditProfileScreenState
                 ],
               ),
             ),
-            // TextField(
-            //   enabled: false,
-            //   controller: _noReg..text = widget.noReg,
-            //   decoration: InputDecoration(
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //     ),
-            //     labelText: 'No Registrasi',
-            //     labelStyle: TextStyle(
-            //       // color: Colors.white,
-            //       fontSize: 14,
-            //     ),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-            //       borderRadius: BorderRadius.circular(25.0),
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 10,
-            // ),
-            // TextField(
-            //   controller: _nickName..text = widget.nickName,
-            //   decoration: InputDecoration(
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //     ),
-            //     labelText: 'Nickname',
-            //     labelStyle: TextStyle(
-            //       // color: Colors.white,
-            //       fontSize: 14,
-            //     ),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-            //       borderRadius: BorderRadius.circular(25.0),
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 10,
-            // ),
-            // TextField(
-            //   controller: _about..text = widget.about,
-            //   decoration: InputDecoration(
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //     ),
-            //     labelText: 'About',
-            //     labelStyle: TextStyle(
-            //       // color: Colors.white,
-            //       fontSize: 14,
-            //     ),
-            //     focusedBorder: OutlineInputBorder(
-            //       borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-            //       borderRadius: BorderRadius.circular(25.0),
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 50,
-            // ),
-
             isLoading
                 ? const SpinKitFadingCircle(
                     size: 40,
@@ -485,8 +424,18 @@ class _CouncelingEditProfileScreenState
                                             ),
                                           ).show(context),
                                           setState(() {
-                                            isLoading = false;
-                                          })
+                                            var duration = const Duration(
+                                                milliseconds: 3000);
+                                            Timer(duration, () {
+                                              setState(() {
+                                                isLoading = false;
+                                                Get.to(
+                                                  const MainPageCouncelee(
+                                                      initialPage: 2),
+                                                );
+                                              });
+                                            });
+                                          }),
                                         }
                                       else
                                         {
@@ -517,9 +466,7 @@ class _CouncelingEditProfileScreenState
                           } else {
                             _profileController
                                 .updatePhoto(widget.noReg, _image!, widget.role)
-                                .then((value) {
-                              print('Berhasil brow');
-                            });
+                                .then((value) {});
                             _profileController
                                 .updateProfile(
                                     widget.noReg, nickName, about, widget.role)
@@ -546,8 +493,18 @@ class _CouncelingEditProfileScreenState
                                             ),
                                           ).show(context),
                                           setState(() {
-                                            isLoading = false;
-                                          })
+                                            var duration = const Duration(
+                                                milliseconds: 3000);
+                                            Timer(duration, () {
+                                              setState(() {
+                                                isLoading = false;
+                                                Get.to(
+                                                  const MainPageCouncelee(
+                                                      initialPage: 2),
+                                                );
+                                              });
+                                            });
+                                          }),
                                         }
                                       else
                                         {

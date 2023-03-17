@@ -12,6 +12,7 @@ import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/app/counceling/concelor_edit_profile_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
+import '../../home/home_screen.dart';
 // import 'package:get/get.dart';
 // import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 // import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -197,7 +198,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   Widget contentAvatar() {
     return Padding(
-      padding: EdgeInsets.only(top: 70.h),
+      padding: EdgeInsets.only(top: 120.h),
       child: Center(
         child: Column(
           children: [
@@ -241,7 +242,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    (idReg != '') ?  '#'+idReg : '00000',
+                    (idReg != '') ? '#' + idReg : '00000',
                     style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -327,6 +328,60 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             vConselor('Rabu'),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget appBarCustom() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed: () {
+              _sharedPreference.removeKey('councelor_status');
+              _sharedPreference.removeKey('councelee_status');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HomePage(isDarkMode: false)),
+              );
+            },
+            icon: const Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            'Profile',
+            style: TextStyle(
+              color: const Color.fromRGBO(255, 255, 255, 1),
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ConcelorEditProfileScreen(
+                    profilePicture: profilePicture,
+                    noReg: idReg,
+                    about: about,
+                    nickName: nickName,
+                    role: role.toString(),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -613,142 +668,94 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         ],
       ),
     );
-    // return Container(
-    //   height: 245.h,
-    //   width: double.infinity,
-    //   child: Center(
-    //     child: Stepper(
-    //       controlsBuilder: (BuildContext context, ControlsDetails controls) {
-    //         return Row(
-    //           children: <Widget>[
-    //             Container(),
-    //           ],
-    //         );
-    //       },
-    //       steps: const [
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //         Step(
-    //           title: Text('Step 01'),
-    //           content: SizedBox(),
-    //         ),
-    //       ],
-    //       onStepTapped: (int newIndex) {
-    //         setState(() {
-    //           _currentState = newIndex;
-    //         });
-    //       },
-    //       currentStep: _currentState,
-    //       onStepContinue: () {
-    //         if (_currentState != 2) {
-    //           setState(() {
-    //             _currentState += 1;
-    //           });
-    //         }
-    //       },
-    //       onStepCancel: () {
-    //         if (_currentState != 0) {
-    //           setState(() {
-    //             _currentState -= 1;
-    //           });
-    //         }
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _sharedPreference.removeKey('councelor_status');
-        _sharedPreference.removeKey('councelee_status');
-        Navigator.pop(context);
-        Navigator.pop(context);
+        // _sharedPreference.removeKey('councelor_status');
+        // _sharedPreference.removeKey('councelee_status');
+        // // Navigator.pop(context);
+        // Navigator.pop(context);
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: 75.h,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              _sharedPreference.removeKey('councelor_status');
-              _sharedPreference.removeKey('councelee_status');
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
-          ),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(0, 171, 233, 1),
-                  Color.fromRGBO(6, 146, 196, 1),
-                ],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
-                      child: Text(
-                        'Profile',
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1),
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 46.w, top: 44.h),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ConcelorEditProfileScreen(
-                                profilePicture: profilePicture,
-                                noReg: idReg,
-                                about: about,
-                                nickName: nickName,
-                                role: role.toString(),
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   toolbarHeight: 75.h,
+        //   automaticallyImplyLeading: false,
+        //   leading: GestureDetector(
+        //     onTap: () {
+        //       _sharedPreference.removeKey('councelor_status');
+        //       _sharedPreference.removeKey('councelee_status');
+        //       Navigator.pop(context);
+        //       Navigator.pop(context);
+        //     },
+        //     child: const Icon(
+        //       Icons.close,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        //   flexibleSpace: Container(
+        //     decoration: const BoxDecoration(
+        //       gradient: LinearGradient(
+        //         colors: [
+        //           Color.fromRGBO(0, 171, 233, 1),
+        //           Color.fromRGBO(6, 146, 196, 1),
+        //         ],
+        //         begin: Alignment.centerRight,
+        //         end: Alignment.centerLeft,
+        //       ),
+        //     ),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Container(
+        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
+        //               child: Text(
+        //                 'Profile',
+        //                 style: TextStyle(
+        //                   color: const Color.fromRGBO(255, 255, 255, 1),
+        //                   fontSize: 18.sp,
+        //                   fontWeight: FontWeight.w600,
+        //                 ),
+        //               ),
+        //             ),
+        //             Container(
+        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
+        //               child: IconButton(
+        //                 onPressed: () {
+        //                   Navigator.push(
+        //                     context,
+        //                     MaterialPageRoute(
+        //                       builder: (context) => ConcelorEditProfileScreen(
+        //                         profilePicture: profilePicture,
+        //                         noReg: idReg,
+        //                         about: about,
+        //                         nickName: nickName,
+        //                         role: role.toString(),
+        //                       ),
+        //                     ),
+        //                   );
+        //                 },
+        //                 icon: const Icon(
+        //                   Icons.edit,
+        //                   color: Colors.white,
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
         body: Stack(
           children: [
             Container(
@@ -756,6 +763,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             ),
             buildHeader(),
             // buildProfileFace(),
+            appBarCustom(),
             contentAvatar(),
           ],
         ),
@@ -780,6 +788,11 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   Widget buildHeader() {
     return Column(
       children: [
+        Container(
+          color: const Color.fromRGBO(0, 171, 233, 1),
+          width: 1.sw,
+          height: 60.h,
+        ),
         Container(
           color: const Color.fromRGBO(255, 195, 70, 1),
           width: 1.sw,

@@ -13,6 +13,8 @@ import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelor.dart';
 import 'package:itb_ganecare/screen/app/prestasi/prestasi_screen.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
@@ -89,166 +91,171 @@ class _WorldThemeState extends State<WorldTheme> {
       // log(_deviceData['identifierForVendor'], name: 'id');
     }
 
-    return MaterialApp(
-      theme: themeNotifier.getTheme(),
-      // initialRoute: '/homePage',
-      home: Scaffold(
-        floatingActionButton: buildFloatingActionButton(),
-        appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: 80.h,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromRGBO(0, 171, 233, 1),
-                  Color.fromRGBO(6, 146, 196, 1),
-                ],
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: MaterialApp(
+        theme: themeNotifier.getTheme(),
+        // initialRoute: '/homePage',
+        home: Scaffold(
+          floatingActionButton: buildFloatingActionButton(),
+          appBar: AppBar(
+            elevation: 0,
+            toolbarHeight: 80.h,
+            automaticallyImplyLeading: false,
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(0, 171, 233, 1),
+                    Color.fromRGBO(6, 146, 196, 1),
+                  ],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Selamat datang',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
-                    ),
-                    Container(
-                      child: Text(
-                        _sharedPreference.getString('username').toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        margin: EdgeInsets.only(top: 42.h),
-                        child: Icon(
-                          Icons.notifications_rounded,
-                          color: Colors.white,
-                          size: 28.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    GestureDetector(
-                      onTap: () {
-                        // Sementara untuk logout
-                        _sharedPreference.putInt('isLogin', 0);
-
-                        Get.snackbar('GaneCare', 'Logging Out');
-                        Get.to(
-                          () => LoginScreen(
-                            deviceId: deviceId,
-                            alertMessage: '',
-                            forgotPassLink: LinkData(
-                              title: 'A',
-                              description: 'B',
-                              url: 'C',
-                            ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Selamat datang',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
                           ),
-                        );
-                      },
-                      child: (profilePicture != '')
-                          ? Container(
-                              height: 50.h,
-                              width: 44.w,
-                              margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 0.5.w,
-                                ),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(profilePicture),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    blurRadius: 8,
-                                    offset: const Offset(3, 2),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(
-                              height: 50.h,
-                              width: 44.w,
-                              margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                image: const DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('assets/images/cat.png'),
-                                ),
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 0.5.w,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    blurRadius: 8,
-                                    offset: const Offset(3, 2),
-                                  ),
-                                ],
+                        ),
+                        margin: EdgeInsets.only(top: 40.h, left: 24.w),
+                      ),
+                      Container(
+                        child: Text(
+                          _sharedPreference.getString('username').toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        margin: EdgeInsets.only(top: 4.h, left: 24.w),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          margin: EdgeInsets.only(top: 42.h),
+                          child: Icon(
+                            Icons.notifications_rounded,
+                            color: Colors.white,
+                            size: 28.sp,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      GestureDetector(
+                        onTap: () {
+                          // Sementara untuk logout
+                          _sharedPreference.putInt('isLogin', 0);
+
+                          Get.snackbar('GaneCare', 'Logging Out');
+                          Get.to(
+                            () => LoginScreen(
+                              deviceId: deviceId,
+                              alertMessage: '',
+                              forgotPassLink: LinkData(
+                                title: 'A',
+                                description: 'B',
+                                url: 'C',
                               ),
                             ),
-                    ),
-                  ],
-                ),
-              ],
+                          );
+                        },
+                        child: (profilePicture != '')
+                            ? Container(
+                                height: 50.h,
+                                width: 44.w,
+                                margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 0.5.w,
+                                  ),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(profilePicture),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 8,
+                                      offset: const Offset(3, 2),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                height: 50.h,
+                                width: 44.w,
+                                margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('assets/images/cat.png'),
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 0.5.w,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 8,
+                                      offset: const Offset(3, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        body: Stack(
-          children: [
-            _backgroundContainer(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              child: SingleChildScrollView(
-                primary: true,
-                child: Column(
-                  children: [
-                    buildHomeBody(context),
-                    SizedBox(height: 16.h),
-                    buildQuickHelp(context),
-                    SizedBox(height: 16.h),
-                    buildScholarshipNews(context),
-                  ],
+          body: Stack(
+            children: [
+              _backgroundContainer(),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                child: SingleChildScrollView(
+                  primary: true,
+                  child: Column(
+                    children: [
+                      buildHomeBody(context),
+                      SizedBox(height: 16.h),
+                      buildQuickHelp(context),
+                      SizedBox(height: 16.h),
+                      buildScholarshipNews(context),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -411,7 +418,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CounceleeSebayaScreen(),
+                                                                const MainPageCouncelee(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       },
@@ -444,7 +453,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CouncelorSebayaScreen(),
+                                                                const MainPageCouncelor(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       },
