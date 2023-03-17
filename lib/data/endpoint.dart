@@ -20,5 +20,5 @@ const String beasiswaTersediaUrl_ = '/api/beasiswa/beasiswa_tersedia';
 const String peerConselorUrl_ = '/api/v1/dashboard/get_peer_counselorv2';
 const String peerConseleeUrl_ = '/api/v1/dashboard/get_counselee';
 
-// Chat
+// CHAT
 const String endChatUrl_ = '/api/v1/chat/end_chat';
