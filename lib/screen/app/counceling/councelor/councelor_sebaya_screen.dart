@@ -6,6 +6,10 @@ import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 import 'package:itb_ganecare/screen/app/counceling/counceling_chat_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelor_profile_screen.dart';
+
+import '../../../../data/controllers/profile_controller.dart';
+import '../counceling_profile_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
   const CouncelorSebayaScreen({Key? key}) : super(key: key);
@@ -73,23 +77,47 @@ class _ConcelorSebayaScreenState extends State<CouncelorSebayaScreen> {
   void _onIconTapped(int index) => setState(() => currentIndex = index);
 
   static List<Widget> pages = [
-    CouncelorSebayaViews(),
+    const CouncelorSebayaViews(),
     const CouncelorListViewScreen(),
-    // const CouncelingProfileScreen(),
-    Container(),
+    const CouncelorProfileScreen(),
+    // Container(),
   ];
 }
 
-class CouncelorSebayaViews extends StatelessWidget {
-  CouncelorSebayaViews({Key? key}) : super(key: key);
+class CouncelorSebayaViews extends StatefulWidget {
+  const CouncelorSebayaViews({Key? key}) : super(key: key);
 
+  @override
+  State<CouncelorSebayaViews> createState() => _CouncelorSebayaViewsState();
+}
+
+class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
+
   // final CounselingController _councelingController = Get.find();
   final FirestoreUtils _firestoreUtils = FirestoreUtils();
 
   // final RxList<String> isPending = <String>[].obs;
   final RxList<String> isApproved = <String>[].obs;
+
   final RxList<String> isEnded = <String>[].obs;
+  final ProfileController _profileController = Get.find();
+  String profilePicture = '';
+
+  @override
+  void initState() {
+    getProfileData();
+    return super.initState();
+  }
+
+   getProfileData() {
+    String noreg = _sharedPreference.getString('noreg').toString();
+    _profileController.getProfileV2(noreg).then((value) => {
+          setState(() {
+            profilePicture = value['data']['conselor']['profilepic_image'];
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,29 +196,55 @@ class CouncelorSebayaViews extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8.w),
-                    Container(
-                      width: 44.w,
-                      margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 0.5.w,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 8,
-                            offset: const Offset(3, 2),
+                    (profilePicture != '')
+                        ? Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(profilePicture),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            height: 50.h,
+                            width: 44.w,
+                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/images/cat.png'),
+                              ),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.5.w,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 8,
+                                  offset: const Offset(3, 2),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Image.asset('assets/images/cat.png'),
-                      ),
-                    ),
                   ],
                 ),
               ],

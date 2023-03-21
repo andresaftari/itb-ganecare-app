@@ -200,6 +200,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     'nim',
                                     value.data.nim,
                                   );
+                                  _sharedPreference.putString(
+                                    'noreg',
+                                    value.data.id,
+                                  );
 
                                   _sharedPreference.putString(
                                     'token_user',
