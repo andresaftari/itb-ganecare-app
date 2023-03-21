@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => PrestasiController());
 
+
     return ScreenUtilInit(
       builder: (context) {
         return const GetMaterialApp(
