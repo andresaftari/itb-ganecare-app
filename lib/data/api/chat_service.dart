@@ -45,7 +45,7 @@ class ChatService extends ChatRepo {
         'conselor_id': conselorId,
         'conselee_id': conseleeId,
         'created_at': createdAt,
-        'chats': List<Chats>.from(datalist)
+        'chats': List<Map<String, Chats>>.from(datalist)
       };
 
       final response = await _dio.postUri(

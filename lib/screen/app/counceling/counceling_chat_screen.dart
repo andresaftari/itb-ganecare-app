@@ -10,6 +10,7 @@ import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
 
 class CouncelingChatScreen extends StatefulWidget {
   final int conseleeId;
@@ -127,7 +128,11 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       await _firestoreUtils.updateRoom(roomId, 'ended');
                       await _endCurrentChat();
 
-                      Get.off(() => const CounceleeSebayaScreen());
+                     if (widget.currentId == widget.conselorId.toString()) {
+                       Get.off(() => const CouncelorSebayaScreen());
+                     } else {
+                       Get.off(() => const CounceleeSebayaScreen());
+                     }
                     },
                     child: Padding(
                       padding: EdgeInsets.all(8.w),
@@ -312,13 +317,17 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 FloatingActionButton(
                   onPressed: () async {
                     if (_messageController.value.text != '') {
+                      int idSender =  int.parse(widget.currentId) == widget.conselorId
+                          ? widget.conselorId
+                          : widget.conseleeId;
+
+                      int idReceiver = idSender == widget.conselorId ? widget.conseleeId : widget.conselorId;
+
                       await _firestoreUtils.postLiveChat(
                         roomId,
                         DateTime.now(),
-                        int.parse(widget.currentId) == widget.conselorId
-                            ? widget.conselorId
-                            : widget.conseleeId,
-                        int.parse(widget.currentId),
+                        idReceiver,
+                        idSender,
                         _messageController.value.text,
                         'text',
                       );
