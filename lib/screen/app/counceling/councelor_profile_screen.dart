@@ -236,8 +236,8 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                     ),
                   ),
             SizedBox(
-              height: 120.h,
-              width: 150.h,
+              height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -266,40 +266,39 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      // IconButton(
-                      //   onPressed: () {
-                      //     _showMyDialog();
-                      //   },
-                      //   icon: const Icon(Icons.edit),
-                      // ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 10.h),
-                        height: 20.h,
-                        width: 40.h,
-                        decoration: const BoxDecoration(color: Colors.grey),
-                        child: const Center(
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(color: Colors.grey),
+                          child: const Center(
                             child: Text(
-                          '2017',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        )),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 10.h),
-                        height: 20.h,
-                        width: 70.h,
-                        decoration: const BoxDecoration(
-                          color: Colors.grey,
+                              '2017',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                          ),
                         ),
-                        child: const Center(
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                          ),
+                          child: const Center(
                             child: Text(
-                          'Beda jurusan',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        )),
+                              'Beda jurusan',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -323,9 +322,19 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                 ],
               ),
             ),
-            vConselor('Senin'),
-            vConselor('Selasa'),
-            vConselor('Rabu'),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2.5,
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    vConselor('Senin'),
+                    vConselor('Selasa'),
+                    vConselor('Rabu'),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -791,17 +800,17 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         Container(
           color: const Color.fromRGBO(0, 171, 233, 1),
           width: 1.sw,
-          height: 60.h,
+          height: MediaQuery.of(context).size.height / 9,
         ),
         Container(
           color: const Color.fromRGBO(255, 195, 70, 1),
           width: 1.sw,
-          height: 120.h,
+          height: MediaQuery.of(context).size.height / 5,
         ),
         Container(
           color: Colors.white,
           width: 1.sw,
-          height: 160.h,
+          height: MediaQuery.of(context).size.height / 5,
         ),
       ],
     );
