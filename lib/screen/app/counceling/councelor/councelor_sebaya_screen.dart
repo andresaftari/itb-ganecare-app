@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -263,19 +266,112 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
 
   Widget buildHeader(BuildContext context) {
     return Container(
-      width: 1.sw,
       height: 52.h,
       color: const Color.fromRGBO(253, 143, 1, 1),
-      child: Padding(
-        padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
-        child: Text(
-          'Daftar Conselee Kamu',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
+            child: Text(
+              'Daftar Conselee Kamu',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
-        ),
+          GestureDetector(
+            onTap: () {
+              showBottomSheet(
+                context: context, 
+                backgroundColor: Colors.white,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.pop(context),  
+                  child: Container(
+                    height: 300.h,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 10.w, 
+                        sigmaY: 10.h,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Filter', 
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.black, 
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(height: 24.h),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Jenis Kelamin', 
+                                      style: TextStyle(
+                                        color: Colors.black, 
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 16.w),
+                                    Container(
+                                      padding: EdgeInsets.all(8.w),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black, 
+                                          width: 0.8.w,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(16.r),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Laki-Laki',
+                                        style: TextStyle(fontSize: 14.sp),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Container(
+                                      padding: EdgeInsets.all(8.w),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black, 
+                                          width: 0.8.w,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(16.r),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Perempuan',
+                                        style: TextStyle(fontSize: 14.sp),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Icon(CupertinoIcons.sort_down, color: Colors.black, size: 26.w),
+            ),
+          ),
+        ],
       ),
     );
   }

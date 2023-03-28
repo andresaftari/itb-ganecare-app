@@ -351,7 +351,8 @@ class _WorldThemeState extends State<WorldTheme> {
                                           ),
                                           child: Container(
                                             margin: EdgeInsets.symmetric(
-                                                horizontal: 16.w),
+                                              horizontal: 16.w,
+                                            ),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
