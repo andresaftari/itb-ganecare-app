@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => PrestasiController());
     Get.lazyPut(() => ChatController());
 
-
     return ScreenUtilInit(
       builder: (context) {
         return const GetMaterialApp(
