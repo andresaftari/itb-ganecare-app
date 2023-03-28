@@ -6,16 +6,12 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/app/counceling/concelor_edit_profile_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
 import '../../home/home_screen.dart';
-// import 'package:get/get.dart';
-// import 'package:itb_ganecare/data/controllers/profile_controller.dart';
-// import 'package:itb_ganecare/data/sharedprefs.dart';
 
 class CouncelorProfileScreen extends StatefulWidget {
   const CouncelorProfileScreen({Key? key}) : super(key: key);
