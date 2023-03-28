@@ -52,7 +52,7 @@ class _MainPageCouncelorState extends State<MainPageCouncelor> {
               },
               children: const [
                 Center(
-                  child: CouncelorSebayaScreen(),
+                  child: CouncelorSebayaViews(),
                 ),
                 Center(
                   child: CouncelorListViewScreen(),
