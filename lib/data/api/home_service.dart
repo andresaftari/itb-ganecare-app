@@ -26,7 +26,7 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'get-quickhelp');
+        // log('${response.data}', name: 'get-quickhelp');
         return Right(MetaHelp.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
@@ -52,7 +52,7 @@ class HomeService extends HomeRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'post-quickhelp');
+        // log('${response.data}', name: 'post-quickhelp');
         return Right(QuickHelp.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

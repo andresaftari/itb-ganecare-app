@@ -14,7 +14,6 @@ class PrestasiController {
     var res;
 
     final result = await _prestasiService.getPrestasi();
-
     result.fold((l) {
       log('failed to get quickhelp ${l.message}', name: 'get-quickhelp');
       hasError(true);
