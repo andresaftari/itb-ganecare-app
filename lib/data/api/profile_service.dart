@@ -45,7 +45,7 @@ class ProfileService extends ProfileRepository {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'get-profile-v2');
+        // log('${response.data}', name: 'get-profile-v2');
         return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
@@ -77,8 +77,8 @@ class ProfileService extends ProfileRepository {
 
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'post-login');
-        print("Response 200");
-        print(200);
+        // print("Response 200");
+        // print(200);
         return const Right(200);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
@@ -113,14 +113,14 @@ class ProfileService extends ProfileRepository {
 
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'post-login');
-        print("Response 200");
-        print(200);
+        // print("Response 200");
+        // print(200);
         return const Right(200);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
     } on DioError catch (e) {
-      print(e);
+      // print(e);
       failure = Failed(e.toString());
       return Left(failure);
     }

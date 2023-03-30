@@ -6,11 +6,14 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
+import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_screen.dart';
+import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
@@ -50,6 +53,7 @@ class WorldTheme extends StatefulWidget {
 class _WorldThemeState extends State<WorldTheme> {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
+  final BeasiswaController _beasiswaController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
@@ -249,7 +253,9 @@ class _WorldThemeState extends State<WorldTheme> {
                       SizedBox(height: 16.h),
                       buildQuickHelp(context),
                       SizedBox(height: 16.h),
-                      buildScholarshipNews(context),
+                      buildBeasiswa(),
+                      buildButtonBeasiswa(),
+                      // buildScholarshipNews(context),
                     ],
                   ),
                 ),
@@ -585,15 +591,25 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   } else if (index == 1) {
-                    return Container(
-                      height: 60.h,
-                      width: 60.w,
-                      padding: EdgeInsets.all(4.w),
-                      margin: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Image.asset('assets/images/beasiswa.png'),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8.r),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BeasiswaScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.w,
+                        padding: EdgeInsets.all(4.w),
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Image.asset('assets/images/beasiswa.png'),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(253, 143, 1, 1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
                     );
                   } else if (index == 2) {
@@ -836,172 +852,342 @@ class _WorldThemeState extends State<WorldTheme> {
     );
   }
 
-  Widget buildScholarshipNews(BuildContext context) {
-    String nim = _sharedPreference.getString('nim').toString();
-
-    return FutureBuilder<dynamic>(
-      future: _homeController.postGetUserid(nim).then(
-            (value) => _homeController.postBeasiswa(value['user_id']),
-          ),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator.adaptive();
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            List list = snapshot.data.content;
-
-            if (list.isNotEmpty) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: const Text(
-                      'Beasiswa Terbaru',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
+  Widget buildBeasiswa() {
+    return Column(
+      children: [
+        FutureBuilder<dynamic>(
+          future: _beasiswaController.getBeasiswa(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.2,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator.adaptive(),
                     ),
-                    margin: EdgeInsets.only(left: 16.w),
                   ),
-                  SizedBox(height: 16.h),
-                  SizedBox(
-                    width: 1.sw,
-                    height: 400.h,
-                    child: ListView.builder(
-                      itemCount: 3,
-                      shrinkWrap: true,
-                      itemBuilder: ((context, index) {
-                        return Card(
-                          child: Container(
-                            width: 1.sw,
-                            height: 100.h,
-                            margin: EdgeInsets.symmetric(horizontal: 16.w),
-                            padding: EdgeInsets.all(8.w),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/emotes/a1.png',
-                                  width: 32.w,
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: ListView.builder(
+                    itemCount: snapshot.data['data'].length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailBeasiswa(
+                                  namaBeasiswa: snapshot.data['data'][index]
+                                      ['nama_beasiswa'],
+                                  namaDonatur: snapshot.data['data'][index]
+                                      ['nama_donatur'],
+                                  kuota: snapshot.data['data'][index]['kuota'],
+                                  status: snapshot.data['data'][index]
+                                      ['status_name'],
                                 ),
-                                SizedBox(width: 8.w),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${list[index].namaBeasiswa.substring(0, 25)}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.sp,
-                                      ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            child: ListTile(
+                              leading: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                        // snapshot.data.data[index].fotoKegiatan,
+                                        'assets/images/cat.png'),
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                snapshot.data['data'][index]['nama_beasiswa'],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data['data'][index]
+                                        ['nama_donatur'],
+                                    style: const TextStyle(
+                                      fontSize: 12,
                                     ),
-                                    SizedBox(height: 8.h),
-                                    Flexible(
-                                      child: Text(
-                                        '${list[index].deskripsi.substring(0, 40)}',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 12.sp,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.blue,
+                                        size: 10,
+                                      ),
+                                      Text(
+                                        snapshot.data['data'][index]
+                                            ['tgl_input'],
+                                        style: const TextStyle(
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              isThreeLine: true,
                             ),
                           ),
-                        );
-                      }),
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: const Text(
-                      'Beasiswa Terbaru',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    margin: EdgeInsets.only(left: 16.w),
-                  ),
-                  SizedBox(height: 16.h),
-                  Card(
-                    child: Container(
-                      width: 1.sw,
-                      height: 60.h,
-                      margin: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Center(
-                        child: Text(
-                          'Belum ada beasiswa\nyang tersedia',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
-                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                ],
+                );
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.2,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Data kosong'),
+                  ),
+                );
+              }
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                width: double.infinity,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ),
               );
             }
-          } else {
-            return Container();
-          }
-        } else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: const Text(
-                  'Beasiswa Terbaru',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                margin: EdgeInsets.only(left: 16.w),
-              ),
-              SizedBox(height: 16.h),
-              Card(
-                child: Container(
-                  width: 1.sw,
-                  height: 60.h,
-                  margin: EdgeInsets.symmetric(horizontal: 8.w),
-                  child: Center(
-                    child: Text(
-                      'Belum ada beasiswa\nyang tersedia',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        }
-      },
+          },
+        ),
+      ],
     );
   }
+
+  Widget buildButtonBeasiswa() {
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.5,
+      height: MediaQuery.of(context).size.height / 20,
+      margin: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+      ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.orange),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BeasiswaScreen(),
+            ),
+          );
+        },
+        child: const Text(
+          'Tampilkan lebih banyak',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+  // Widget buildScholarshipNews(BuildContext context) {
+  //   String nim = _sharedPreference.getString('nim').toString();
+
+  //   return FutureBuilder<dynamic>(
+  //     future: _homeController.postGetUserid(nim).then(
+  //           (value) => _homeController.postBeasiswa(value['user_id']),
+  //         ),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return const CircularProgressIndicator.adaptive();
+  //         } else if (snapshot.connectionState == ConnectionState.done) {
+  //           List list = snapshot.data.content;
+
+  //           if (list.isNotEmpty) {
+  //             return Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               children: [
+  //                 Container(
+  //                   child: const Text(
+  //                     'Beasiswa Terbaru',
+  //                     style: TextStyle(
+  //                       color: Colors.white,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                   margin: EdgeInsets.only(left: 16.w),
+  //                 ),
+  //                 SizedBox(height: 16.h),
+  //                 SizedBox(
+  //                   width: 1.sw,
+  //                   height: 400.h,
+  //                   child: ListView.builder(
+  //                     itemCount: 3,
+  //                     shrinkWrap: true,
+  //                     itemBuilder: ((context, index) {
+  //                       return Card(
+  //                         child: Container(
+  //                           width: 1.sw,
+  //                           height: 100.h,
+  //                           margin: EdgeInsets.symmetric(horizontal: 16.w),
+  //                           padding: EdgeInsets.all(8.w),
+  //                           child: Row(
+  //                             children: [
+  //                               Image.asset(
+  //                                 'assets/emotes/a1.png',
+  //                                 width: 32.w,
+  //                               ),
+  //                               SizedBox(width: 8.w),
+  //                               Column(
+  //                                 mainAxisAlignment: MainAxisAlignment.center,
+  //                                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                                 children: [
+  //                                   Text(
+  //                                     '${list[index].namaBeasiswa.substring(0, 25)}',
+  //                                     style: TextStyle(
+  //                                       color: Colors.black,
+  //                                       fontSize: 12.sp,
+  //                                     ),
+  //                                   ),
+  //                                   SizedBox(height: 8.h),
+  //                                   Flexible(
+  //                                     child: Text(
+  //                                       '${list[index].deskripsi.substring(0, 40)}',
+  //                                       overflow: TextOverflow.ellipsis,
+  //                                       maxLines: 2,
+  //                                       softWrap: true,
+  //                                       style: TextStyle(
+  //                                         overflow: TextOverflow.ellipsis,
+  //                                         color: Colors.black,
+  //                                         fontSize: 12.sp,
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       );
+  //                     }),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           } else {
+  //             return Column(
+  //               mainAxisAlignment: MainAxisAlignment.start,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Container(
+  //                   child: const Text(
+  //                     'Beasiswa Terbaru',
+  //                     style: TextStyle(
+  //                       color: Colors.white,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                   margin: EdgeInsets.only(left: 16.w),
+  //                 ),
+  //                 SizedBox(height: 16.h),
+  //                 Card(
+  //                   child: Container(
+  //                     width: 1.sw,
+  //                     height: 60.h,
+  //                     margin: EdgeInsets.symmetric(horizontal: 8.w),
+  //                     child: Center(
+  //                       child: Text(
+  //                         'Belum ada beasiswa\nyang tersedia',
+  //                         textAlign: TextAlign.center,
+  //                         style: TextStyle(
+  //                           color: Colors.black,
+  //                           fontWeight: FontWeight.w600,
+  //                           fontSize: 14.sp,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           }
+  //         } else {
+  //           return Container();
+  //         }
+  //       } else {
+  //         return Column(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Container(
+  //               child: const Text(
+  //                 'Beasiswa Terbaru',
+  //                 style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontWeight: FontWeight.w500,
+  //                 ),
+  //               ),
+  //               margin: EdgeInsets.only(left: 16.w),
+  //             ),
+  //             SizedBox(height: 16.h),
+  //             Card(
+  //               child: Container(
+  //                 width: 1.sw,
+  //                 height: 60.h,
+  //                 margin: EdgeInsets.symmetric(horizontal: 8.w),
+  //                 child: Center(
+  //                   child: Text(
+  //                     'Belum ada beasiswa\nyang tersedia',
+  //                     textAlign: TextAlign.center,
+  //                     style: TextStyle(
+  //                       color: Colors.black,
+  //                       fontWeight: FontWeight.w600,
+  //                       fontSize: 14.sp,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget buildFloatingActionButton() {
     String nim = _sharedPreference.getString('nim').toString();

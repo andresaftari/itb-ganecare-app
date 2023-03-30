@@ -5,27 +5,25 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
+import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
+import 'package:itb_ganecare/models/beasiswaku_model.dart';
 import 'package:itb_ganecare/models/dummy_prestasi.dart';
-import 'package:itb_ganecare/models/prestasi_model.dart';
-import 'package:itb_ganecare/screen/app/prestasi/detail_prestasi_screen.dart';
+import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 
-class PrestasiScreen extends StatefulWidget {
-  const PrestasiScreen({Key? key}) : super(key: key);
+class BeasiswaScreen extends StatefulWidget {
+  const BeasiswaScreen({Key? key}) : super(key: key);
 
   @override
-  State<PrestasiScreen> createState() => _PrestasiScreenState();
+  State<BeasiswaScreen> createState() => _BeasiswaScreenState();
 }
 
-class _PrestasiScreenState extends State<PrestasiScreen> {
-  final PrestasiController _prestasiController = Get.find();
-
-  Widget getDataPrestasi(BuildContext context) {
+class _BeasiswaScreenState extends State<BeasiswaScreen> {
+  final BeasiswaController _beasiswaController = Get.find();
+  Widget getDataBeasiswa(BuildContext context) {
     return Column(
       children: [
         FutureBuilder<dynamic>(
-          future: _prestasiController.getPretasi(),
+          future: _beasiswaController.getBeasiswa(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +43,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height / 1,
                   child: ListView.builder(
-                    itemCount: snapshot.data.data.length,
+                    itemCount: snapshot.data['data'].length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
@@ -56,9 +54,14 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailPrestasi(
-                                  idPenghargaan:
-                                      snapshot.data.data[index].idPenghargaan,
+                                builder: (context) => DetailBeasiswa(
+                                  namaBeasiswa: snapshot.data['data'][index]
+                                      ['nama_beasiswa'],
+                                  namaDonatur: snapshot.data['data'][index]
+                                      ['nama_donatur'],
+                                  kuota: snapshot.data['data'][index]['kuota'],
+                                  status: snapshot.data['data'][index]
+                                      ['status_name'],
                                 ),
                               ),
                             );
@@ -68,17 +71,17 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                               leading: Container(
                                 height: 50,
                                 width: 50,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      snapshot.data.data[index].fotoKegiatan,
-                                    ),
+                                    image: AssetImage(
+                                        // snapshot.data.data[index].fotoKegiatan,
+                                        'assets/images/cat.png'),
                                   ),
                                 ),
                               ),
                               title: Text(
-                                snapshot.data.data[index].namaPenghargaan,
+                                snapshot.data['data'][index]['nama_beasiswa'],
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -88,7 +91,8 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    snapshot.data.data[index].eventPenghargaan,
+                                    snapshot.data['data'][index]
+                                        ['nama_donatur'],
                                     style: const TextStyle(
                                       fontSize: 12,
                                     ),
@@ -104,8 +108,8 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                                         size: 10,
                                       ),
                                       Text(
-                                        snapshot
-                                            .data.data[index].tahunPerolehan,
+                                        snapshot.data['data'][index]
+                                            ['tgl_input'],
                                         style: const TextStyle(
                                           fontSize: 12,
                                         ),
@@ -164,7 +168,9 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
             color: Colors.white,
           ),
         ),
-        title: const Center(child: Text('Daftar Prestasi')),
+        title: const Center(
+          child: Text('Daftar Beasiswa'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -178,7 +184,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              getDataPrestasi(context),
+              getDataBeasiswa(context),
             ],
           ),
         ),
@@ -188,7 +194,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  final PrestasiController _prestasiController = Get.find();
+  final BeasiswaController _beasiswaController = Get.find();
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -221,11 +227,15 @@ class CustomSearchDelegate extends SearchDelegate {
     //   }
     // }
     // return ListView.builder(
-    //     itemCount: matchQuery.length,
-    //     itemBuilder: ((context, index) {
-    //       var result = matchQuery[index];
-    //       return Padding(
-    //         padding: const EdgeInsets.all(2.0),
+    //   itemCount: matchQuery.length,
+    //   itemBuilder: ((context, index) {
+    //     var result = matchQuery[index];
+    //     return Padding(
+    //       padding: const EdgeInsets.all(2.0),
+    //       child: GestureDetector(
+    //         onTap: () {
+    //           print('build result');
+    //         },
     //         child: Card(
     //           child: ListTile(
     //             leading: Container(
@@ -277,36 +287,48 @@ class CustomSearchDelegate extends SearchDelegate {
     //             isThreeLine: true,
     //           ),
     //         ),
-    //       );
-    //     }));
+    //       ),
+    //     );
+    //   }),
+    // );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<DataPrestasi> matchQuery = [];
+    List<Datum> matchQuery = [];
 
-    _prestasiController.getPretasi().then((value) {
-      for (var data in value.data) {
-        if (data.namaPenghargaan.toLowerCase().contains(query.toLowerCase())) {
-          matchQuery.add(DataPrestasi(
-              idPenghargaan: data.idPenghargaan,
-              fotoKegiatan: data.fotoKegiatan,
-              namaPenghargaan: data.namaPenghargaan,
-              eventPenghargaan: data.eventPenghargaan,
-              capaian: data.capaian,
-              tingkat: data.tingkat,
-              lembaga: data.lembaga,
-              tahunPerolehan: data.tahunPerolehan,
-              statusIndividuKelompok: data.statusIndividuKelompok,
-              nilai: data.nilai));
+    _beasiswaController.getBeasiswa().then((value) {
+      for (var data in value['data']) {
+        if (data['nama_beasiswa'].toLowerCase().contains(query.toLowerCase())) {
+          matchQuery.add(Datum(
+            namaDonatur: data['nama_donatur'],
+            namaBeasiswa: data['nama_beasiswa'],
+            anggaran: data['anggaran'],
+            kuota: data['kuota'],
+            idPermohonan: data['id_permohonan'],
+            useridPemohon: data['userid_pemohon'],
+            noReg: data['no_reg'],
+            nim: data['nim'],
+            idBeasiswa: data['id_beasiswa'],
+            tglInput: data['tgl_input'],
+            awalPeriodePembiayaan: data['awal_periode_pembiayaan'] ?? "",
+            akhirPeriodePembiayaan: data['akhir_periode_pembiayaan'] ?? "",
+            prioritasKe: data['prioritas_ke'],
+            status: data['status'],
+            idPeriode: data['id_periode'],
+            modifyDate: data['modify_date'],
+            cek: data['cek'],
+            statusName: data['status_name'],
+          ));
         }
       }
     });
+    // print(matchQuery);
     return SingleChildScrollView(
       child: Column(
         children: [
           FutureBuilder<dynamic>(
-            future: _prestasiController.getPretasi(),
+            future: _beasiswaController.getBeasiswa(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -331,6 +353,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         var result = matchQuery[index];
+
                         return Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: GestureDetector(
@@ -338,9 +361,15 @@ class CustomSearchDelegate extends SearchDelegate {
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
-                              //     builder: (context) => DetailPrestasi(
-                              //       idPenghargaan:
-                              //           snapshot.data.data[index].idPenghargaan,
+                              //     builder: (context) => DetailBeasiswa(
+                              //       namaBeasiswa: snapshot.data['data'][index]
+                              //           ['nama_beasiswa'],
+                              //       namaDonatur: snapshot.data['data'][index]
+                              //           ['nama_donatur'],
+                              //       kuota: snapshot.data['data'][index]
+                              //           ['kuota'],
+                              //       status: snapshot.data['data'][index]
+                              //           ['status_name'],
                               //     ),
                               //   ),
                               // );
@@ -350,17 +379,17 @@ class CustomSearchDelegate extends SearchDelegate {
                                 leading: Container(
                                   height: 50,
                                   width: 50,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                        result.fotoKegiatan,
-                                      ),
+                                      image: AssetImage(
+                                          // snapshot.data.data[index].fotoKegiatan,
+                                          'assets/images/cat.png'),
                                     ),
                                   ),
                                 ),
                                 title: Text(
-                                  result.namaPenghargaan,
+                                  result.namaBeasiswa,
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -370,7 +399,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      result.eventPenghargaan,
+                                      result.namaDonatur,
                                       style: const TextStyle(
                                         fontSize: 12,
                                       ),
@@ -386,7 +415,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                           size: 10,
                                         ),
                                         Text(
-                                          result.tahunPerolehan,
+                                          result.tglInput,
                                           style: const TextStyle(
                                             fontSize: 12,
                                           ),
