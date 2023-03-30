@@ -4,10 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:itb_ganecare/data/endpoint.dart';
 import 'package:itb_ganecare/data/failed.dart';
-import 'package:itb_ganecare/data/repo/counseling_repo.dart';
 import 'package:itb_ganecare/data/repo/prestasi_repo.dart';
-import 'package:itb_ganecare/models/counseling.dart';
-import 'package:itb_ganecare/models/prestasi.dart';
+import 'package:itb_ganecare/models/prestasi_model.dart';
 
 class PrestasiService extends PrestasiRepo {
   final Dio _dio;
@@ -23,7 +21,7 @@ class PrestasiService extends PrestasiRepo {
           'https://kemahasiswaan.itb.ac.id/api/prestasi/ganecare_best5penghargaan');
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'get-prestasi');
+        // log('${response.data}', name: 'get-prestasi');
         return Right(GetPrestasi.fromJson(response.data));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
@@ -46,7 +44,7 @@ class PrestasiService extends PrestasiRepo {
       );
 
       if (response.statusCode == 200) {
-        log('${response.data}', name: 'get-detail-prestasi');
+        // log('${response.data}', name: 'get-detail-prestasi');
         return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

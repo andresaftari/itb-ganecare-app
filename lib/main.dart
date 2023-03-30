@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
+import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
 import 'package:itb_ganecare/data/controllers/chat_controller.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => PrestasiController());
     Get.lazyPut(() => ChatController());
+    Get.lazyPut(() => BeasiswaController());
 
     return ScreenUtilInit(
       builder: (context) {
