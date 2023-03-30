@@ -199,12 +199,14 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            children: [
-              contentOne(),
-              contentTwo(),
-              contenThree(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                contentOne(),
+                contentTwo(),
+                contenThree(),
+              ],
+            ),
           ),
         ),
       ),

@@ -74,7 +74,7 @@ class _WorldThemeState extends State<WorldTheme> {
     _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
             profilePicture = value['data']['conselee']['profilepic_image'];
-          })
+          }),
         });
   }
 
@@ -990,7 +990,7 @@ class _WorldThemeState extends State<WorldTheme> {
 
   Widget buildButtonBeasiswa() {
     return Container(
-      width: MediaQuery.of(context).size.width / 1.5,
+      width: MediaQuery.of(context).size.width / 2,
       height: MediaQuery.of(context).size.height / 20,
       margin: EdgeInsets.only(
         top: 10,
@@ -1017,6 +1017,7 @@ class _WorldThemeState extends State<WorldTheme> {
           'Tampilkan lebih banyak',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 12,
           ),
         ),
       ),

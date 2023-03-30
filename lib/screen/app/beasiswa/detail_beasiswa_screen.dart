@@ -122,7 +122,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
 
   Widget contentThree() {
     return Container(
-      height: MediaQuery.of(context).size.height / 4.5,
+      height: MediaQuery.of(context).size.height / 3,
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10, top: 10),
       child: Column(
@@ -181,7 +181,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
             child: Container(
               padding: const EdgeInsets.only(left: 10, right: 10),
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 20,
+              height: MediaQuery.of(context).size.height / 15,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -208,7 +208,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height / 15,
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       child: ElevatedButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
