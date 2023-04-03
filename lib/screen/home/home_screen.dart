@@ -623,12 +623,12 @@ class _WorldThemeState extends State<WorldTheme> {
                   } else if (index == 2) {
                     return GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const JadwalScreen(),
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const JadwalScreen(),
+                          ),
+                        );
                       },
                       child: Container(
                         height: 60.h,

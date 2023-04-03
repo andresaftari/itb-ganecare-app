@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
@@ -15,7 +16,7 @@ class JadwalService extends JadwalRepo {
   JadwalService(this._dio);
 
   @override
-  Future<Either<Failed, dynamic>> getJadwalService() async {
+  Future<Either<Failed, GetJadwal>> getJadwalService() async {
     Failed failure;
 
     try {
@@ -31,7 +32,7 @@ class JadwalService extends JadwalRepo {
 
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'get-jadwal');
-        return Right(response.data);
+        return Right(GetJadwal.fromJson(json.decode(response.data)));
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }

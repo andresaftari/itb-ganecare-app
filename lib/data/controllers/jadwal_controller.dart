@@ -17,6 +17,7 @@ class JadwalController {
     final result = await _jadwalService.getJadwalService();
     result.fold((l) {
       // log('failed to get quickhelp ${l.message}', name: 'get-jadwal-controller');
+      print('masuk====');
       hasError(true);
       errorValue('failed to get quickhelp');
     }, (r) {
