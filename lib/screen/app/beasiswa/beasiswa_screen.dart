@@ -23,7 +23,7 @@ class _BeasiswaScreenState extends State<BeasiswaScreen> {
     return Column(
       children: [
         FutureBuilder<dynamic>(
-          future: _beasiswaController.getBeasiswa(),
+          future: _beasiswaController.getBeasiswaTersedia(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,26 +60,22 @@ class _BeasiswaScreenState extends State<BeasiswaScreen> {
                                   namaDonatur: snapshot.data['data'][index]
                                       ['nama_donatur'],
                                   kuota: snapshot.data['data'][index]['kuota'],
-                                  status: snapshot.data['data'][index]
-                                      ['status_name'],
+                                  anggaran: snapshot.data['data'][index]
+                                      ['anggaran'],
+                                  awalPem: snapshot.data['data'][index]
+                                          ['awal_periode_pembiayaan'] ??
+                                      "",
+                                  akhirPem: snapshot.data['data'][index]
+                                          ['akhir_periode_pembiayaan'] ??
+                                      "",
+                                  deskripsi: snapshot.data['data'][index]
+                                      ['deskripsi'],
                                 ),
                               ),
                             );
                           },
                           child: Card(
                             child: ListTile(
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        // snapshot.data.data[index].fotoKegiatan,
-                                        'assets/images/cat.png'),
-                                  ),
-                                ),
-                              ),
                               title: Text(
                                 snapshot.data['data'][index]['nama_beasiswa'],
                                 style: const TextStyle(
@@ -297,7 +293,7 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<Datum> matchQuery = [];
 
-    _beasiswaController.getBeasiswa().then((value) {
+    _beasiswaController.getBeasiswaTersedia().then((value) {
       for (var data in value['data']) {
         if (data['nama_beasiswa'].toLowerCase().contains(query.toLowerCase())) {
           matchQuery.add(Datum(
@@ -328,7 +324,7 @@ class CustomSearchDelegate extends SearchDelegate {
       child: Column(
         children: [
           FutureBuilder<dynamic>(
-            future: _beasiswaController.getBeasiswa(),
+            future: _beasiswaController.getBeasiswaTersedia(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
