@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/beasiswa_service.dart';
-import 'package:itb_ganecare/models/beasiswaku_model.dart';
 
 class BeasiswaController {
   final BeasiswaService _beasiswaService = BeasiswaService(Dio());

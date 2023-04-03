@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_webview_screen.dart';
 
 import '../../../data/controllers/prestasi_controller.dart';
 
@@ -354,7 +355,14 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
           ),
         ),
         // onPressed: (img == null) ? null : () {},
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BeasiswaWebViewScreen(),
+            ),
+          );
+        },
         child: const Text(
           'Lihat Beasiswa',
           style: TextStyle(color: Colors.white),

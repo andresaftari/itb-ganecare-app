@@ -1,13 +1,7 @@
-import 'package:dartz/dartz_unsafe.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
 import 'package:itb_ganecare/models/beasiswaku_model.dart';
-import 'package:itb_ganecare/models/dummy_prestasi.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 
 class BeasiswaScreen extends StatefulWidget {
@@ -297,8 +291,10 @@ class CustomSearchDelegate extends SearchDelegate {
       for (var data in value['data']) {
         if (data['nama_beasiswa'].toLowerCase().contains(query.toLowerCase())) {
           matchQuery.add(Datum(
+            jenisInstansi: data['jenis_instansi'],
             namaDonatur: data['nama_donatur'],
             namaBeasiswa: data['nama_beasiswa'],
+            deskripsi: data['deskripsi'],
             anggaran: data['anggaran'],
             kuota: data['kuota'],
             idPermohonan: data['id_permohonan'],
@@ -307,8 +303,12 @@ class CustomSearchDelegate extends SearchDelegate {
             nim: data['nim'],
             idBeasiswa: data['id_beasiswa'],
             tglInput: data['tgl_input'],
-            awalPeriodePembiayaan: data['awal_periode_pembiayaan'] ?? "",
-            akhirPeriodePembiayaan: data['akhir_periode_pembiayaan'] ?? "",
+            awalPeriodePembiayaan: data['awal_periode_pembiayaan'] == null
+                ? ''
+                : data['awal_periode_pembiayaan'],
+            akhirPeriodePembiayaan: data['akhir_periode_pembiayaan'] == null
+                ? ''
+                : data['akhir_periode_pembiayaan'],
             prioritasKe: data['prioritas_ke'],
             status: data['status'],
             idPeriode: data['id_periode'],
@@ -354,36 +354,44 @@ class CustomSearchDelegate extends SearchDelegate {
                           padding: const EdgeInsets.all(2.0),
                           child: GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => DetailBeasiswa(
-                              //       namaBeasiswa: snapshot.data['data'][index]
-                              //           ['nama_beasiswa'],
-                              //       namaDonatur: snapshot.data['data'][index]
-                              //           ['nama_donatur'],
-                              //       kuota: snapshot.data['data'][index]
-                              //           ['kuota'],
-                              //       status: snapshot.data['data'][index]
-                              //           ['status_name'],
-                              //     ),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailBeasiswa(
+                                    namaBeasiswa: snapshot.data['data'][index]
+                                        ['nama_beasiswa'],
+                                    namaDonatur: snapshot.data['data'][index]
+                                        ['nama_donatur'],
+                                    kuota: snapshot.data['data'][index]
+                                        ['kuota'],
+                                    anggaran: snapshot.data['data'][index]
+                                        ['anggaran'],
+                                    awalPem: snapshot.data['data'][index]
+                                            ['awal_periode_pembiayaan'] ??
+                                        "",
+                                    akhirPem: snapshot.data['data'][index]
+                                            ['akhir_periode_pembiayaan'] ??
+                                        "",
+                                    deskripsi: snapshot.data['data'][index]
+                                        ['deskripsi'],
+                                  ),
+                                ),
+                              );
                             },
                             child: Card(
                               child: ListTile(
-                                leading: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(
-                                          // snapshot.data.data[index].fotoKegiatan,
-                                          'assets/images/cat.png'),
-                                    ),
-                                  ),
-                                ),
+                                // leading: Container(
+                                //   height: 50,
+                                //   width: 50,
+                                //   decoration: const BoxDecoration(
+                                //     image: DecorationImage(
+                                //       fit: BoxFit.cover,
+                                //       image: AssetImage(
+                                //           // snapshot.data.data[index].fotoKegiatan,
+                                //           'assets/images/cat.png'),
+                                //     ),
+                                //   ),
+                                // ),
                                 title: Text(
                                   result.namaBeasiswa,
                                   style: const TextStyle(

@@ -15,8 +15,10 @@ class DataBeasiswaKu {
 
 class Datum {
   Datum({
+    required this.jenisInstansi,
     required this.namaDonatur,
     required this.namaBeasiswa,
+    required this.deskripsi,
     required this.anggaran,
     required this.kuota,
     required this.idPermohonan,
@@ -35,8 +37,10 @@ class Datum {
     required this.statusName,
   });
 
+  String jenisInstansi;
   String namaDonatur;
   String namaBeasiswa;
+  String deskripsi;
   String anggaran;
   String kuota;
   String idPermohonan;
@@ -50,13 +54,15 @@ class Datum {
   String prioritasKe;
   String status;
   String idPeriode;
-  String modifyDate;
+  DateTime modifyDate;
   String cek;
   String statusName;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        jenisInstansi: json["jenis_instansi"],
         namaDonatur: json["nama_donatur"],
         namaBeasiswa: json["nama_beasiswa"],
+        deskripsi: json["deskripsi"],
         anggaran: json["anggaran"],
         kuota: json["kuota"],
         idPermohonan: json["id_permohonan"],
@@ -72,8 +78,73 @@ class Datum {
         prioritasKe: json["prioritas_ke"],
         status: json["status"],
         idPeriode: json["id_periode"],
-        modifyDate: json["modify_date"],
+        modifyDate: DateTime.parse(json["modify_date"]),
         cek: json["cek"],
         statusName: json["status_name"],
       );
 }
+
+// class Datum {
+//   Datum({
+//     required this.namaDonatur,
+//     required this.namaBeasiswa,
+//     required this.anggaran,
+//     required this.kuota,
+//     required this.idPermohonan,
+//     required this.useridPemohon,
+//     required this.noReg,
+//     required this.nim,
+//     required this.idBeasiswa,
+//     required this.tglInput,
+//     required this.awalPeriodePembiayaan,
+//     required this.akhirPeriodePembiayaan,
+//     required this.prioritasKe,
+//     required this.status,
+//     required this.idPeriode,
+//     required this.modifyDate,
+//     required this.cek,
+//     required this.statusName,
+//   });
+
+//   String namaDonatur;
+//   String namaBeasiswa;
+//   String anggaran;
+//   String kuota;
+//   String idPermohonan;
+//   String useridPemohon;
+//   String noReg;
+//   String nim;
+//   String idBeasiswa;
+//   String tglInput;
+//   String awalPeriodePembiayaan;
+//   String akhirPeriodePembiayaan;
+//   String prioritasKe;
+//   String status;
+//   String idPeriode;
+//   String modifyDate;
+//   String cek;
+//   String statusName;
+
+//   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+//         namaDonatur: json["nama_donatur"],
+//         namaBeasiswa: json["nama_beasiswa"],
+//         anggaran: json["anggaran"],
+//         kuota: json["kuota"],
+//         idPermohonan: json["id_permohonan"],
+//         useridPemohon: json["userid_pemohon"],
+//         noReg: json["no_reg"],
+//         nim: json["nim"],
+//         idBeasiswa: json["id_beasiswa"],
+//         tglInput: json["tgl_input"],
+//         awalPeriodePembiayaan:
+//             json["awal_periode_pembiayaan"] == null ? '' : '',
+//         akhirPeriodePembiayaan:
+//             json["akhir_periode_pembiayaan"] == null ? '' : '',
+//         prioritasKe: json["prioritas_ke"],
+//         status: json["status"],
+//         idPeriode: json["id_periode"],
+//         modifyDate: json["modify_date"],
+//         cek: json["cek"],
+//         statusName: json["status_name"],
+//       );
+// }

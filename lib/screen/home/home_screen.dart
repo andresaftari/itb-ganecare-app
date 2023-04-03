@@ -16,6 +16,7 @@ import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/jadwal/jadwal_screen.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_beasiswa.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelor.dart';
@@ -557,7 +558,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CounceleeSebayaScreen(),
+                                                                const MainPageCouncelee(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       } else {
@@ -565,7 +568,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CouncelorSebayaScreen(),
+                                                                const MainPageCouncelor(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       }
@@ -616,15 +621,25 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   } else if (index == 2) {
-                    return Container(
-                      height: 60.h,
-                      width: 60.w,
-                      padding: EdgeInsets.all(4.w),
-                      margin: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Image.asset('assets/images/konsultasi.png'),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8.r),
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const JadwalScreen(),
+                        //   ),
+                        // );
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.w,
+                        padding: EdgeInsets.all(4.w),
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Image.asset('assets/images/konsultasi.png'),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(253, 143, 1, 1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
                     );
                   } else if (index == 3) {
@@ -898,9 +913,12 @@ class _WorldThemeState extends State<WorldTheme> {
                                   namaDonatur: snapshot.data['data'][index]
                                       ['nama_donatur'],
                                   kuota: snapshot.data['data'][index]['kuota'],
-                                  anggaran: snapshot.data['data'][index]['anggaran'],
-                                  awalPem: snapshot.data['data'][index]['awal_periode_pembiayaan'],
-                                  akhirPem: snapshot.data['data'][index]['akhir_periode_pembiayaan'],
+                                  anggaran: snapshot.data['data'][index]
+                                      ['anggaran'],
+                                  awalPem: snapshot.data['data'][index]
+                                      ['awal_periode_pembiayaan'],
+                                  akhirPem: snapshot.data['data'][index]
+                                      ['akhir_periode_pembiayaan'],
                                   deskripsi: snapshot.data['data'][index]
                                       ['deskripsi'],
                                 ),
