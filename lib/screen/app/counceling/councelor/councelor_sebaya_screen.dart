@@ -113,7 +113,7 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
     return super.initState();
   }
 
-   getProfileData() {
+  getProfileData() {
     String noreg = _sharedPreference.getString('noreg').toString();
     _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
@@ -168,7 +168,7 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
+                      margin: EdgeInsets.only(left: 24.w),
                     ),
                     Container(
                       child: Text(
@@ -189,13 +189,10 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                   children: [
                     GestureDetector(
                       onTap: () {},
-                      child: Container(
-                        margin: EdgeInsets.only(top: 42.h),
-                        child: Icon(
-                          Icons.notifications_rounded,
-                          color: Colors.white,
-                          size: 28.sp,
-                        ),
+                      child: Icon(
+                        Icons.notifications_rounded,
+                        color: Colors.white,
+                        size: 28.sp,
                       ),
                     ),
                     SizedBox(width: 8.w),
@@ -203,7 +200,7 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                         ? Container(
                             height: 50.h,
                             width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            margin: EdgeInsets.only(right: 24.w),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -227,11 +224,11 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                         : Container(
                             height: 50.h,
                             width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
+                            margin: EdgeInsets.only(right: 24.w),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('assets/images/cat.png'),
                               ),
@@ -285,25 +282,25 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
           GestureDetector(
             onTap: () {
               showBottomSheet(
-                context: context, 
+                context: context,
                 backgroundColor: Colors.white,
                 builder: (context) => GestureDetector(
-                  onTap: () => Navigator.pop(context),  
+                  onTap: () => Navigator.pop(context),
                   child: Container(
                     height: 300.h,
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(
-                        sigmaX: 10.w, 
+                        sigmaX: 10.w,
                         sigmaY: 10.h,
                       ),
                       child: Column(
                         children: [
                           Text(
-                            'Filter', 
+                            'Filter',
                             style: TextStyle(
                               fontSize: 18.sp,
-                              color: Colors.black, 
+                              color: Colors.black,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -314,9 +311,9 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Jenis Kelamin', 
+                                      'Jenis Kelamin',
                                       style: TextStyle(
-                                        color: Colors.black, 
+                                        color: Colors.black,
                                         fontSize: 12.sp,
                                       ),
                                     ),
@@ -325,7 +322,7 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                                       padding: EdgeInsets.all(8.w),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: Colors.black, 
+                                          color: Colors.black,
                                           width: 0.8.w,
                                         ),
                                         borderRadius: BorderRadius.all(
@@ -342,7 +339,7 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                                       padding: EdgeInsets.all(8.w),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: Colors.black, 
+                                          color: Colors.black,
                                           width: 0.8.w,
                                         ),
                                         borderRadius: BorderRadius.all(
@@ -368,7 +365,8 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: Icon(CupertinoIcons.sort_down, color: Colors.black, size: 26.w),
+              child: Icon(CupertinoIcons.sort_down,
+                  color: Colors.black, size: 26.w),
             ),
           ),
         ],
@@ -504,7 +502,11 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                             Padding(
                               padding: EdgeInsets.only(left: 8.h),
                               child: Text(
-                                temp[index].lastMessageConselor,
+                                temp[index].lastMessageConselor.length >= 30
+                                    ? temp[index]
+                                        .lastMessageConselor
+                                        .substring(0, 20)
+                                    : temp[index].lastMessageConselor,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 softWrap: true,

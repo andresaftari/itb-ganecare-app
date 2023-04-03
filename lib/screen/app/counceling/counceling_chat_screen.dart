@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,29 +45,7 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
         toolbarHeight: 70.h,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
-          onTap: () {
-            // _firestoreUtils.getLiveChatRoom().listen((event) {
-            //   for (final room in event) {
-            //     if (room.idConselee == widget.conseleeId) {
-            //       Future(
-            //         () => _firestoreUtils.updateInRoom(
-            //           roomId: roomId,
-            //           isCounseleeInRoom: false,
-            //         ),
-            //       );
-            //     } else if (room.idConselor == widget.conselorId) {
-            //       Future(
-            //         () => _firestoreUtils.updateInRoom(
-            //           roomId: roomId,
-            //           isCounselorInRoom: false,
-            //         ),
-            //       );
-            //     }
-            //   }
-            // });
-
-            Navigator.pop(context);
-          },
+          onTap: () => Navigator.pop(context),
           child: const Icon(
             Icons.close,
             color: Colors.white,
@@ -128,11 +105,11 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                       await _firestoreUtils.updateRoom(roomId, 'ended');
                       await _endCurrentChat();
 
-                     if (widget.currentId == widget.conselorId.toString()) {
-                       Get.off(() => const CouncelorSebayaScreen());
-                     } else {
-                       Get.off(() => const CounceleeSebayaScreen());
-                     }
+                      if (widget.currentId == widget.conselorId.toString()) {
+                        Get.off(() => const CouncelorSebayaScreen());
+                      } else {
+                        Get.off(() => const CounceleeSebayaScreen());
+                      }
                     },
                     child: Padding(
                       padding: EdgeInsets.all(8.w),
@@ -165,16 +142,36 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator.adaptive();
               } else if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.data == null || snapshot.data.length == 0) {
+                  if (int.parse(widget.currentId) == widget.conselorId) {
+                    int idSender =
+                    int.parse(widget.currentId) == widget.conselorId
+                        ? widget.conselorId
+                        : widget.conseleeId;
+
+                    int idReceiver = idSender == widget.conselorId
+                        ? widget.conseleeId
+                        : widget.conselorId;
+
+                    Future(
+                          () => _firestoreUtils.postLiveChat(
+                        roomId,
+                        DateTime.now(),
+                        idReceiver,
+                        idSender,
+                        'Halo, salam kenal. Semoga harimu bahagia selalu! Ada yang bisa dibantu ka?',
+                        'text',
+                      ),
+                    );
+                  }
+                }
+
                 if (snapshot.data != null && snapshot.data.length > 0) {
                   List<Chats> chats = snapshot.data.toList();
-
-                  // log(chats[0].message, name: 'chat-dataset');
 
                   return GroupedListView<Chats, String>(
                     elements: chats,
                     floatingHeader: true,
-                    // reverse:,
-
                     groupBy: (check) {
                       DateTime timestamp = Timestamp(
                         check.dateTime.seconds,
@@ -317,11 +314,14 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
                 FloatingActionButton(
                   onPressed: () async {
                     if (_messageController.value.text != '') {
-                      int idSender =  int.parse(widget.currentId) == widget.conselorId
-                          ? widget.conselorId
-                          : widget.conseleeId;
+                      int idSender =
+                          int.parse(widget.currentId) == widget.conselorId
+                              ? widget.conselorId
+                              : widget.conseleeId;
 
-                      int idReceiver = idSender == widget.conselorId ? widget.conseleeId : widget.conselorId;
+                      int idReceiver = idSender == widget.conselorId
+                          ? widget.conseleeId
+                          : widget.conselorId;
 
                       await _firestoreUtils.postLiveChat(
                         roomId,
@@ -390,21 +390,15 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
   Future _endCurrentChat() async {
     String roomId = _sharedPreference.getString('roomId').toString();
 
-    _firestoreUtils.getLiveChat(roomId).listen((event) { 
+    _firestoreUtils.getLiveChat(roomId).listen((event) {
       for (var element in event) {
         DateTime today = Timestamp(
           element.dateTime.seconds,
           element.dateTime.nanoseconds,
         ).toDate();
 
-        _chatController.postEndChat(
-          element.idRoom, 
-          widget.conselorId, 
-          widget.conseleeId, 
-          today, 
-          roomId, 
-          event
-        );
+        _chatController.postEndChat(element.idRoom, widget.conselorId,
+            widget.conseleeId, today, roomId, event);
       }
     });
   }
