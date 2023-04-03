@@ -1,3 +1,4 @@
 abstract class BeasiswaRepo {
-  Future getBeasiswaService();
+  Future getBeasiswaKuService();
+  Future getBeasiswaTersediaService();
 }

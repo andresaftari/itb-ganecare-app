@@ -12,7 +12,7 @@ class BeasiswaService extends BeasiswaRepo {
   BeasiswaService(this._dio);
 
   @override
-  Future<Either<Failed, Map<String, dynamic>>> getBeasiswaService() async {
+  Future<Either<Failed, Map<String, dynamic>>> getBeasiswaKuService() async {
     Failed failure;
 
     try {
@@ -25,7 +25,32 @@ class BeasiswaService extends BeasiswaRepo {
       );
 
       if (response.statusCode == 200) {
-        // log('${response.data}', name: 'get-beasiswa');
+        // log('${response.data}', name: 'get-beasiswaku');
+        return Right(response.data);
+      } else {
+        throw '${response.statusCode}: ${response.statusMessage}';
+      }
+    } on DioError catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+  
+  @override
+  Future<Either<Failed, Map<String, dynamic>>> getBeasiswaTersediaService() async {
+    Failed failure;
+
+    try {
+      final response = await _dio.get(
+        'https://kemahasiswaan.itb.ac.id/api/beasiswa/beasiswa_tersedia',
+        queryParameters: {
+          'no_reg': '21103515',
+          'token': 'lh7jNnh0AE1XPlZ4TLjkPmZWgc7bSvoWIVUiPZO1',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // log('${response.data}', name: 'get-beasiswa-tersedia');
         return Right(response.data);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';

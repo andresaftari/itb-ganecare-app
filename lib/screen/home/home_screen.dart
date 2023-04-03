@@ -16,6 +16,8 @@ import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/jadwal/jadwal_screen.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_beasiswa.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelor.dart';
 import 'package:itb_ganecare/screen/app/prestasi/prestasi_screen.dart';
@@ -74,7 +76,7 @@ class _WorldThemeState extends State<WorldTheme> {
     _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
             profilePicture = value['data']['conselee']['profilepic_image'];
-          })
+          }),
         });
   }
 
@@ -556,7 +558,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CounceleeSebayaScreen(),
+                                                                const MainPageCouncelee(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       } else {
@@ -564,7 +568,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CouncelorSebayaScreen(),
+                                                                const MainPageCouncelor(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       }
@@ -596,7 +602,9 @@ class _WorldThemeState extends State<WorldTheme> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const BeasiswaScreen(),
+                            builder: (context) => const MainPageBeasiswa(
+                              initialPage: 0,
+                            ),
                           ),
                         );
                       },
@@ -613,15 +621,25 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   } else if (index == 2) {
-                    return Container(
-                      height: 60.h,
-                      width: 60.w,
-                      padding: EdgeInsets.all(4.w),
-                      margin: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Image.asset('assets/images/konsultasi.png'),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8.r),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const JadwalScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.w,
+                        padding: EdgeInsets.all(4.w),
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Image.asset('assets/images/konsultasi.png'),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(253, 143, 1, 1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
                     );
                   } else if (index == 3) {
@@ -856,7 +874,7 @@ class _WorldThemeState extends State<WorldTheme> {
     return Column(
       children: [
         FutureBuilder<dynamic>(
-          future: _beasiswaController.getBeasiswa(),
+          future: _beasiswaController.getBeasiswaTersedia(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -867,7 +885,9 @@ class _WorldThemeState extends State<WorldTheme> {
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator.adaptive(),
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.white,
+                      ),
                     ),
                   ),
                 );
@@ -893,26 +913,20 @@ class _WorldThemeState extends State<WorldTheme> {
                                   namaDonatur: snapshot.data['data'][index]
                                       ['nama_donatur'],
                                   kuota: snapshot.data['data'][index]['kuota'],
-                                  status: snapshot.data['data'][index]
-                                      ['status_name'],
+                                  anggaran: snapshot.data['data'][index]
+                                      ['anggaran'],
+                                  awalPem: snapshot.data['data'][index]
+                                      ['awal_periode_pembiayaan'],
+                                  akhirPem: snapshot.data['data'][index]
+                                      ['akhir_periode_pembiayaan'],
+                                  deskripsi: snapshot.data['data'][index]
+                                      ['deskripsi'],
                                 ),
                               ),
                             );
                           },
                           child: Card(
                             child: ListTile(
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        // snapshot.data.data[index].fotoKegiatan,
-                                        'assets/images/cat.png'),
-                                  ),
-                                ),
-                              ),
                               title: Text(
                                 snapshot.data['data'][index]['nama_beasiswa'],
                                 style: const TextStyle(
@@ -977,7 +991,9 @@ class _WorldThemeState extends State<WorldTheme> {
                   alignment: Alignment.center,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator.adaptive(),
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Colors.white,
+                    ),
                   ),
                 ),
               );
@@ -990,7 +1006,7 @@ class _WorldThemeState extends State<WorldTheme> {
 
   Widget buildButtonBeasiswa() {
     return Container(
-      width: MediaQuery.of(context).size.width / 1.5,
+      width: MediaQuery.of(context).size.width / 2,
       height: MediaQuery.of(context).size.height / 20,
       margin: EdgeInsets.only(
         top: 10,
@@ -1017,6 +1033,7 @@ class _WorldThemeState extends State<WorldTheme> {
           'Tampilkan lebih banyak',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 12,
           ),
         ),
       ),
