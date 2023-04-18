@@ -10,6 +10,7 @@ import 'package:itb_ganecare/data/controllers/chat_controller.dart';
 import 'package:itb_ganecare/data/controllers/counseling_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/jadwal_controller.dart';
+import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => PrestasiController());
     Get.lazyPut(() => ChatController());
     Get.lazyPut(() => BeasiswaController());
+    Get.lazyPut(() => MoodTrackerController());
 
     return ScreenUtilInit(
       builder: (context) {
