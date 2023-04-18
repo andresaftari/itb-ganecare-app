@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/models/mood_model.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
@@ -33,6 +34,9 @@ class CouncelingProfileScreen extends StatefulWidget {
 }
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String text = '';
+  bool isLoading = false;
   int? selectedMoodId;
   // handle mood tracker api
   final MoodTrackerController _moodTrackerController = Get.find();
@@ -449,10 +453,33 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                                                     image: AssetImage(
                                                         'assets/emotes/a1.png'),
                                                   )
-                                                : const DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/emotes/a5.png'),
-                                                  ),
+                                                : snapshot.data.data[index]
+                                                            .mood ==
+                                                        7
+                                                    ? const DecorationImage(
+                                                        image: AssetImage(
+                                                            'assets/emotes/a2.png'),
+                                                      )
+                                                    : snapshot.data.data[index]
+                                                                .mood ==
+                                                            5
+                                                        ? const DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/emotes/a3.png'),
+                                                          )
+                                                        : snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .mood ==
+                                                                3
+                                                            ? const DecorationImage(
+                                                                image: AssetImage(
+                                                                    'assets/emotes/a4.png'),
+                                                              )
+                                                            : const DecorationImage(
+                                                                image: AssetImage(
+                                                                    'assets/emotes/a5.png'),
+                                                              ),
                                           ),
                                         ),
                                         Expanded(
@@ -475,8 +502,26 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                                                       snapshot.data.data[index]
                                                                   .mood ==
                                                               10
-                                                          ? 'Percaya Diri'
-                                                          : 'Stress',
+                                                          ? 'Senang sekali'
+                                                          : snapshot
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .mood ==
+                                                                  7
+                                                              ? 'Percaya Diri'
+                                                              : snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .mood ==
+                                                                      5
+                                                                  ? 'Senang'
+                                                                  : snapshot.data.data[index]
+                                                                              .mood ==
+                                                                          3
+                                                                      ? 'Kurang senang'
+                                                                      : 'Stress',
                                                       style: TextStyle(
                                                         color: snapshot
                                                                     .data
@@ -484,7 +529,23 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                                                                     .mood ==
                                                                 10
                                                             ? Colors.green
-                                                            : Colors.red,
+                                                            : snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .mood ==
+                                                                    7
+                                                                ? Colors.blue
+                                                                : snapshot
+                                                                            .data
+                                                                            .data[
+                                                                                index]
+                                                                            .mood ==
+                                                                        5
+                                                                    ? Colors
+                                                                        .pink
+                                                                    : Colors
+                                                                        .red,
                                                       ),
                                                     ),
                                                     const SizedBox(
@@ -839,6 +900,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
         onPressed: () {
           showModalBottomSheet<void>(
             isScrollControlled: true,
+            isDismissible: false,
             context: context,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
@@ -860,185 +922,329 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                             right: 16,
                             top: 16,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Mood Tracking',
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Mood Tracking',
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          selectedMoodId = null;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.close),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const Text(
+                                  'Bagaimana kabarmu ?',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          convertDateTime(
+                                            DateTime.now(),
+                                          ),
+                                          style: const TextStyle(
+                                              color: Color(0xff03A0D9)),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.timer,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          convertFormatTime(
+                                            DateTime.now(),
+                                          ),
+                                          style: const TextStyle(
+                                              color: Color(0xff03A0D9)),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 3,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: mockMood.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      Mood mood = mockMood[index];
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  10,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  20,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      mood.moodImage),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                mood.desc,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        value:
+                                            selectedMoodId == mood.moodemotion,
+                                        onChanged: (bool? isChecked) {
+                                          setState(() {
+                                            if (isChecked != null &&
+                                                isChecked) {
+                                              selectedMoodId = mood.moodemotion;
+                                            } else {
+                                              selectedMoodId = null;
+                                            }
+                                          });
+                                        },
+                                      );
                                     },
-                                    icon: const Icon(Icons.close),
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                'Bagaimana kabarmu ?',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        convertDateTime(
-                                          DateTime.now(),
-                                        ),
-                                        style: const TextStyle(
-                                            color: Color(0xff03A0D9)),
-                                      ),
-                                    ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextFormField(
+                                  decoration: const InputDecoration(
+                                    hintText: 'Apa yang anda pikirkan ?',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.grey, width: 0.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.blue, width: 0.0),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.timer,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        convertFormatTime(
-                                          DateTime.now(),
-                                        ),
-                                        style: const TextStyle(
-                                            color: Color(0xff03A0D9)),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                height: MediaQuery.of(context).size.height / 3,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: mockMood.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    Mood mood = mockMood[index];
-                                    return CheckboxListTile(
-                                      title: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                10,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
+                                  minLines:
+                                      6, // any number you need (It works as the rows for the textarea)
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      text = value!;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                isLoading
+                                    ? const SpinKitFadingCircle(
+                                        size: 40,
+                                        color: Colors.blue,
+                                      )
+                                    : SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        height:
+                                            MediaQuery.of(context).size.height /
                                                 20,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image:
-                                                    AssetImage(mood.moodImage),
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.orange),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              mood.desc,
+                                          child: const Text(
+                                            'Simpan',
+                                            style: TextStyle(
+                                              color: Colors.white,
                                             ),
                                           ),
-                                        ],
+                                          onPressed: () async {
+                                            if (selectedMoodId == null ||
+                                                selectedMoodId == 0) {
+                                              Flushbar(
+                                                duration: const Duration(
+                                                    milliseconds: 3000),
+                                                flushbarPosition:
+                                                    FlushbarPosition.TOP,
+                                                backgroundColor: Colors.red,
+                                                titleText: const Text(
+                                                  'Gagal simpan data!',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                messageText: const Text(
+                                                  'Belum memilih emotion',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ).show(context);
+                                            } else {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                _formKey.currentState!.save();
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+                                                _moodTrackerController
+                                                    .postMoodTracker(
+                                                  text,
+                                                  selectedMoodId.toString(),
+                                                  selectedMoodId.toString(),
+                                                )
+                                                    .then((value) {
+                                                  if (value == 200) {
+                                                    Navigator.pop(context);
+                                                    Get.to(
+                                                        const MainPageCouncelee(
+                                                            initialPage: 2));
+                                                    Flushbar(
+                                                      duration: const Duration(
+                                                          milliseconds: 3000),
+                                                      flushbarPosition:
+                                                          FlushbarPosition.TOP,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      titleText: const Text(
+                                                        'Create Success',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      messageText: const Text(
+                                                        'Berhasil menambahkan mood tracker',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ).show(context);
+
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                  } else {
+                                                    Flushbar(
+                                                      duration: const Duration(
+                                                          milliseconds: 3000),
+                                                      flushbarPosition:
+                                                          FlushbarPosition.TOP,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      titleText: const Text(
+                                                        'Create Failed',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      messageText: const Text(
+                                                        'Gagal menambahkan mood tracker',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ).show(context);
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                  }
+                                                });
+                                              } else {
+                                                Flushbar(
+                                                  duration: const Duration(
+                                                      milliseconds: 3000),
+                                                  flushbarPosition:
+                                                      FlushbarPosition.TOP,
+                                                  backgroundColor: Colors.red,
+                                                  titleText: const Text(
+                                                    'Gagal simpan data!',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  messageText: const Text(
+                                                    'Terdapat form kosong!',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ).show(context);
+                                                setState(() {
+                                                  isLoading = false;
+                                                });
+                                              }
+                                            }
+                                          },
+                                        ),
                                       ),
-                                      value: selectedMoodId == mood.moodId,
-                                      onChanged: (bool? isChecked) {
-                                        setState(() {
-                                          if (isChecked != null && isChecked) {
-                                            selectedMoodId = mood.moodId;
-                                          } else {
-                                            selectedMoodId = null;
-                                          }
-                                        });
-                                      },
-                                    );
-                                  },
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Apa yang anda pikirkan ?',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey, width: 0.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 0.0),
-                                  ),
-                                ),
-                                minLines:
-                                    6, // any number you need (It works as the rows for the textarea)
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: MediaQuery.of(context).size.height / 20,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.orange),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                      ),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Simpan',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    print(selectedMoodId);
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],

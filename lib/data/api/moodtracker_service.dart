@@ -6,6 +6,8 @@ import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/moodtracker_repo.dart';
 import 'package:itb_ganecare/models/moodtracker_model.dart';
 
+import '../endpoint.dart';
+
 class MoodTrackerService extends MoodTrackerRepo {
   final Dio _dio;
 
@@ -25,6 +27,42 @@ class MoodTrackerService extends MoodTrackerRepo {
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'get-mood-tracker');
         return Right(GetMoodTracker.fromJson(response.data));
+      } else {
+        throw '${response.statusCode}: ${response.statusMessage}';
+      }
+    } on DioError catch (e) {
+      failure = Failed(e.toString());
+      return Left(failure);
+    }
+  }
+
+  @override
+  Future<Either<Failed, int>> postMoodTrackerService(
+    String text,
+    String mood,
+    String emotion,
+  ) async {
+    Failed failure;
+    FormData formData = FormData.fromMap(
+      {
+        'text': text,
+        'mood': mood,
+        'emotion': emotion,
+        'no_reg': '22102224',
+      },
+    );
+
+    try {
+      final response = await _dio.postUri(
+        Uri.http(kemahasiswaanBaseUrl_, postMoodTrakcerUrl_),
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        // log('${response.data}', name: 'post-login');
+        // print("Response 200");
+        // print(200);
+        return const Right(200);
       } else {
         throw '${response.statusCode}: ${response.statusMessage}';
       }
