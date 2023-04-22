@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -31,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
+
+  bool isLoading = false;
 
   // void _showDialogLogin() {
   //   alertMessage = widget.alertMessage;
@@ -159,121 +161,158 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 30.h),
 
                       //Button
-                      ButtonTheme(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                          ),
-                          child: FittedBox(
-                            child: Text(
-                              'Login',
-                              textDirection: TextDirection.ltr,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.sp,
-                                decoration: TextDecoration.none,
-                                fontWeight: FontWeight.normal,
+                      isLoading
+                          ? const SpinKitFadingCircle(
+                              size: 40,
+                              color: Colors.orange,
+                            )
+                          : SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height / 20,
+                              child: ButtonTheme(
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.orange),
+                                  ),
+                                  child: FittedBox(
+                                    child: Text(
+                                      'Login',
+                                      textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13.sp,
+                                        decoration: TextDecoration.none,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      _authController
+                                          .postLogin(
+                                        username,
+                                        password,
+                                        widget.deviceId,
+                                      )
+                                          .then((value) {
+                                        if (value.statusCode == 200) {
+                                          _sharedPreference.putString(
+                                            'username',
+                                            username,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'name',
+                                            value.data.name,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'nim',
+                                            value.data.nim,
+                                          );
+                                          _sharedPreference.putString(
+                                            'noreg',
+                                            value.data.id,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'token_user',
+                                            value.auth.tokenMahasiswa.token,
+                                          );
+
+                                          _sharedPreference.putInt(
+                                            'angkatan',
+                                            value.auth.user?.angkatan ??
+                                                value.auth.counselor?.angkatan,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'major',
+                                            value.auth.user?.jurusan ??
+                                                value.auth.counselor?.jurusan
+                                                    .substring(
+                                                        value
+                                                                .auth
+                                                                .counselor
+                                                                ?.jurusan
+                                                                .length -
+                                                            1,
+                                                        value.auth.counselor
+                                                                ?.jurusan -
+                                                            5),
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'gender',
+                                            value.auth.user?.gender ??
+                                                value.auth.counselor?.gender,
+                                          );
+
+                                          if (value.userGroup.conselee == '') {
+                                            _sharedPreference.putString(
+                                              'councelee_id',
+                                              value.userGroup.conselee,
+                                            );
+                                          } else if (value.userGroup.conselee !=
+                                              '') {
+                                            _sharedPreference.putString(
+                                              'councelee_id',
+                                              value.userGroup.conselee,
+                                            );
+                                          }
+
+                                          if (value.userGroup.conselor == '') {
+                                            _sharedPreference.putString(
+                                              'councelor_id',
+                                              value.userGroup.conselor,
+                                            );
+                                          } else if (value.userGroup.conselor !=
+                                              '') {
+                                            _sharedPreference.putString(
+                                              'councelor_id',
+                                              value.userGroup.conselor,
+                                            );
+                                          }
+
+                                          _sharedPreference.putInt(
+                                              'isLogin', 1);
+
+                                          Get.off(
+                                            () => const HomePage(
+                                                isDarkMode: false),
+                                          );
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
+                                      });
+                                      // In case of server error, uncomment these code
+                                      // below & comment the main code above to check
+                                      // login-screen function
+                                      // Get.off(
+                                      //       () => const HomePage(isDarkMode: false),
+                                      // );
+                                    } else {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    }
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _authController
-                                  .postLogin(
-                                username,
-                                password,
-                                widget.deviceId,
-                              )
-                                  .then((value) {
-                                if (value.statusCode == 200) {
-                                  _sharedPreference.putString(
-                                    'username',
-                                    username,
-                                  );
-
-                                  _sharedPreference.putString(
-                                    'name',
-                                    value.data.name,
-                                  );
-
-                                  _sharedPreference.putString(
-                                    'nim',
-                                    value.data.nim,
-                                  );
-                                  _sharedPreference.putString(
-                                    'noreg',
-                                    value.data.id,
-                                  );
-
-                                  _sharedPreference.putString(
-                                    'token_user',
-                                    value.auth.tokenMahasiswa.token,
-                                  );
-
-                                  _sharedPreference.putInt(
-                                    'angkatan',
-                                    value.auth.user?.angkatan ??
-                                        value.auth.counselor?.angkatan,
-                                  );
-
-                                  _sharedPreference.putString(
-                                    'major',
-                                    value.auth.user?.jurusan ??
-                                        value.auth.counselor?.jurusan.substring(
-                                            value.auth.counselor?.jurusan
-                                                    .length -
-                                                1,
-                                            value.auth.counselor?.jurusan - 5),
-                                  );
-
-                                  _sharedPreference.putString(
-                                    'gender',
-                                    value.auth.user?.gender ??
-                                        value.auth.counselor?.gender,
-                                  );
-
-                                  if (value.userGroup.conselee == '') {
-                                    _sharedPreference.putString(
-                                      'councelee_id',
-                                      value.userGroup.conselee,
-                                    );
-                                  } else if (value.userGroup.conselee != '') {
-                                    _sharedPreference.putString(
-                                      'councelee_id',
-                                      value.userGroup.conselee,
-                                    );
-                                  }
-
-                                  if (value.userGroup.conselor == '') {
-                                    _sharedPreference.putString(
-                                      'councelor_id',
-                                      value.userGroup.conselor,
-                                    );
-                                  } else if (value.userGroup.conselor != '') {
-                                    _sharedPreference.putString(
-                                      'councelor_id',
-                                      value.userGroup.conselor,
-                                    );
-                                  }
-
-                                  _sharedPreference.putInt('isLogin', 1);
-
-                                  Get.off(
-                                    () => const HomePage(isDarkMode: false),
-                                  );
-                                }
-                              });
-
-                              // In case of server error, uncomment these code
-                              // below & comment the main code above to check
-                              // login-screen function
-                              // Get.off(
-                              //       () => const HomePage(isDarkMode: false),
-                              // );
-                            }
-                          },
-                        ),
-                      ),
                       // if (_forgotPasswordLink != null)
                       // Padding(
                       //   padding: EdgeInsets.all(10.w),
