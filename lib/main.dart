@@ -14,7 +14,10 @@ import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/models/jadwal_model_concelor.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
+
+import 'data/controllers/jadwal_conselor_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +63,7 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => ChatController());
     Get.lazyPut(() => BeasiswaController());
     Get.lazyPut(() => MoodTrackerController());
+    Get.lazyPut(() => JadwalConselorController());
 
     return ScreenUtilInit(
       builder: (context) {

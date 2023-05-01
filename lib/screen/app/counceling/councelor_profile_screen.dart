@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/data/controllers/jadwal_conselor_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/app/counceling/concelor_edit_profile_screen.dart';
 
@@ -21,6 +22,7 @@ class CouncelorProfileScreen extends StatefulWidget {
 }
 
 class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
+  final JadwalConselorController _jadwalConselorController = Get.find();
   XFile? image;
   bool status = false;
 
@@ -324,9 +326,72 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    vConselor('Senin'),
-                    vConselor('Selasa'),
-                    vConselor('Rabu'),
+                    FutureBuilder<dynamic>(
+                      future: _jadwalConselorController.getJadwal(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.2,
+                              width: double.infinity,
+                              child: const Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              ),
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height / 1,
+                              child: ListView.builder(
+                                itemCount: snapshot.data.data.senin.length,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                padding: const EdgeInsets.only(bottom: 100),
+                                itemBuilder: (context, index) {
+                                  print(snapshot.data.data.senin.length);
+                                  return Container(
+                                    margin: const EdgeInsets.all(20),
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.amberAccent,
+                                  );
+                                },
+                              ),
+                            );
+                          } else {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.2,
+                              width: double.infinity,
+                              child: const Align(
+                                alignment: Alignment.center,
+                                child: Text('Data kosong'),
+                              ),
+                            );
+                          }
+                        } else {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height / 1.2,
+                            width: double.infinity,
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator.adaptive(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    )
+                    // vConselor('Senin'),
+                    // vConselor('Selasa'),
+                    // vConselor('Rabu'),
                   ],
                 ),
               ),
@@ -641,6 +706,30 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         ],
       ),
     );
+  }
+
+  Widget vConselorSenin() {
+    return SizedBox();
+  }
+
+  Widget vConselorSelasa() {
+    return SizedBox();
+  }
+
+  Widget vConselorRabu() {
+    return SizedBox();
+  }
+
+  Widget vConselorKamis() {
+    return SizedBox();
+  }
+
+  Widget vConselorJumat() {
+    return SizedBox();
+  }
+
+  Widget vConselorSabtu() {
+    return SizedBox();
   }
 
   Widget vConsele() {
