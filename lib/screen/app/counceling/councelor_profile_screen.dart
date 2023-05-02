@@ -324,75 +324,18 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               height: MediaQuery.of(context).size.height / 2.5,
               width: double.infinity,
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FutureBuilder<dynamic>(
-                      future: _jadwalConselorController.getJadwal(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.2,
-                              width: double.infinity,
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator.adaptive(),
-                                ),
-                              ),
-                            );
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return SizedBox(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height / 1,
-                              child: ListView.builder(
-                                itemCount: snapshot.data.data.senin.length,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                padding: const EdgeInsets.only(bottom: 100),
-                                itemBuilder: (context, index) {
-                                  print(snapshot.data.data.senin.length);
-                                  return Container(
-                                    margin: const EdgeInsets.all(20),
-                                    height: 50,
-                                    width: 50,
-                                    color: Colors.amberAccent,
-                                  );
-                                },
-                              ),
-                            );
-                          } else {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.2,
-                              width: double.infinity,
-                              child: const Align(
-                                alignment: Alignment.center,
-                                child: Text('Data kosong'),
-                              ),
-                            );
-                          }
-                        } else {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height / 1.2,
-                            width: double.infinity,
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    )
-                    // vConselor('Senin'),
-                    // vConselor('Selasa'),
-                    // vConselor('Rabu'),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: Column(
+                    children: [
+                      vConselorSenin(),
+                      vConselorSelasa(),
+                      vConselorRabu(),
+                      vConselorKamis(),
+                      vConselorJumat(),
+                      vConselorSabtu(),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -709,27 +652,1107 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   }
 
   Widget vConselorSenin() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.senin.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.senin.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.senin.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Senin",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.senin[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.senin[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.senin[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConselorSelasa() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.selasa.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.selasa.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.selasa.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Selasa",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.selasa[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.selasa[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.selasa[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConselorRabu() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.rabu.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.rabu.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.rabu.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Rabu",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.rabu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.rabu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.rabu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConselorKamis() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.kamis.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.kamis.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.kamis.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Kamis",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.kamis[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.kamis[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.kamis[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConselorJumat() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.jumat.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.jumat.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.jumat.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "jumat",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.jumat[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.jumat[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.jumat[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConselorSabtu() {
-    return SizedBox();
+    return FutureBuilder<dynamic>(
+      future: _jadwalConselorController.getJadwal(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            List<int> indexFirst = snapshot.data.data.sabtu.sublist(0, 5);
+            print(indexFirst);
+            List<int> indexSecond = snapshot.data.data.sabtu.sublist(5, 10);
+            print(indexSecond);
+            List<int> indexThird = snapshot.data.data.sabtu.sublist(10, 15);
+            print(indexThird);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ExpandablePanel(
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "sabtu",
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                  collapsed: const SizedBox(),
+                  expanded: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Pagi',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexFirst.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.sabtu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Siang',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexSecond.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.sabtu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: Text(
+                              'Sore',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.3,
+                            height: MediaQuery.of(context).size.height / 15,
+                            child: ListView.builder(
+                              itemCount: indexThird.length,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: MediaQuery.of(context).size.width / 7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white),
+                                  child: Center(
+                                    child: Text(snapshot.data.data.sabtu[index]
+                                        .toString()),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Text('Data kosong'),
+              ),
+            );
+          }
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            width: double.infinity,
+            child: const Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget vConsele() {
