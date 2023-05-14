@@ -12,7 +12,6 @@ import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_
 import 'package:itb_ganecare/screen/app/counceling/councelor_profile_screen.dart';
 
 import '../../../../data/controllers/profile_controller.dart';
-import '../counceling_profile_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
   const CouncelorSebayaScreen({Key? key}) : super(key: key);
@@ -172,7 +171,12 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                     ),
                     Container(
                       child: Text(
-                        _sharedPreference.getString('username').toString(),
+                        _sharedPreference
+                                .getString('nickname')
+                                .toString()
+                                .contains('Konselor')
+                            ? _sharedPreference.getString('nickname').toString()
+                            : 'Konselor',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,

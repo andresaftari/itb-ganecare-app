@@ -34,30 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isLoading = false;
 
-  // void _showDialogLogin() {
-  //   alertMessage = widget.alertMessage;
-  //   _forgotPasswordLink = widget.forgotPassLink;
-
-  //   if (alertMessage != '') {
-  //     Future.delayed(const Duration(milliseconds: 500), () {
-  //       final text = alertMessage;
-
-  //       // log(alertMessage.toString(), name: 'Alert');
-
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: Center(child: Text(text!)),
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //         ),
-  //       );
-  //       alertMessage = null;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     // _showDialogLogin();
@@ -287,7 +263,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           }
 
                                           _sharedPreference.putInt(
-                                              'isLogin', 1);
+                                            'isLogin',
+                                            1,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'nickname',
+                                            value.auth.user.nickname,
+                                          );
 
                                           Get.off(
                                             () => const HomePage(

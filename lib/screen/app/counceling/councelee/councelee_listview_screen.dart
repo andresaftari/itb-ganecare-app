@@ -94,7 +94,12 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                     ),
                     Container(
                       child: Text(
-                        _sharedPreference.getString('username').toString(),
+                        _sharedPreference
+                                .getString('nickname')
+                                .toString()
+                                .contains('Konselee')
+                            ? _sharedPreference.getString('nickname').toString()
+                            : 'Konselee',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -153,7 +158,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('assets/images/cat.png'),
                               ),
