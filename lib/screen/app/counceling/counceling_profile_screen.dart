@@ -12,7 +12,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
+import 'package:itb_ganecare/models/mood_model.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 import 'package:itb_ganecare/screen/home/home_screen.dart';
 
 import '../../../data/controllers/profile_controller.dart';
@@ -31,8 +34,64 @@ class CouncelingProfileScreen extends StatefulWidget {
 }
 
 class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String text = '';
+  bool isLoading = false;
+  int? selectedMoodId;
+  // handle mood tracker api
+  final MoodTrackerController _moodTrackerController = Get.find();
+
+  String convertFormatTime(DateTime dateTime) {
+    return '${dateTime.hour}' + ":" + '${dateTime.minute}';
+  }
+
+  String convertDateTime(DateTime dateTime) {
+    String month;
+
+    switch (dateTime.month) {
+      case 1:
+        month = 'Jan';
+        break;
+      case 2:
+        month = 'Feb';
+        break;
+      case 3:
+        month = 'Mar';
+        break;
+      case 4:
+        month = 'Apr';
+        break;
+      case 5:
+        month = 'May';
+        break;
+      case 6:
+        month = 'Jun';
+        break;
+      case 7:
+        month = 'Jul';
+        break;
+      case 8:
+        month = 'Aug';
+        break;
+      case 9:
+        month = 'Sep';
+        break;
+      case 10:
+        month = 'Oct';
+        break;
+      case 11:
+        month = 'Nov';
+        break;
+      default:
+        month = 'Des';
+    }
+
+    return '${dateTime.day} ' + month + ' ${dateTime.year} ';
+  }
+
   // handle stepper
   int _currentState = 0;
+
   List<StepperData> stepperData = [
     StepperData(
       title: StepperText(
@@ -94,6 +153,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   @override
   void initState() {
     getProfileData();
+
     return super.initState();
   }
 
@@ -203,7 +263,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                       ),
                     ),
                   ),
-            SizedBox( 
+            SizedBox(
               height: MediaQuery.of(context).size.height / 5,
               width: MediaQuery.of(context).size.width / 2,
               child: Column(
@@ -308,56 +368,301 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           children: [
             Column(
               children: [
-                Container(
-                  height: 30.h,
-                  width: double.infinity,
-                  color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini,13 Maret 22')),
+                FutureBuilder<dynamic>(
+                  future: _moodTrackerController.getMoodTracker(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height / 1.2,
+                          width: double.infinity,
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        return SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: ListView.builder(
+                            itemCount: snapshot.data.data.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.height / 8,
+                                margin: const EdgeInsets.only(top: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              25,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xffC6F0F3),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          convertDateTime(snapshot
+                                              .data.data[index].createdAt),
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 10),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              5,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              30,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              bottomLeft: Radius.circular(
+                                                20,
+                                              ),
+                                            ),
+                                            image: snapshot.data.data[index]
+                                                        .mood ==
+                                                    10
+                                                ? const DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/emotes/a1.png'),
+                                                  )
+                                                : snapshot.data.data[index]
+                                                            .mood ==
+                                                        7
+                                                    ? const DecorationImage(
+                                                        image: AssetImage(
+                                                            'assets/emotes/a2.png'),
+                                                      )
+                                                    : snapshot.data.data[index]
+                                                                .mood ==
+                                                            5
+                                                        ? const DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/emotes/a3.png'),
+                                                          )
+                                                        : snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .mood ==
+                                                                3
+                                                            ? const DecorationImage(
+                                                                image: AssetImage(
+                                                                    'assets/emotes/a4.png'),
+                                                              )
+                                                            : const DecorationImage(
+                                                                image: AssetImage(
+                                                                    'assets/emotes/a5.png'),
+                                                              ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                15,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      snapshot.data.data[index]
+                                                                  .mood ==
+                                                              10
+                                                          ? 'Senang sekali'
+                                                          : snapshot
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .mood ==
+                                                                  7
+                                                              ? 'Percaya Diri'
+                                                              : snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .mood ==
+                                                                      5
+                                                                  ? 'Senang'
+                                                                  : snapshot.data.data[index]
+                                                                              .mood ==
+                                                                          3
+                                                                      ? 'Kurang senang'
+                                                                      : 'Stress',
+                                                      style: TextStyle(
+                                                        color: snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .mood ==
+                                                                10
+                                                            ? Colors.green
+                                                            : snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .mood ==
+                                                                    7
+                                                                ? Colors.blue
+                                                                : snapshot
+                                                                            .data
+                                                                            .data[
+                                                                                index]
+                                                                            .mood ==
+                                                                        5
+                                                                    ? Colors
+                                                                        .pink
+                                                                    : Colors
+                                                                        .red,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                      convertFormatTime(snapshot
+                                                          .data
+                                                          .data[index]
+                                                          .updatedAt),
+                                                      style: const TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 10,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  snapshot
+                                                      .data.data[index].text,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height / 1.2,
+                          width: double.infinity,
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: Text('Data kosong'),
+                          ),
+                        );
+                      }
+                    } else {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.2,
+                        width: double.infinity,
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
-                Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  height: 170.h,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      AnotherStepper(
-                        stepperList: stepperData,
-                        stepperDirection: Axis.vertical,
-                        iconWidth:
-                            25, // Height that will be applied to all the stepper icons
-                        iconHeight:
-                            25, // Width that will be applied to all the stepper icons
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 30.h,
-                  width: double.infinity,
-                  color: const Color.fromRGBO(255, 195, 70, 1),
-                  child: const Center(child: Text('Hari ini,12 Januari 22')),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  height: 170.h,
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      AnotherStepper(
-                        stepperList: stepperData,
-                        stepperDirection: Axis.vertical,
-                        iconWidth:
-                            25, // Height that will be applied to all the stepper icons
-                        iconHeight:
-                            25, // Width that will be applied to all the stepper icons
-                      ),
-                    ],
-                  ),
-                ),
+
+                // Container(
+                //   height: 30.h,
+                //   width: double.infinity,
+                //   color: const Color.fromRGBO(255, 195, 70, 1),
+                //   child: const Center(child: Text('Hari ini,13 Maret 22')),
+                // ),
+                // Container(
+                //   padding: const EdgeInsets.only(left: 5, right: 5),
+                //   height: 170.h,
+                //   width: double.infinity,
+                //   color: Colors.white,
+                //   child: ListView(
+                //     scrollDirection: Axis.vertical,
+                //     children: [
+                //       AnotherStepper(
+                //         stepperList: stepperData,
+                //         stepperDirection: Axis.vertical,
+                //         iconWidth:
+                //             25, // Height that will be applied to all the stepper icons
+                //         iconHeight:
+                //             25, // Width that will be applied to all the stepper icons
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // Container(
+                //   height: 30.h,
+                //   width: double.infinity,
+                //   color: const Color.fromRGBO(255, 195, 70, 1),
+                //   child: const Center(child: Text('Hari ini,12 Januari 22')),
+                // ),
+                // Container(
+                //   padding: const EdgeInsets.only(left: 5, right: 5),
+                //   height: 170.h,
+                //   width: double.infinity,
+                //   color: Colors.white,
+                //   child: ListView(
+                //     scrollDirection: Axis.vertical,
+                //     children: [
+                //       AnotherStepper(
+                //         stepperList: stepperData,
+                //         stepperDirection: Axis.vertical,
+                //         iconWidth:
+                //             25, // Height that will be applied to all the stepper icons
+                //         iconHeight:
+                //             25, // Width that will be applied to all the stepper icons
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ],
@@ -593,19 +898,361 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
       margin: EdgeInsets.only(bottom: 55.h),
       child: FloatingActionButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              elevation: 1,
-              backgroundColor: Colors.orange,
-              content: Text(
-                'This feature still in development',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
+          showModalBottomSheet<void>(
+            isScrollControlled: true,
+            isDismissible: false,
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
               ),
             ),
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: SizedBox(
+                    child: Wrap(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 16,
+                          ),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Mood Tracking',
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          selectedMoodId = null;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.close),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                const Text(
+                                  'Bagaimana kabarmu ?',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          convertDateTime(
+                                            DateTime.now(),
+                                          ),
+                                          style: const TextStyle(
+                                              color: Color(0xff03A0D9)),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.timer,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          convertFormatTime(
+                                            DateTime.now(),
+                                          ),
+                                          style: const TextStyle(
+                                              color: Color(0xff03A0D9)),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 3,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: mockMood.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      Mood mood = mockMood[index];
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  10,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  20,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      mood.moodImage),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                mood.desc,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        value:
+                                            selectedMoodId == mood.moodemotion,
+                                        onChanged: (bool? isChecked) {
+                                          setState(() {
+                                            if (isChecked != null &&
+                                                isChecked) {
+                                              selectedMoodId = mood.moodemotion;
+                                            } else {
+                                              selectedMoodId = null;
+                                            }
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextFormField(
+                                  decoration: const InputDecoration(
+                                    hintText: 'Apa yang anda pikirkan ?',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.grey, width: 0.0),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.blue, width: 0.0),
+                                    ),
+                                  ),
+                                  minLines:
+                                      6, // any number you need (It works as the rows for the textarea)
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      text = value!;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                isLoading
+                                    ? const SpinKitFadingCircle(
+                                        size: 40,
+                                        color: Colors.blue,
+                                      )
+                                    : SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                20,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.orange),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Simpan',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            if (selectedMoodId == null ||
+                                                selectedMoodId == 0) {
+                                              Flushbar(
+                                                duration: const Duration(
+                                                    milliseconds: 3000),
+                                                flushbarPosition:
+                                                    FlushbarPosition.TOP,
+                                                backgroundColor: Colors.red,
+                                                titleText: const Text(
+                                                  'Gagal simpan data!',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                messageText: const Text(
+                                                  'Belum memilih emotion',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ).show(context);
+                                            } else {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                _formKey.currentState!.save();
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+                                                _moodTrackerController
+                                                    .postMoodTracker(
+                                                  text,
+                                                  selectedMoodId.toString(),
+                                                  selectedMoodId.toString(),
+                                                )
+                                                    .then((value) {
+                                                  if (value == 200) {
+                                                    Navigator.pop(context);
+                                                    Get.to(
+                                                        const MainPageCouncelee(
+                                                            initialPage: 2));
+                                                    Flushbar(
+                                                      duration: const Duration(
+                                                          milliseconds: 3000),
+                                                      flushbarPosition:
+                                                          FlushbarPosition.TOP,
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      titleText: const Text(
+                                                        'Create Success',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      messageText: const Text(
+                                                        'Berhasil menambahkan mood tracker',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ).show(context);
+
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                  } else {
+                                                    Flushbar(
+                                                      duration: const Duration(
+                                                          milliseconds: 3000),
+                                                      flushbarPosition:
+                                                          FlushbarPosition.TOP,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      titleText: const Text(
+                                                        'Create Failed',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      messageText: const Text(
+                                                        'Gagal menambahkan mood tracker',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ).show(context);
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                  }
+                                                });
+                                              } else {
+                                                Flushbar(
+                                                  duration: const Duration(
+                                                      milliseconds: 3000),
+                                                  flushbarPosition:
+                                                      FlushbarPosition.TOP,
+                                                  backgroundColor: Colors.red,
+                                                  titleText: const Text(
+                                                    'Gagal simpan data!',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  messageText: const Text(
+                                                    'Terdapat form kosong!',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ).show(context);
+                                                setState(() {
+                                                  isLoading = false;
+                                                });
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
           );
         },
         backgroundColor: Colors.white,

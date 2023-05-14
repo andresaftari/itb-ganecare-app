@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_webview_screen.dart';
 
 import '../../../data/controllers/prestasi_controller.dart';
 
@@ -17,14 +18,20 @@ class DetailBeasiswa extends StatefulWidget {
   final String namaBeasiswa;
   final String namaDonatur;
   final String kuota;
-  final String status;
+  final String anggaran;
+  final String awalPem;
+  final String akhirPem;
+  final String deskripsi;
 
   const DetailBeasiswa({
     Key? key,
     required this.namaBeasiswa,
     required this.namaDonatur,
     required this.kuota,
-    required this.status,
+    required this.anggaran,
+    required this.awalPem,
+    required this.akhirPem,
+    required this.deskripsi,
   }) : super(key: key);
 
   @override
@@ -70,42 +77,42 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
         SizedBox(
           height: 20.h,
         ),
-        Container(
-          height: 250.h,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-                Text(
-                  widget.kuota + 'orang',
-                ),
-              ],
-            ),
-            Row(
-              children: const [
-                Icon(
-                  Icons.timer,
-                  color: Colors.black,
-                ),
-                Text('60 Hari'),
-              ],
-            ),
-          ],
-        )
+        // Container(
+        //   height: 250.h,
+        //   width: double.infinity,
+        //   decoration: BoxDecoration(
+        //     color: Colors.grey.shade300,
+        //     borderRadius: BorderRadius.circular(20),
+        //   ),
+        // ),
+        // const SizedBox(
+        //   height: 10,
+        // ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Row(
+        //       children: [
+        //         const Icon(
+        //           Icons.person,
+        //           color: Colors.black,
+        //         ),
+        //         Text(
+        //           widget.kuota + 'orang',
+        //         ),
+        //       ],
+        //     ),
+        //     Row(
+        //       children: const [
+        //         Icon(
+        //           Icons.timer,
+        //           color: Colors.black,
+        //         ),
+        //         Text('60 Hari'),
+        //       ],
+        //     ),
+        //   ],
+        // )
       ],
     );
   }
@@ -113,16 +120,146 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
   Widget contentTwo() {
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 10),
-      height: MediaQuery.of(context).size.height / 4,
+      height: MediaQuery.of(context).size.height / 3.5,
       width: double.infinity,
-      child: const Text(
-          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Deskripsi Beasiswa',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 200,
+                  height: 20,
+                  child: Text(
+                    'Nama Donatur',
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 20,
+                    child: Text(
+                      ': ' + widget.namaDonatur,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 200,
+                  height: 20,
+                  child: Text(
+                    'Kuota',
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 20,
+                    child: Text(': ' + widget.kuota),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 200,
+                  height: 20,
+                  child: Text(
+                    'Anggaran',
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 20,
+                    child: Text(': ' + widget.anggaran),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 200,
+                  height: 20,
+                  child: Text(
+                    'Awal periode pembayaran',
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 20,
+                    child: Text(': ' + widget.awalPem),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 200,
+                  height: 20,
+                  child: Text(
+                    'Akhir periode pembayaran',
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 20,
+                    child: Text(': ' + widget.akhirPem),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'Deskripsi lainnya',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            (widget.deskripsi != "")
+                ? Text(widget.deskripsi)
+                : const Text(
+                    'Tidak terdapat deskripsi',
+                  ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget contentThree() {
     return Container(
-      height: MediaQuery.of(context).size.height / 4.5,
+      height: MediaQuery.of(context).size.height / 6,
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10, top: 10),
       child: Column(
@@ -131,7 +268,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
           const Text(
             'Berkas Pengajuan',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -172,33 +309,33 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
           const SizedBox(
             height: 10,
           ),
-          DottedBorder(
-            borderType: BorderType.RRect,
-            radius: Radius.circular(20),
-            dashPattern: [10, 10],
-            color: Colors.grey,
-            strokeWidth: 2,
-            child: Container(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height / 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  (img == null) ? const Text('Pilih berkas') : Text(img!.name),
-                  IconButton(
-                    onPressed: () {
-                      getImage();
-                    },
-                    icon: const Icon(
-                      Icons.upload,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // DottedBorder(
+          //   borderType: BorderType.RRect,
+          //   radius: Radius.circular(20),
+          //   dashPattern: [10, 10],
+          //   color: Colors.grey,
+          //   strokeWidth: 2,
+          //   child: Container(
+          //     padding: const EdgeInsets.only(left: 10, right: 10),
+          //     width: double.infinity,
+          //     height: MediaQuery.of(context).size.height / 15,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         (img == null) ? const Text('Pilih berkas') : Text(img!.name),
+          //         IconButton(
+          //           onPressed: () {
+          //             getImage();
+          //           },
+          //           icon: const Icon(
+          //             Icons.upload,
+          //             color: Colors.blue,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -208,7 +345,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height / 15,
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       child: ElevatedButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -217,9 +354,17 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
             ),
           ),
         ),
-        onPressed: (img == null) ? null : () {},
+        // onPressed: (img == null) ? null : () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BeasiswaWebViewScreen(),
+            ),
+          );
+        },
         child: const Text(
-          'Ajukan',
+          'Lihat Beasiswa',
           style: TextStyle(color: Colors.white),
         ),
       ),

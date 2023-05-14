@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
+import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/models/link_data.dart';
@@ -16,12 +17,16 @@ import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
+import 'package:itb_ganecare/screen/app/jadwal/jadwal_screen.dart';
+import 'package:itb_ganecare/screen/app/mainpage/main_page_beasiswa.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelor.dart';
 import 'package:itb_ganecare/screen/app/prestasi/prestasi_screen.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
+
+import '../app/prestasi/detail_prestasi_screen.dart';
 
 class HomePage extends StatelessWidget {
   final bool isDarkMode;
@@ -54,6 +59,7 @@ class _WorldThemeState extends State<WorldTheme> {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   final BeasiswaController _beasiswaController = Get.find();
+  final PrestasiController _prestasiController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
@@ -74,7 +80,7 @@ class _WorldThemeState extends State<WorldTheme> {
     _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
             profilePicture = value['data']['conselee']['profilepic_image'];
-          })
+          }),
         });
   }
 
@@ -253,13 +259,15 @@ class _WorldThemeState extends State<WorldTheme> {
                       SizedBox(height: 16.h),
                       buildQuickHelp(context),
                       SizedBox(height: 16.h),
+                      buildPrestasi(context),
+                      SizedBox(height: 16.h),
                       buildBeasiswa(),
-                      buildButtonBeasiswa(),
                       // buildScholarshipNews(context),
                     ],
                   ),
                 ),
               ),
+              buildButtonBeasiswa(),
             ],
           ),
         ),
@@ -304,7 +312,7 @@ class _WorldThemeState extends State<WorldTheme> {
         children: [
           Container(
             child: const Text(
-              'Apps',
+              'Our Menu',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -556,7 +564,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CounceleeSebayaScreen(),
+                                                                const MainPageCouncelee(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       } else {
@@ -564,7 +574,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CouncelorSebayaScreen(),
+                                                                const MainPageCouncelor(
+                                                              initialPage: 0,
+                                                            ),
                                                           ),
                                                         );
                                                       }
@@ -596,7 +608,9 @@ class _WorldThemeState extends State<WorldTheme> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const BeasiswaScreen(),
+                            builder: (context) => const MainPageBeasiswa(
+                              initialPage: 0,
+                            ),
                           ),
                         );
                       },
@@ -613,15 +627,25 @@ class _WorldThemeState extends State<WorldTheme> {
                       ),
                     );
                   } else if (index == 2) {
-                    return Container(
-                      height: 60.h,
-                      width: 60.w,
-                      padding: EdgeInsets.all(4.w),
-                      margin: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Image.asset('assets/images/konsultasi.png'),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(253, 143, 1, 1),
-                        borderRadius: BorderRadius.circular(8.r),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const JadwalScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 60.h,
+                        width: 60.w,
+                        padding: EdgeInsets.all(4.w),
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: Image.asset('assets/images/konsultasi.png'),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(253, 143, 1, 1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
                     );
                   } else if (index == 3) {
@@ -670,7 +694,22 @@ class _WorldThemeState extends State<WorldTheme> {
 
   Widget buildQuickHelp(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          child: const Text(
+            'Quick help',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          margin: EdgeInsets.only(
+            left: 16.w,
+            top: 8.h,
+            bottom: 8.h,
+          ),
+        ),
         FutureBuilder<dynamic>(
           future: _homeController.getQuickHelp(),
           builder: (context, snapshot) {
@@ -678,7 +717,9 @@ class _WorldThemeState extends State<WorldTheme> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator.adaptive(),
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.white,
+                  ),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
                 return SizedBox(
@@ -756,6 +797,198 @@ class _WorldThemeState extends State<WorldTheme> {
                 child: Padding(
                   padding: EdgeInsets.all(8.w),
                   child: const Text('Lorem Ipsum Dolor Sit Amet'),
+                ),
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget buildPrestasi(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: const Text(
+            'Prestasi',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          margin: EdgeInsets.only(
+            left: 16.w,
+            top: 8.h,
+            bottom: 8.h,
+          ),
+        ),
+        FutureBuilder<dynamic>(
+          future: _prestasiController.getPretasi(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data.data.length == 0) {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 5,
+                    child: const Center(
+                      child: Text(
+                        'Belum terdapat pretasi',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: ListView.builder(
+                      itemCount: snapshot.data.data.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPrestasi(
+                                  idPenghargaan:
+                                      snapshot.data.data[index].idPenghargaan,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            height: MediaQuery.of(context).size.height / 20,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  offset: Offset(2, 2), // Shadow position
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        snapshot.data.data[index].fotoKegiatan,
+                                      ),
+                                    ),
+                                  ),
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.5,
+                                  height:
+                                      MediaQuery.of(context).size.height / 7,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 10, top: 10),
+                                  child: Text(
+                                    snapshot.data.data[index].namaPenghargaan,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    snapshot.data.data[index].eventPenghargaan,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.blue,
+                                        size: 10,
+                                      ),
+                                      Text(
+                                        snapshot
+                                            .data.data[index].tahunPerolehan,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                  width: double.infinity,
+                  child: const Align(
+                    alignment: Alignment.center,
+                    child: Text('Terdapat kesalahan pada server!'),
+                  ),
+                );
+              }
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
+                width: double.infinity,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
                 ),
               );
             }
@@ -854,130 +1087,165 @@ class _WorldThemeState extends State<WorldTheme> {
 
   Widget buildBeasiswa() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          child: const Text(
+            'Beasiswa',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          margin: EdgeInsets.only(
+            left: 16.w,
+            top: 8.h,
+            bottom: 8.h,
+          ),
+        ),
         FutureBuilder<dynamic>(
-          future: _beasiswaController.getBeasiswa(),
+          future: _beasiswaController.getBeasiswaTersedia(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.2,
+                  height: MediaQuery.of(context).size.height / 5,
                   width: double.infinity,
                   child: const Align(
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator.adaptive(),
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.white,
+                      ),
                     ),
                   ),
                 );
               } else if (snapshot.connectionState == ConnectionState.done) {
-                return SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 3,
-                  child: ListView.builder(
-                    itemCount: snapshot.data['data'].length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailBeasiswa(
-                                  namaBeasiswa: snapshot.data['data'][index]
-                                      ['nama_beasiswa'],
-                                  namaDonatur: snapshot.data['data'][index]
-                                      ['nama_donatur'],
-                                  kuota: snapshot.data['data'][index]['kuota'],
-                                  status: snapshot.data['data'][index]
-                                      ['status_name'],
-                                ),
-                              ),
-                            );
-                          },
-                          child: Card(
-                            child: ListTile(
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                        // snapshot.data.data[index].fotoKegiatan,
-                                        'assets/images/cat.png'),
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                snapshot.data['data'][index]['nama_beasiswa'],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    snapshot.data['data'][index]
+                if (snapshot.data['data'].length == 0) {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 5,
+                    child: const Center(
+                      child: Text(
+                        'Belum terdapat beasiswa',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 3,
+                    child: ListView.builder(
+                      itemCount: snapshot.data['data'].length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailBeasiswa(
+                                    namaBeasiswa: snapshot.data['data'][index]
+                                        ['nama_beasiswa'],
+                                    namaDonatur: snapshot.data['data'][index]
                                         ['nama_donatur'],
-                                    style: const TextStyle(
-                                      fontSize: 12,
+                                    kuota: snapshot.data['data'][index]
+                                        ['kuota'],
+                                    anggaran: snapshot.data['data'][index]
+                                        ['anggaran'],
+                                    awalPem: snapshot.data['data'][index]
+                                        ['awal_periode_pembiayaan'],
+                                    akhirPem: snapshot.data['data'][index]
+                                        ['akhir_periode_pembiayaan'],
+                                    deskripsi: snapshot.data['data'][index]
+                                        ['deskripsi'],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                  snapshot.data['data'][index]['nama_beasiswa'],
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      snapshot.data['data'][index]
+                                          ['nama_donatur'],
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                        color: Colors.blue,
-                                        size: 10,
-                                      ),
-                                      Text(
-                                        snapshot.data['data'][index]
-                                            ['tgl_input'],
-                                        style: const TextStyle(
-                                          fontSize: 12,
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                          color: Colors.blue,
+                                          size: 10,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        Text(
+                                          snapshot.data['data'][index]
+                                              ['tgl_input'],
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                isThreeLine: true,
                               ),
-                              isThreeLine: true,
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                );
+                        );
+                      },
+                    ),
+                  );
+                }
               } else {
                 return SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.2,
+                  height: MediaQuery.of(context).size.height / 5,
                   width: double.infinity,
                   child: const Align(
                     alignment: Alignment.center,
-                    child: Text('Data kosong'),
+                    child: Text(
+                      'Terjadi kesalahan server!',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 );
               }
             } else {
               return SizedBox(
-                height: MediaQuery.of(context).size.height / 1.2,
+                height: MediaQuery.of(context).size.height / 5,
                 width: double.infinity,
                 child: const Align(
                   alignment: Alignment.center,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator.adaptive(),
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Colors.white,
+                    ),
                   ),
                 ),
               );
@@ -989,34 +1257,38 @@ class _WorldThemeState extends State<WorldTheme> {
   }
 
   Widget buildButtonBeasiswa() {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.5,
-      height: MediaQuery.of(context).size.height / 20,
-      margin: EdgeInsets.only(
-        top: 10,
-        bottom: 10,
-      ),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.orange),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height / 20,
+        margin: const EdgeInsets.only(
+          top: 10,
+          bottom: 10,
+        ),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.orange),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
             ),
           ),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const BeasiswaScreen(),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BeasiswaScreen(),
+              ),
+            );
+          },
+          child: const Text(
+            'Tampilkan lebih banyak',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
             ),
-          );
-        },
-        child: const Text(
-          'Tampilkan lebih banyak',
-          style: TextStyle(
-            color: Colors.white,
           ),
         ),
       ),

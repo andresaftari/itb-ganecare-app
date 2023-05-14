@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:itb_ganecare/data/api/beasiswa_service.dart';
-import 'package:itb_ganecare/models/beasiswaku_model.dart';
 
 class BeasiswaController {
   final BeasiswaService _beasiswaService = BeasiswaService(Dio());
@@ -11,10 +10,25 @@ class BeasiswaController {
   RxBool hasError = false.obs;
   RxString errorValue = ''.obs;
 
-  Future getBeasiswa() async {
+  Future getBeasiswaTersedia() async {
     var res;
 
-    final result = await _beasiswaService.getBeasiswaService();
+    final result = await _beasiswaService.getBeasiswaTersediaService();
+
+    result.fold((l) {
+      hasError(true);
+      errorValue('failed to get beasiswa');
+    }, (r) {
+      res = r;
+      return r;
+    });
+    return res;
+  }
+
+  Future getBeasiswaKu() async {
+    var res;
+
+    final result = await _beasiswaService.getBeasiswaKuService();
 
     result.fold((l) {
       hasError(true);
