@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -261,6 +263,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                               value.userGroup.conselor,
                                             );
                                           }
+
+                                          _sharedPreference.putString(
+                                            'nickname',
+                                            value.auth.user.nickname,
+                                          );
+
+                                          log(
+                                            '${value.auth.user.nickname}',
+                                            name: 'nickname',
+                                          );
 
                                           _sharedPreference.putInt(
                                             'isLogin',
