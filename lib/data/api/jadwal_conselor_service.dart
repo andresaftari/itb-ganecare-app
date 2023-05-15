@@ -24,9 +24,9 @@ class JadwalConselorService extends JadwalConcelorRepo {
     try {
       final response = await _dio.post(
         'http://167.205.57.127:8080/api/v1/user/getjadwal',
-        queryParameters: {
-          'no_reg': '22102224',
-        },
+        // queryParameters: {
+        //   'no_reg': '22102224',
+        // },
       );
 
       if (response.statusCode == 200) {
