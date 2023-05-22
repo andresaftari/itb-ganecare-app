@@ -3143,20 +3143,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
       ),
     );
   }
-
-  // void loadData() {
-  //   String nim = _sharedPreference.getString('nim').toString();
-  // String username = _sharedPreference.getString('username').toString();
-
-  //   Future(
-  //     () => _authController.getProfile(nim).then(
-  //           (value) => log(
-  //             value.toString(),
-  //           ),
-  //         ),
-  //   );
-  // }
-
+  
   Widget buildHeader() {
     return Column(
       children: [
