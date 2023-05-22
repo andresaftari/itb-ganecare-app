@@ -185,8 +185,10 @@ class _CouncelingEditProfileScreenState
               'Update Profile',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  // color: Colors.white,
-                  ),
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                // color: Colors.white,
+              ),
             ),
           ),
           const SizedBox(
@@ -284,7 +286,10 @@ class _CouncelingEditProfileScreenState
         ),
       );
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -300,7 +305,7 @@ class _CouncelingEditProfileScreenState
                     initialValue: widget.noReg,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'No Reg',
                       labelStyle: const TextStyle(
@@ -309,12 +314,12 @@ class _CouncelingEditProfileScreenState
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
                   TextFormField(
                     initialValue: widget.nickName,
@@ -331,7 +336,7 @@ class _CouncelingEditProfileScreenState
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'Enter nickname',
                       labelStyle: const TextStyle(
@@ -340,12 +345,12 @@ class _CouncelingEditProfileScreenState
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
                   TextFormField(
                     initialValue: widget.about,
@@ -362,7 +367,7 @@ class _CouncelingEditProfileScreenState
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'Enter about',
                       labelStyle: const TextStyle(
@@ -371,12 +376,12 @@ class _CouncelingEditProfileScreenState
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 50,
                   ),
                 ],
               ),
@@ -533,18 +538,6 @@ class _CouncelingEditProfileScreenState
                                         }
                                     });
                           }
-
-                          // var duration = const Duration(milliseconds: 3000);
-                          // Timer(duration, () {
-                          //   Navigator.pop(context);
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           const CouncelingProfileScreen(),
-                          //     ),
-                          //   );
-                          // });
                         } else {
                           Flushbar(
                             duration: const Duration(milliseconds: 2000),
@@ -574,7 +567,13 @@ class _CouncelingEditProfileScreenState
                           });
                         }
                       },
-                      child: const Text('Update'),
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
           ],

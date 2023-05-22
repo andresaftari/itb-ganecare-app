@@ -53,6 +53,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   String idReg = '';
   String about = '';
   String nickName = '';
+  String angkatan = '';
+  String nim = '';
+  String jurusan = '';
+  String gender = '';
   int role = 0;
 
   @override
@@ -70,6 +74,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             about = value['data']['conselor']['about'];
             nickName = value['data']['conselor']['nickname'];
             role = value['data']['conselor']['role'];
+            angkatan = value['data']['conselor']['angkatan'].toString();
+            nim = value['data']['conselor']['nim'].toString();
+            jurusan = value['data']['conselor']['jurusan'];
+            gender = value['data']['conselor']['gender'];
           })
         });
   }
@@ -624,7 +632,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -648,7 +656,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -661,6 +669,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "Senin",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -678,12 +690,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -707,20 +723,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -751,16 +767,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -784,12 +799,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -813,20 +832,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -857,16 +876,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -890,12 +908,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -919,20 +941,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -963,16 +985,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -997,7 +1018,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1007,7 +1028,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 5,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -1029,7 +1050,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1052,7 +1073,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -1065,6 +1086,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "Selasa",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -1082,12 +1107,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1111,20 +1140,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1155,16 +1184,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1188,12 +1216,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1217,20 +1249,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1261,16 +1293,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1294,12 +1325,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1323,20 +1358,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1367,16 +1402,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1401,7 +1435,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1411,7 +1445,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 5,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -1433,7 +1467,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1456,7 +1490,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -1469,6 +1503,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "Rabu",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -1486,12 +1524,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1515,20 +1557,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1559,16 +1601,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1592,12 +1633,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1621,20 +1666,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1665,16 +1710,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1698,12 +1742,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1727,20 +1775,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1771,16 +1819,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1805,7 +1852,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1815,7 +1862,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 5,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -1837,7 +1884,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -1860,7 +1907,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -1873,6 +1920,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "Kamis",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -1890,12 +1941,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -1919,20 +1974,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -1963,16 +2018,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -1996,12 +2050,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2025,20 +2083,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2069,16 +2127,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2102,12 +2159,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2131,20 +2192,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2175,16 +2236,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2209,7 +2269,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 5,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -2219,7 +2279,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 5,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -2241,7 +2301,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 10,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -2264,7 +2324,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -2277,6 +2337,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "jumat",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -2294,12 +2358,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2323,20 +2391,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2367,16 +2435,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2400,12 +2467,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2429,20 +2500,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2473,16 +2544,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2506,12 +2576,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2535,20 +2609,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2579,16 +2653,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2613,7 +2686,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 10,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -2623,7 +2696,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 10,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -2645,7 +2718,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         if (snapshot.hasData) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 10,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -2668,7 +2741,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 195, 70, 1),
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ExpandablePanel(
@@ -2681,6 +2754,10 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                       ),
                       Text(
                         "sabtu",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -2698,12 +2775,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Pagi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2727,20 +2808,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2771,16 +2852,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2804,12 +2884,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Siang',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2833,20 +2917,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2877,16 +2961,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -2910,12 +2993,16 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                             padding: EdgeInsets.only(right: 5),
                             child: Text(
                               'Sore',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Column(
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width / 1.3,
+                                width: MediaQuery.of(context).size.width / 1.4,
                                 height: MediaQuery.of(context).size.height / 15,
                                 child: Stack(
                                   children: [
@@ -2939,20 +3026,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     decoration: BoxDecoration(
                                                         color: (e == 0)
                                                             ? Colors.white
-                                                            : Colors.blue,
+                                                            : Colors
+                                                                .amberAccent,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
@@ -2983,16 +3070,15 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
-                                                            9.5,
+                                                            8,
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height /
-                                                            30,
+                                                            25,
                                                     margin:
                                                         const EdgeInsets.only(
-                                                            left: 10,
-                                                            right: 10),
+                                                            right: 5),
                                                     child: Center(
                                                         child:
                                                             Text(e.toString())),
@@ -3017,7 +3103,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.2,
+              height: MediaQuery.of(context).size.height / 10,
               width: double.infinity,
               child: const Align(
                 alignment: Alignment.center,
@@ -3027,7 +3113,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           }
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.2,
+            height: MediaQuery.of(context).size.height / 10,
             width: double.infinity,
             child: const Align(
               alignment: Alignment.center,
@@ -3042,108 +3128,321 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
     );
   }
 
+  Widget navHeader() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 15,
+      width: double.infinity,
+      margin: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 50,
+            height: MediaQuery.of(context).size.height / 15,
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(
+                      isDarkMode: false,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.close),
+            ),
+          ),
+          Expanded(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 15,
+              child: const Center(
+                child: Text(
+                  'Profile Page',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: MediaQuery.of(context).size.height / 15,
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConcelorEditProfileScreen(
+                      profilePicture: profilePicture,
+                      noReg: idReg,
+                      about: about,
+                      nickName: nickName,
+                      role: role.toString(),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.edit,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget header() {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 2.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 2,
+            offset: Offset(0, 1), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height / 4,
+            decoration: const BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 6,
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                      image: AssetImage('assets/icons/profil.png'),
+                    ),
+                  ),
+                ),
+                Text(
+                  (nim != '') ? nim : 'not found!',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      overflow: TextOverflow.ellipsis),
+                ),
+                Text(
+                  (nickName != '') ? nickName : 'Anonymous',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height / 5.5,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 10,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          const Text(
+                            'Angkatan',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (angkatan != '') ? angkatan : 'not found!',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Text(
+                            'Jurusan',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (jurusan.length > 10)
+                                ? jurusan.substring(20, 25)
+                                : 'not found!',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Text(
+                            'Jenis Kelamin',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (gender == 'L') ? 'Pria' : 'Wanita',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: Column(
+                      children: const [
+                        Text(
+                          'Bio',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget navContent() {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 20,
+      child: const Text(
+        'Jadwal Concelor',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget content() {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 1.2,
+      margin: const EdgeInsets.only(
+        left: 10,
+        right: 10,
+        bottom: 50,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            vConselorSenin(),
+            vConselorSelasa(),
+            vConselorRabu(),
+            vConselorKamis(),
+            vConselorJumat(),
+            vConselorSabtu(),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // _sharedPreference.removeKey('councelor_status');
-        // _sharedPreference.removeKey('councelee_status');
-        // // Navigator.pop(context);
-        // Navigator.pop(context);
         return false;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   toolbarHeight: 75.h,
-        //   automaticallyImplyLeading: false,
-        //   leading: GestureDetector(
-        //     onTap: () {
-        //       _sharedPreference.removeKey('councelor_status');
-        //       _sharedPreference.removeKey('councelee_status');
-        //       Navigator.pop(context);
-        //       Navigator.pop(context);
-        //     },
-        //     child: const Icon(
-        //       Icons.close,
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        //   flexibleSpace: Container(
-        //     decoration: const BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [
-        //           Color.fromRGBO(0, 171, 233, 1),
-        //           Color.fromRGBO(6, 146, 196, 1),
-        //         ],
-        //         begin: Alignment.centerRight,
-        //         end: Alignment.centerLeft,
-        //       ),
-        //     ),
-        //     child: Column(
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Container(
-        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
-        //               child: Text(
-        //                 'Profile',
-        //                 style: TextStyle(
-        //                   color: const Color.fromRGBO(255, 255, 255, 1),
-        //                   fontSize: 18.sp,
-        //                   fontWeight: FontWeight.w600,
-        //                 ),
-        //               ),
-        //             ),
-        //             Container(
-        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
-        //               child: IconButton(
-        //                 onPressed: () {
-        //                   Navigator.push(
-        //                     context,
-        //                     MaterialPageRoute(
-        //                       builder: (context) => ConcelorEditProfileScreen(
-        //                         profilePicture: profilePicture,
-        //                         noReg: idReg,
-        //                         about: about,
-        //                         nickName: nickName,
-        //                         role: role.toString(),
-        //                       ),
-        //                     ),
-        //                   );
-        //                 },
-        //                 icon: const Icon(
-        //                   Icons.edit,
-        //                   color: Colors.white,
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-
-        body: Stack(
-          children: [
-            Container(
-              color: const Color.fromRGBO(0, 171, 233, 1),
-            ),
-            buildHeader(),
-            // buildProfileFace(),
-            appBarCustom(),
-            contentAvatar(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              navHeader(),
+              header(),
+              navContent(),
+              content(),
+            ],
+          ),
         ),
         floatingActionButton: buildFloatingActionButton(),
       ),
     );
   }
-  
+
   Widget buildHeader() {
     return Column(
       children: [

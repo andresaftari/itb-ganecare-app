@@ -192,7 +192,16 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             width: 50,
             height: MediaQuery.of(context).size.height / 15,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(
+                      isDarkMode: false,
+                    ),
+                  ),
+                );
+              },
               icon: Icon(Icons.close),
             ),
           ),
@@ -214,7 +223,20 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             width: 50,
             height: MediaQuery.of(context).size.height / 15,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CouncelingEditProfileScreen(
+                      profilePicture: profilePicture,
+                      noReg: idReg,
+                      about: about,
+                      nickName: nickName,
+                      role: role.toString(),
+                    ),
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.edit,
               ),
