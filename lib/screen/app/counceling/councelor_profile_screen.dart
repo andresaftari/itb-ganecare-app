@@ -74,6 +74,24 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
         });
   }
 
+  List<String> dataTime = [
+    "07.00",
+    "08.00",
+    "09.00",
+    "10.00",
+    "11.00",
+    "12.00",
+    "13.00",
+    "14.00",
+    "15.00",
+    "16.00",
+    "17.00",
+    "18.00",
+    "19.00",
+    "20.00",
+    "21.00",
+  ];
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -142,58 +160,6 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
     );
   }
 
-  // handle stepper
-  int _currentState = 0;
-  List<StepperData> stepperData = [
-    StepperData(
-      title: StepperText(
-        "Percaya diri",
-        textStyle: const TextStyle(
-          color: Colors.green,
-        ),
-      ),
-      subtitle: StepperText(
-        "Jangan lupa maen epep",
-        textStyle: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      iconWidget: Container(
-        padding: const EdgeInsets.all(1),
-        decoration: const BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: const Center(
-          child: Icon(Icons.adb, color: Colors.white),
-        ),
-      ),
-    ),
-    StepperData(
-      title: StepperText(
-        "Stresss",
-        textStyle: const TextStyle(
-          color: Colors.red,
-        ),
-      ),
-      subtitle: StepperText(
-        "Jangan lupa maen epep",
-        textStyle: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      iconWidget: Container(
-        padding: const EdgeInsets.all(1),
-        decoration: const BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: const Center(
-          child: Icon(Icons.adb, color: Colors.white),
-        ),
-      ),
-    ),
-  ];
-  // final ProfileController _authController = Get.find();
-  // final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   Widget contentAvatar() {
     return Padding(
       padding: EdgeInsets.only(top: 120.h),
@@ -669,12 +635,14 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
               ),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
+            // List From Api Data
             List<int> indexFirst = snapshot.data.data.senin.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.senin.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.senin.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -712,28 +680,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.senin[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -745,28 +786,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.senin[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -778,28 +892,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.senin[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -854,11 +1041,12 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<int> indexFirst = snapshot.data.data.selasa.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.selasa.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.selasa.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -896,28 +1084,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.selasa[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -929,28 +1190,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.selasa[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -962,28 +1296,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.selasa[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1038,11 +1445,12 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<int> indexFirst = snapshot.data.data.rabu.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.rabu.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.rabu.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -1080,28 +1488,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.rabu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1113,28 +1594,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.rabu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1146,28 +1700,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.rabu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1222,11 +1849,12 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<int> indexFirst = snapshot.data.data.kamis.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.kamis.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.kamis.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -1264,28 +1892,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.kamis[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1297,28 +1998,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.kamis[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1330,28 +2104,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.kamis[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1406,11 +2253,12 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<int> indexFirst = snapshot.data.data.jumat.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.jumat.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.jumat.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -1448,28 +2296,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.jumat[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1481,28 +2402,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.jumat[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1514,28 +2508,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.jumat[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1590,11 +2657,12 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             List<int> indexFirst = snapshot.data.data.sabtu.sublist(0, 5);
-            print(indexFirst);
             List<int> indexSecond = snapshot.data.data.sabtu.sublist(5, 10);
-            print(indexSecond);
             List<int> indexThird = snapshot.data.data.sabtu.sublist(10, 15);
-            print(indexThird);
+            // List jam statuc
+            List<String> splitFirst = dataTime.sublist(0, 5);
+            List<String> splitSecond = dataTime.sublist(5, 10);
+            List<String> splitThrid = dataTime.sublist(10, 15);
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -1632,28 +2700,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Pagi',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexFirst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.sabtu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitFirst
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1665,28 +2806,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Siang',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexSecond.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.sabtu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexSecond
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1698,28 +2912,101 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                               'Sore',
                             ),
                           ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: ListView.builder(
-                              itemCount: indexThird.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.all(10),
-                                  height: 20,
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: Center(
-                                    child: Text(snapshot.data.data.sabtu[index]
-                                        .toString()),
-                                  ),
-                                );
-                              },
-                            ),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 1.3,
+                                height: MediaQuery.of(context).size.height / 15,
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: indexThird
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                        color: (e == 0)
+                                                            ? Colors.white
+                                                            : Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        primary: false,
+                                        children: [
+                                          Row(
+                                            children: splitThrid
+                                                .map(
+                                                  (e) => Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            9.5,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            30,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Center(
+                                                        child:
+                                                            Text(e.toString())),
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1752,38 +3039,6 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           );
         }
       },
-    );
-  }
-
-  Widget vConsele() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Column(
-        children: [
-          Container(
-            height: 30.h,
-            width: double.infinity,
-            color: const Color.fromRGBO(255, 195, 70, 1),
-            child: const Center(child: Text('Hari ini, Januari 22')),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            height: 170.h,
-            color: Colors.white,
-            width: double.infinity,
-            child: Center(
-              child: AnotherStepper(
-                stepperList: stepperData,
-                stepperDirection: Axis.vertical,
-                iconWidth:
-                    25, // Height that will be applied to all the stepper icons
-                iconHeight:
-                    25, // Width that will be applied to all the stepper icons
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
