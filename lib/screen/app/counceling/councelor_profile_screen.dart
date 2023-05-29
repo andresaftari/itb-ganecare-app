@@ -24,7 +24,6 @@ class CouncelorProfileScreen extends StatefulWidget {
 class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
   final JadwalConselorController _jadwalConselorController = Get.find();
 
-
   final ProfileController _profileController = Get.find();
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
   String profilePicture = '';
@@ -3056,20 +3055,20 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height / 10,
                     child: Column(
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Bio',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-                          style: TextStyle(
+                          (about != "") ? about : "-",
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
@@ -3147,6 +3146,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
       ),
     );
   }
+
   Widget buildFloatingActionButton() {
     return Container(
       margin: EdgeInsets.only(bottom: 48.h),
@@ -3176,5 +3176,4 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
       ),
     );
   }
-
 }

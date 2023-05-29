@@ -401,20 +401,20 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height / 10,
                     child: Column(
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Bio',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-                          style: TextStyle(
+                          (about != "") ? about : "-",
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
