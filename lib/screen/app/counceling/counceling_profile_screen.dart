@@ -148,12 +148,15 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   String idReg = '';
   String about = '';
   String nickName = '';
+  String angkatan = '';
+  String nim = '';
+  String gender = '';
+  String jurusan = '';
   int role = 0;
 
   @override
   void initState() {
     getProfileData();
-
     return super.initState();
   }
 
@@ -161,62 +164,82 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     String noreg = _sharedPreference.getString('noreg').toString();
     _profileController.getProfileV2(noreg).then((value) => {
           setState(() {
+            print(value);
             profilePicture = value['data']['conselee']['profilepic_image'];
             idReg = value['data']['conselee']['register_id'];
             about = value['data']['conselee']['about'];
-            nickName = value['data']['conselee']['nickname'];
+            nickName = value['data']['conselee']['name'];
+            angkatan = value['data']['conselee']['angkatan'].toString();
+            nim = value['data']['conselee']['nim'].toString();
+            gender = value['data']['conselee']['gender'];
+            jurusan = value['data']['conselee']['jurusan'];
             role = value['data']['conselee']['role'];
           })
         });
   }
 
-  Widget appBarCustom() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
+  Widget navHeader() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 15,
+      width: double.infinity,
+      margin: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-            onPressed: () {
-              _sharedPreference.removeKey('councelor_status');
-              _sharedPreference.removeKey('councelee_status');
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const HomePage(isDarkMode: false)),
-              );
-            },
-            icon: const Icon(
-              Icons.close,
-              color: Colors.white,
+          SizedBox(
+            width: 50,
+            height: MediaQuery.of(context).size.height / 15,
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(
+                      isDarkMode: false,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.close),
             ),
           ),
-          Text(
-            'Profile',
-            style: TextStyle(
-              color: const Color.fromRGBO(255, 255, 255, 1),
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CouncelingEditProfileScreen(
-                    profilePicture: profilePicture,
-                    noReg: idReg,
-                    about: about,
-                    nickName: nickName,
-                    role: role.toString(),
+          Expanded(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 15,
+              child: const Center(
+                child: Text(
+                  'Profile Page',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            },
-            icon: const Icon(
-              Icons.edit,
-              color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: MediaQuery.of(context).size.height / 15,
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CouncelingEditProfileScreen(
+                      profilePicture: profilePicture,
+                      noReg: idReg,
+                      about: about,
+                      nickName: nickName,
+                      role: role.toString(),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.edit,
+              ),
             ),
           ),
         ],
@@ -224,449 +247,351 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     );
   }
 
-  Widget contentAvatar() {
-    return Padding(
-      padding: EdgeInsets.only(top: 120.h),
-      child: Center(
-        child: Column(
-          children: [
-            (profilePicture != "")
-                ? Container(
-                    height: 100.h,
-                    width: 100.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
+  Widget header() {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 2.2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 2,
+            offset: Offset(0, 1), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height / 4,
+            decoration: const BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 6,
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                      image: AssetImage('assets/icons/profil.png'),
+                    ),
+                  ),
+                ),
+                Text(
+                  (nim != '') ? nim : 'not found!',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      overflow: TextOverflow.ellipsis),
+                ),
+                Text(
+                  (nickName != '') ? nickName : 'Anonymous',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height / 5.5,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 10,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          const Text(
+                            'Angkatan',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (angkatan != '') ? angkatan : 'not found!',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      image: DecorationImage(
-                          image: NetworkImage(profilePicture),
-                          fit: BoxFit.cover),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 10,
+                      Column(
+                        children: [
+                          const Text(
+                            'Jurusan',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (jurusan.length > 10)
+                                ? jurusan.substring(20, 25)
+                                : 'not found!',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ],
                       ),
+                      Column(
+                        children: [
+                          const Text(
+                            'Jenis Kelamin',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            (gender == 'L') ? 'Pria' : 'Wanita',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Bio',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          (about != "") ? about : "-",
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   )
-                : Container(
-                    height: 100.h,
-                    width: 100.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/cat.png'),
-                          fit: BoxFit.cover),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 10,
-                      ),
-                    ),
-                  ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width / 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    (idReg != '') ? '#' + idReg : '00000',
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 10.h),
-                        height: 24.h,
-                        width: 24.h,
-                        child: const Icon(
-                          Icons.list,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          (nickName != '') ? nickName : 'Anonymous',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(color: Colors.grey),
-                          child: const Center(
-                            child: Text(
-                              '2017',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Beda jurusan',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 10.h),
-                        height: 20.h,
-                        width: 150.w,
-                        child: Center(
-                          child: Text(
-                            (about != '') ? about : 'Anonymous',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
-            vConsele(),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget navContent() {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 20,
+      child: const Text(
+        'Mood Tracker',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  Widget vConsele() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: SizedBox(
-        height: 250.h,
-        width: double.infinity,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            Column(
-              children: [
-                FutureBuilder<dynamic>(
-                  future: _moodTrackerController.getMoodTracker(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height / 1.2,
-                          width: double.infinity,
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CircularProgressIndicator.adaptive(
-                                backgroundColor: Colors.white,
-                              ),
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.done) {
-                        return SizedBox(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 3,
-                          child: ListView.builder(
-                            itemCount: snapshot.data.data.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: double.infinity,
-                                height: MediaQuery.of(context).size.height / 8,
-                                margin: const EdgeInsets.only(top: 5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              25,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xffC6F0F3),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20),
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          convertDateTime(snapshot
-                                              .data.data[index].createdAt),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 10),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              5,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              30,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              bottomLeft: Radius.circular(
-                                                20,
-                                              ),
-                                            ),
-                                            image: snapshot.data.data[index]
-                                                        .mood ==
-                                                    10
-                                                ? const DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/emotes/a1.png'),
-                                                  )
-                                                : snapshot.data.data[index]
-                                                            .mood ==
-                                                        7
-                                                    ? const DecorationImage(
-                                                        image: AssetImage(
-                                                            'assets/emotes/a2.png'),
-                                                      )
-                                                    : snapshot.data.data[index]
-                                                                .mood ==
-                                                            5
-                                                        ? const DecorationImage(
-                                                            image: AssetImage(
-                                                                'assets/emotes/a3.png'),
-                                                          )
-                                                        : snapshot
-                                                                    .data
-                                                                    .data[index]
-                                                                    .mood ==
-                                                                3
-                                                            ? const DecorationImage(
-                                                                image: AssetImage(
-                                                                    'assets/emotes/a4.png'),
-                                                              )
-                                                            : const DecorationImage(
-                                                                image: AssetImage(
-                                                                    'assets/emotes/a5.png'),
-                                                              ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                15,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      snapshot.data.data[index]
-                                                                  .mood ==
-                                                              10
-                                                          ? 'Senang sekali'
-                                                          : snapshot
-                                                                      .data
-                                                                      .data[
-                                                                          index]
-                                                                      .mood ==
-                                                                  7
-                                                              ? 'Percaya Diri'
-                                                              : snapshot
-                                                                          .data
-                                                                          .data[
-                                                                              index]
-                                                                          .mood ==
-                                                                      5
-                                                                  ? 'Senang'
-                                                                  : snapshot.data.data[index]
-                                                                              .mood ==
-                                                                          3
-                                                                      ? 'Kurang senang'
-                                                                      : 'Stress',
-                                                      style: TextStyle(
-                                                        color: snapshot
-                                                                    .data
-                                                                    .data[index]
-                                                                    .mood ==
-                                                                10
-                                                            ? Colors.green
-                                                            : snapshot
-                                                                        .data
-                                                                        .data[
-                                                                            index]
-                                                                        .mood ==
-                                                                    7
-                                                                ? Colors.blue
-                                                                : snapshot
-                                                                            .data
-                                                                            .data[
-                                                                                index]
-                                                                            .mood ==
-                                                                        5
-                                                                    ? Colors
-                                                                        .pink
-                                                                    : Colors
-                                                                        .red,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Text(
-                                                      convertFormatTime(snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .updatedAt),
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 10,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  snapshot
-                                                      .data.data[index].text,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height / 1.2,
-                          width: double.infinity,
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text('Data kosong'),
-                          ),
-                        );
-                      }
-                    } else {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.2,
-                        width: double.infinity,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator.adaptive(
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
+  Widget content() {
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16),
+      width: MediaQuery.of(context).size.height / 1,
+      height: MediaQuery.of(context).size.height / 4,
+      child: FutureBuilder<dynamic>(
+        future: _moodTrackerController.getMoodTracker(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                width: double.infinity,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
                 ),
+              );
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 4,
+                child: ListView.builder(
+                    itemCount: snapshot.data.data.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return contentData(
+                        index,
+                        snapshot.data.data[index].text,
+                        snapshot.data.data[index].mood.toString(),
+                        snapshot.data.data[index].emotion.toString(),
+                        convertDateTime(snapshot.data.data[index].createdAt),
+                      );
+                    }),
+              );
+            } else {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                width: double.infinity,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Text('Data kosong'),
+                ),
+              );
+            }
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.2,
+              width: double.infinity,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
 
-                // Container(
-                //   height: 30.h,
-                //   width: double.infinity,
-                //   color: const Color.fromRGBO(255, 195, 70, 1),
-                //   child: const Center(child: Text('Hari ini,13 Maret 22')),
-                // ),
-                // Container(
-                //   padding: const EdgeInsets.only(left: 5, right: 5),
-                //   height: 170.h,
-                //   width: double.infinity,
-                //   color: Colors.white,
-                //   child: ListView(
-                //     scrollDirection: Axis.vertical,
-                //     children: [
-                //       AnotherStepper(
-                //         stepperList: stepperData,
-                //         stepperDirection: Axis.vertical,
-                //         iconWidth:
-                //             25, // Height that will be applied to all the stepper icons
-                //         iconHeight:
-                //             25, // Width that will be applied to all the stepper icons
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   height: 30.h,
-                //   width: double.infinity,
-                //   color: const Color.fromRGBO(255, 195, 70, 1),
-                //   child: const Center(child: Text('Hari ini,12 Januari 22')),
-                // ),
-                // Container(
-                //   padding: const EdgeInsets.only(left: 5, right: 5),
-                //   height: 170.h,
-                //   width: double.infinity,
-                //   color: Colors.white,
-                //   child: ListView(
-                //     scrollDirection: Axis.vertical,
-                //     children: [
-                //       AnotherStepper(
-                //         stepperList: stepperData,
-                //         stepperDirection: Axis.vertical,
-                //         iconWidth:
-                //             25, // Height that will be applied to all the stepper icons
-                //         iconHeight:
-                //             25, // Width that will be applied to all the stepper icons
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
+  Widget contentData(
+    int index,
+    String text,
+    String mood,
+    String emotion,
+    String date,
+  ) {
+    return Container(
+      margin: EdgeInsets.only(left: (index == 0) ? 0 : 10),
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: MediaQuery.of(context).size.height / 4,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 2,
+            offset: Offset(0, 1), // Shadow position
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.circular(5),
             ),
-          ],
-        ),
+            child: const Icon(
+              Icons.pentagon,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            date,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            text,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -675,221 +600,21 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // _sharedPreference.removeKey('councelor_status');
-        // _sharedPreference.removeKey('councelee_status');
-        // // Navigator.pop(context);
-        // Navigator.pop(context);
         return false;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   toolbarHeight: 75.h,
-        //   automaticallyImplyLeading: false,
-        //   leading: GestureDetector(
-        //     onTap: () {
-        //       _sharedPreference.removeKey('councelor_status');
-        //       _sharedPreference.removeKey('councelee_status');
-        //       Navigator.pop(context);
-        //       Navigator.pop(context);
-        //     },
-        //     child: const Icon(
-        //       Icons.close,
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        //   flexibleSpace: Container(
-        //     decoration: const BoxDecoration(
-        //       gradient: LinearGradient(
-        //         colors: [
-        //           Color.fromRGBO(0, 171, 233, 1),
-        //           Color.fromRGBO(6, 146, 196, 1),
-        //         ],
-        //         begin: Alignment.centerRight,
-        //         end: Alignment.centerLeft,
-        //       ),
-        //     ),
-        //     child: Column(
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Container(
-        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
-        //               child: Text(
-        //                 'Profile',
-        //                 style: TextStyle(
-        //                   color: const Color.fromRGBO(255, 255, 255, 1),
-        //                   fontSize: 18.sp,
-        //                   fontWeight: FontWeight.w600,
-        //                 ),
-        //               ),
-        //             ),
-        //             Container(
-        //               margin: EdgeInsets.only(left: 46.w, top: 44.h),
-        //               child: IconButton(
-        //                 onPressed: () {
-        //                   Navigator.push(
-        //                     context,
-        //                     MaterialPageRoute(
-        //                       builder: (context) => CouncelingEditProfileScreen(
-        //                         profilePicture: profilePicture,
-        //                         noReg: idReg,
-        //                         about: about,
-        //                         nickName: nickName,
-        //                         role: role.toString(),
-        //                       ),
-        //                     ),
-        //                   );
-        //                 },
-        //                 icon: const Icon(
-        //                   Icons.edit,
-        //                   color: Colors.white,
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        body: Stack(
-          children: [
-            Container(
-              color: const Color.fromRGBO(0, 171, 233, 1),
-            ),
-            buildHeader(),
-            // buildProfileFace(),
-            appBarCustom(),
-            contentAvatar(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              navHeader(),
+              header(),
+              navContent(),
+              content(),
+            ],
+          ),
         ),
         floatingActionButton: buildFloatingActionButton(),
       ),
-    );
-  }
-
-  // void loadData() {
-  //   String nim = _sharedPreference.getString('nim').toString();
-  // String username = _sharedPreference.getString('username').toString();
-
-  //   Future(
-  //     () => _authController.getProfile(nim).then(
-  //           (value) => log(
-  //             value.toString(),
-  //           ),
-  //         ),
-  //   );
-  // }
-
-  Widget buildHeader() {
-    return Column(
-      children: [
-        Container(
-          color: const Color.fromRGBO(0, 171, 233, 1),
-          width: 1.sw,
-          height: MediaQuery.of(context).size.height / 9,
-        ),
-        Container(
-          color: const Color.fromRGBO(255, 195, 70, 1),
-          width: 1.sw,
-          height: MediaQuery.of(context).size.height / 5,
-        ),
-        Container(
-          color: Colors.white,
-          width: 1.sw,
-          height: MediaQuery.of(context).size.height / 5,
-        ),
-      ],
-    );
-  }
-
-  Widget buildProfileFace() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Center(
-          child: Container(
-            width: 125.w,
-            margin: EdgeInsets.only(right: 24.w, top: 42.h),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.black,
-                width: 0.5.w,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  blurRadius: 8.r,
-                  offset: const Offset(3, 2),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(8.w),
-              child: Image.asset('assets/images/cat.png'),
-            ),
-          ),
-        ),
-        SizedBox(height: 24.h),
-        Text(
-          (nickName != '') ? nickName : 'Anonymous',
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(4.w),
-              child: Text(
-                '2018',
-                style: TextStyle(
-                  backgroundColor: Colors.grey.withOpacity(0.4),
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4.w),
-              child: Text(
-                'Satu Jurusan',
-                style: TextStyle(
-                  backgroundColor: Colors.grey.withOpacity(0.4),
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          'BIO Example Text...',
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        SizedBox(height: 44.h),
-        Text(
-          'Jan 2022',
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
     );
   }
 
