@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -33,30 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'Login');
 
   bool isLoading = false;
-
-  // void _showDialogLogin() {
-  //   alertMessage = widget.alertMessage;
-  //   _forgotPasswordLink = widget.forgotPassLink;
-
-  //   if (alertMessage != '') {
-  //     Future.delayed(const Duration(milliseconds: 500), () {
-  //       final text = alertMessage;
-
-  //       // log(alertMessage.toString(), name: 'Alert');
-
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: Center(child: Text(text!)),
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //         ),
-  //       );
-  //       alertMessage = null;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -286,8 +264,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                             );
                                           }
 
+                                          _sharedPreference.putString(
+                                            'nickname',
+                                            value.auth.user.nickname,
+                                          );
+
+                                          log(
+                                            '${value.auth.user.nickname}',
+                                            name: 'nickname',
+                                          );
+
                                           _sharedPreference.putInt(
-                                              'isLogin', 1);
+                                            'isLogin',
+                                            1,
+                                          );
+
+                                          _sharedPreference.putString(
+                                            'nickname',
+                                            value.auth.user.nickname,
+                                          );
 
                                           Get.off(
                                             () => const HomePage(

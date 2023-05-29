@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -15,8 +14,6 @@ import 'package:itb_ganecare/models/link_data.dart';
 import 'package:itb_ganecare/repositories/app_data_repository.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/beasiswa_screen.dart';
 import 'package:itb_ganecare/screen/app/beasiswa/detail_beasiswa_screen.dart';
-import 'package:itb_ganecare/screen/app/counceling/councelee/councelee_sebaya_screen.dart';
-import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_sebaya_screen.dart';
 import 'package:itb_ganecare/screen/app/jadwal/jadwal_screen.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_beasiswa.dart';
 import 'package:itb_ganecare/screen/app/mainpage/main_page_councelee.dart';
@@ -257,7 +254,9 @@ class _WorldThemeState extends State<WorldTheme> {
                     children: [
                       buildHomeBody(context),
                       SizedBox(height: 16.h),
-                      buildQuickHelp(context),
+                      _sharedPreference.checkKey('councelor_id')
+                          ? buildQuickHelp(context)
+                          : Container(),
                       SizedBox(height: 16.h),
                       buildPrestasi(context),
                       SizedBox(height: 16.h),
@@ -412,8 +411,9 @@ class _WorldThemeState extends State<WorldTheme> {
                                                       ),
                                                       style: ElevatedButton
                                                           .styleFrom(
-                                                        primary: const Color
-                                                            .fromRGBO(
+                                                        backgroundColor:
+                                                            const Color
+                                                                .fromRGBO(
                                                           253,
                                                           143,
                                                           1,
@@ -451,9 +451,10 @@ class _WorldThemeState extends State<WorldTheme> {
                                                       ),
                                                       style: ElevatedButton
                                                           .styleFrom(
-                                                        primary: const Color
-                                                                .fromRGBO(
-                                                            253, 143, 1, 1),
+                                                        backgroundColor:
+                                                            const Color
+                                                                    .fromRGBO(
+                                                                253, 143, 1, 1),
                                                         shape:
                                                             RoundedRectangleBorder(
                                                           borderRadius:
@@ -534,7 +535,7 @@ class _WorldThemeState extends State<WorldTheme> {
                                                     ),
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                      primary:
+                                                      backgroundColor:
                                                           const Color.fromRGBO(
                                                         253,
                                                         143,
@@ -742,7 +743,14 @@ class _WorldThemeState extends State<WorldTheme> {
                                   margin: EdgeInsets.symmetric(horizontal: 8.w),
                                   child: Center(
                                     child: Text(
-                                      snapshot.data.data[index].anonymousName,
+                                      _sharedPreference
+                                              .getString('nickname')
+                                              .toString()
+                                              .contains('Konselee')
+                                          ? _sharedPreference
+                                              .getString('nickname')
+                                              .toString()
+                                          : 'Konselee',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -879,7 +887,7 @@ class _WorldThemeState extends State<WorldTheme> {
                             );
                           },
                           child: Container(
-                            margin: EdgeInsets.only(left: 10),
+                            margin: const EdgeInsets.only(left: 10),
                             width: MediaQuery.of(context).size.width / 1.5,
                             height: MediaQuery.of(context).size.height / 20,
                             decoration: BoxDecoration(
@@ -888,7 +896,7 @@ class _WorldThemeState extends State<WorldTheme> {
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
-                                  offset: Offset(2, 2), // Shadow position
+                                  offset: const Offset(2, 2), // Shadow position
                                 ),
                               ],
                             ),
@@ -897,7 +905,7 @@ class _WorldThemeState extends State<WorldTheme> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(20),
                                       topRight: Radius.circular(20),
                                     ),
@@ -1294,6 +1302,7 @@ class _WorldThemeState extends State<WorldTheme> {
       ),
     );
   }
+
   // Widget buildScholarshipNews(BuildContext context) {
   //   String nim = _sharedPreference.getString('nim').toString();
 

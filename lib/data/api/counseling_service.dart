@@ -43,9 +43,9 @@ class CounselingService extends CounselingRepo {
 
   @override
   Future<Either<Failed, PostCounselor>> postPeerCounselor(
-    String jurusan,
-    String angkatan,
-    String gender,
+    String? jurusan,
+    String? angkatan,
+    String? gender,
   ) async {
     Failed failure;
 

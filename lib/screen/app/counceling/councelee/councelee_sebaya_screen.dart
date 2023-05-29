@@ -168,7 +168,12 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
                     ),
                     Container(
                       child: Text(
-                        '${_sharedPreference.getString('username')}',
+                        _sharedPreference
+                                .getString('nickname')
+                                .toString()
+                                .contains('Konselee')
+                            ? _sharedPreference.getString('nickname').toString()
+                            : 'Konselee',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,

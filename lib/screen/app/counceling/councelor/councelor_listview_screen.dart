@@ -90,7 +90,12 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                     ),
                     Container(
                       child: Text(
-                        _sharedPreference.getString('username').toString(),
+                        _sharedPreference
+                                .getString('nickname')
+                                .toString()
+                                .contains('Konselor')
+                            ? _sharedPreference.getString('nickname').toString()
+                            : 'Konselor',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.sp,
@@ -149,7 +154,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('assets/images/cat.png'),
                               ),

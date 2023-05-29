@@ -31,9 +31,9 @@ class CounselingController {
   }
 
   Future postPeerCounselor(
-    String jurusan,
-    String angkatan,
-    String gender,
+    String? jurusan,
+    String? angkatan,
+    String? gender,
   ) async {
     var res;
 

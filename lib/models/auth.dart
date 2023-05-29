@@ -156,86 +156,6 @@ class TokenListener {
   Map<String, dynamic> toJson() => {'token': token};
 }
 
-// class User {
-//   User({
-//     required this.email,
-//     required this.inaId,
-//     required this.name,
-//     required this.affiliation,
-//     required this.nim,
-//     required this.deviceId,
-//     required this.gender,
-//     required this.jurusan,
-//     required this.angkatan,
-//     required this.nickname,
-//     required this.role,
-//     required this.description,
-//     required this.profilepicImage,
-//     required this.mahasiswaCount,
-//     required this.updatedAt,
-//     required this.createdAt,
-//     required this.id,
-//   });
-
-//   int id;
-//   int inaId;
-//   String deviceId;
-//   String name;
-//   String nickname;
-//   String email;
-//   int role;
-//   String affiliation;
-//   String description;
-//   String profilepicImage;
-//   DateTime createdAt;
-//   DateTime updatedAt;
-//   int mahasiswaCount;
-//   String jurusan;
-//   int angkatan;
-//   String gender;
-//   int nim;
-
-//   factory User.fromJson(Map<String, dynamic> json) => User(
-//         email: json['email'],
-//         inaId: json['ina_id'],
-//         name: json['name'],
-//         affiliation: json['affiliation'],
-//         nim: json['nim'],
-//         deviceId: json['device_id'],
-//         gender: json['gender'],
-//         jurusan: json['jurusan'],
-//         angkatan: json['angkatan'],
-//         nickname: json['nickname'],
-//         role: json['role'],
-//         description: json['description'],
-//         profilepicImage: json['profilepic_image'],
-//         mahasiswaCount: json['mahasiswa_count'],
-//         updatedAt: DateTime.parse(json['updated_at']),
-//         createdAt: DateTime.parse(json['created_at']),
-//         id: json['id'],
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         'email': email,
-//         'ina_id': inaId,
-//         'name': name,
-//         'affiliation': affiliation,
-//         'nim': nim,
-//         'device_id': deviceId,
-//         'gender': gender,
-//         'jurusan': jurusan,
-//         'angkatan': angkatan,
-//         'nickname': nickname,
-//         'role': role,
-//         'description': description,
-//         'profilepic_image': profilepicImage,
-//         'mahasiswa_count': mahasiswaCount,
-//         'updated_at': updatedAt.toIso8601String(),
-//         'created_at': createdAt.toIso8601String(),
-//         'id': id,
-//       };
-// }
-
 class UserCounselor {
   UserCounselor({
     required this.id,
@@ -461,6 +381,11 @@ class UserGroup {
         'conselee': conselee,
         'conselor': conselor,
       };
+
+  @override
+  String toString() {
+    return 'UserGroup{conselee: $conselee, conselor: $conselor}';
+  }
 }
 
 ProfileId profileIdFromJson(String str) => ProfileId.fromJson(json.decode(str));
