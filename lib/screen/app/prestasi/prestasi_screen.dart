@@ -14,6 +14,168 @@ class PrestasiScreen extends StatefulWidget {
 class _PrestasiScreenState extends State<PrestasiScreen> {
   final PrestasiController _prestasiController = Get.find();
 
+  Widget headerPrestasi() {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 10,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            height: MediaQuery.of(context).size.height / 10,
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Expanded(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 10,
+              child: const Center(
+                child: Text(
+                  'Daftar Prestasi',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 60,
+            height: MediaQuery.of(context).size.height / 10,
+            child: IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: CustomSearchDelegate());
+              },
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardPrestasi(
+    String image,
+    String title,
+    String subtitle,
+    String id,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 5,
+          right: 5,
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 70,
+              width: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  10,
+                ),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    image,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
+                height: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailPrestasi(idPenghargaan: id),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget getDataPrestasi(BuildContext context) {
     return Column(
       children: [
@@ -23,7 +185,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
             if (snapshot.hasData) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.2,
+                  height: MediaQuery.of(context).size.height / 1,
                   width: double.infinity,
                   child: const Align(
                     alignment: Alignment.center,
@@ -43,72 +205,27 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                        ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailPrestasi(
-                                  idPenghargaan:
-                                      snapshot.data.data[index].idPenghargaan,
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => DetailPrestasi(
+                            //       idPenghargaan:
+                            //           snapshot.data.data[index].idPenghargaan,
+                            //     ),
+                            //   ),
+                            // );
                           },
-                          child: Card(
-                            child: ListTile(
-                              leading: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      snapshot.data.data[index].fotoKegiatan,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                snapshot.data.data[index].namaPenghargaan,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    snapshot.data.data[index].eventPenghargaan,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                        color: Colors.blue,
-                                        size: 10,
-                                      ),
-                                      Text(
-                                        snapshot
-                                            .data.data[index].tahunPerolehan,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              isThreeLine: true,
-                            ),
+                          child: cardPrestasi(
+                            snapshot.data.data[index].fotoKegiatan,
+                            snapshot.data.data[index].namaPenghargaan,
+                            snapshot.data.data[index].eventPenghargaan,
+                            snapshot.data.data[index].idPenghargaan,
                           ),
                         ),
                       );
@@ -117,7 +234,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                 );
               } else {
                 return SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.2,
+                  height: MediaQuery.of(context).size.height / 1,
                   width: double.infinity,
                   child: const Align(
                     alignment: Alignment.center,
@@ -127,7 +244,7 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
               }
             } else {
               return SizedBox(
-                height: MediaQuery.of(context).size.height / 1.2,
+                height: MediaQuery.of(context).size.height / 1,
                 width: double.infinity,
                 child: const Align(
                   alignment: Alignment.center,
@@ -147,30 +264,11 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-        title: const Center(child: Text('Daftar Prestasi')),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showSearch(context: context, delegate: CustomSearchDelegate());
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              headerPrestasi(),
               getDataPrestasi(context),
             ],
           ),
@@ -338,57 +436,101 @@ class CustomSearchDelegate extends SearchDelegate {
                               //   ),
                               // );
                             },
-                            child: Card(
-                              child: ListTile(
-                                leading: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                        result.fotoKegiatan,
-                                      ),
-                                    ),
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 10),
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height / 8,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: const Offset(
+                                        0, 1), // changes position of shadow
                                   ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
                                 ),
-                                title: Text(
-                                  result.namaPenghargaan,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Text(
-                                      result.eventPenghargaan,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.blue,
-                                          size: 10,
+                                    Container(
+                                      height: 70,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          10,
                                         ),
-                                        Text(
-                                          result.tahunPerolehan,
-                                          style: const TextStyle(
-                                            fontSize: 12,
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            result.fotoKegiatan,
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                        ),
+                                        height: 50,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              result.namaPenghargaan,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              result.eventPenghargaan,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailPrestasi(
+                                                idPenghargaan: snapshot.data
+                                                    .data[index].idPenghargaan,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
-                                isThreeLine: true,
                               ),
                             ),
                           ),

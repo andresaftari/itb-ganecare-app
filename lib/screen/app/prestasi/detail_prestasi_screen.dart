@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -53,124 +54,294 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
             });
   }
 
-  Widget contentOne() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 20.h,
-        ),
-        Text(
-          (namaPrestasi != '') ? namaPrestasi : 'Data kosong',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-        (fotoKegiatan != "")
-            ? Container(
-                height: 250.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(fotoKegiatan), fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              )
-            : Container(
-                height: 250.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(20),
+  Widget headerDetailPrestasi() {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 10,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            height: MediaQuery.of(context).size.height / 10,
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Expanded(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height / 10,
+              child: const Center(
+                child: Text(
+                  'Detail Prestasi',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-      ],
+            ),
+          ),
+          SizedBox(
+            width: 60,
+            height: MediaQuery.of(context).size.height / 10,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget contentOne() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 20,
+        top: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          (fotoKegiatan != "")
+              ? Container(
+                  height: 250.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(fotoKegiatan), fit: BoxFit.cover),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                )
+              : Container(
+                  height: 250.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+        ],
+      ),
     );
   }
 
   Widget contentTwo() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20.h,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 150,
-              height: 20,
-              child: Text('Lingkup/Tingkat'),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            (namaPrestasi != "") ? namaPrestasi : '-',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
-            Expanded(
-              child: SizedBox(
-                height: 20,
-                child: Text(': $lingkup'),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          children: [
-            const SizedBox(
-              width: 150,
-              height: 20,
-              child: Text('Tanggal'),
-            ),
-            Expanded(
-              child: SizedBox(
-                height: 20,
-                child: Text(': $startDate sd $endDate'),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          children: [
-            const SizedBox(
-              width: 150,
-              height: 20,
-              child: Text('Penyelenggara'),
-            ),
-            Expanded(
-              child: SizedBox(
-                height: 30,
-                child: Text(
-                  ': $penyelenggara',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget contenThree() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 4,
+      height: MediaQuery.of(context).size.height / 2,
       width: double.infinity,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            (deskripsi != '')
-                ? Text(deskripsi)
-                : const Text('Belum terdapat deskripsi'),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ExpandablePanel(
+                theme: const ExpandableThemeData(iconColor: Colors.white),
+                header: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Lingkup/Tingkat",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                collapsed: const SizedBox(),
+                expanded: Column(
+                  children: [
+                    Text(
+                      (lingkup != "") ? lingkup : "-",
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ExpandablePanel(
+                theme: const ExpandableThemeData(iconColor: Colors.white),
+                header: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Tanggal",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                collapsed: const SizedBox(),
+                expanded: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Start Date :',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            child: Text(
+                          (startDate != "") ? startDate : "-",
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 100,
+                          child: Text(
+                            'End Date :',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            (endDate != "") ? endDate : "-",
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ExpandablePanel(
+                theme: const ExpandableThemeData(iconColor: Colors.white),
+                header: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Deksripsi",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                collapsed: const SizedBox(),
+                expanded: SizedBox(
+                  height: MediaQuery.of(context).size.height / 5,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (deskripsi != "") ? deskripsi : '-',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -178,35 +349,15 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Detail Prestasi')),
-        actions: const [
-          SizedBox(
-            width: 35,
-            height: 20,
-          )
-        ],
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
-      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                contentOne(),
-                contentTwo(),
-                contenThree(),
-              ],
-            ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              headerDetailPrestasi(),
+              contentOne(),
+              contentTwo(),
+              contenThree(),
+            ],
           ),
         ),
       ),

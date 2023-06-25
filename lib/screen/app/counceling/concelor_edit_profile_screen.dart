@@ -178,8 +178,10 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
               'Update Profile',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  // color: Colors.white,
-                  ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                // color: Colors.white,
+              ),
             ),
           ),
           const SizedBox(
@@ -277,7 +279,10 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
         ),
       );
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -293,7 +298,7 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                     initialValue: widget.noReg,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'No Reg',
                       labelStyle: const TextStyle(
@@ -302,12 +307,12 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
                   TextFormField(
                     initialValue: widget.nickName,
@@ -324,7 +329,7 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'Enter nickname',
                       labelStyle: const TextStyle(
@@ -333,12 +338,12 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
                   TextFormField(
                     initialValue: widget.about,
@@ -355,7 +360,7 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                       labelText: 'Enter about',
                       labelStyle: const TextStyle(
@@ -364,12 +369,12 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 50,
                   ),
                 ],
               ),
@@ -557,7 +562,13 @@ class _ConcelorEditProfileScreenState extends State<ConcelorEditProfileScreen> {
                           });
                         }
                       },
-                      child: const Text('Update'),
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat'),
+                      ),
                     ),
                   ),
           ],
