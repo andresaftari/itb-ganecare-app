@@ -109,11 +109,11 @@ class _CouncelingEditProfileScreenState
                             getCamera();
                             Navigator.pop(context);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.camera,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Pilih kamera',
                         ),
                       ],
@@ -125,11 +125,11 @@ class _CouncelingEditProfileScreenState
                             getImage();
                             Navigator.pop(context);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.image,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Pilih galeri',
                         ),
                       ],
