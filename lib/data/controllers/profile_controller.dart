@@ -59,7 +59,7 @@ class ProfileController {
       errorValue('failed to get profile');
     }, (r) {
       res = r;
-      print(r);
+      // log(r.toString(), name: 'profile-update');
       return r;
     });
 
@@ -77,7 +77,7 @@ class ProfileController {
       errorValue('failed to get profile');
     }, (r) {
       res = r;
-      print(r);
+      // log(r.toString(), name: 'profile-photo-update');
       return r;
     });
 

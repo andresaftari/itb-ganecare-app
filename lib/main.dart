@@ -14,7 +14,6 @@ import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/data/controllers/profile_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
-import 'package:itb_ganecare/models/jadwal_model_concelor.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
 import 'data/controllers/jadwal_conselor_controller.dart';

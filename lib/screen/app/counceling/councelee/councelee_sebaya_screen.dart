@@ -298,7 +298,7 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
             );
           } else {
             rooms = snap.data;
-            log(rooms.toString(), name: 'log-dataset');
+            // log(rooms.toString(), name: 'log-dataset');
 
             return Column(
               children: [
