@@ -22,6 +22,7 @@ import 'package:itb_ganecare/screen/app/prestasi/prestasi_screen.dart';
 import 'package:itb_ganecare/screen/auth/login_screen.dart';
 import 'package:itb_ganecare/themes/custom_themes.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../app/prestasi/detail_prestasi_screen.dart';
 
@@ -81,6 +82,918 @@ class _WorldThemeState extends State<WorldTheme> {
         });
   }
 
+  Widget headerHome() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 20,
+        bottom: 15,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height / 10,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome Back',
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                Text(
+                  _sharedPreference.getString('username').toString(),
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            (profilePicture != "")
+                ? Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 0.5.w,
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(profilePicture),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(0, 1), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget contentMenu(
+    BuildContext context,
+    int index,
+    String icon,
+    String title,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        if (index == 0) {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 10,
+                    sigmaY: 10,
+                  ),
+                  child: _sharedPreference
+                              .getString('councelor_id')
+                              .toString() !=
+                          ''
+                      ? Container(
+                          margin: EdgeInsets.only(top: 16.h),
+                          height: 300.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16.r),
+                              bottomRight: Radius.circular(16.r),
+                            ),
+                          ),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'Counceling Sebaya',
+                                    style: TextStyle(
+                                        fontSize: 16.sp,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                                SizedBox(height: 24.h),
+                                Text(
+                                  'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n'
+                                  'Data pribadi Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                  'Pendamping Sebaya maupun pengguna lain',
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.black,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                                SizedBox(height: 8.h),
+                                const Center(
+                                  child: Text(
+                                    'Masuk sebagai :',
+                                    style: TextStyle(fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                                SizedBox(height: 16.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      child: Text(
+                                        'Councelee',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.sp,
+                                            fontFamily: 'Montserrat'),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromRGBO(
+                                          253,
+                                          143,
+                                          1,
+                                          1,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16.r,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainPageCouncelee(
+                                              initialPage: 0,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    ElevatedButton(
+                                      child: Text(
+                                        'Councelor',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.sp,
+                                            fontFamily: 'Montserrat'),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromRGBO(
+                                            253, 143, 1, 1),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16.r,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainPageCouncelor(
+                                              initialPage: 0,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          margin: EdgeInsets.only(top: 16.h),
+                          height: 300.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16.r),
+                              bottomRight: Radius.circular(16.r),
+                            ),
+                          ),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'Counceling Sebaya',
+                                    style: TextStyle(
+                                        fontSize: 16.sp,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                ),
+                                SizedBox(height: 24.h),
+                                Text(
+                                  'Anda akan membuka aplikasi Pendamping Sebay yang membuat Anda masuk ke mode anonim.\n\n'
+                                  'Data pribadi Anda terkait Nama dan NIM tidak akan diketahui oleh\n'
+                                  'Pendamping Sebaya maupun pengguna lain',
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.black,
+                                      fontFamily: 'Montserrat'),
+                                ),
+                                SizedBox(height: 32.h),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'Lanjutkan',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16.sp,
+                                          fontFamily: 'Montserrat'),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromRGBO(
+                                        253,
+                                        143,
+                                        1,
+                                        1,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          16.r,
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      if (_sharedPreference
+                                                  .getString('councelee_id')
+                                                  .toString() !=
+                                              '' &&
+                                          _sharedPreference
+                                                  .getString('councelee_id') !=
+                                              null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainPageCouncelee(
+                                              initialPage: 0,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainPageCouncelor(
+                                              initialPage: 0,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                );
+              });
+        } else if (index == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainPageBeasiswa(
+                initialPage: 0,
+              ),
+            ),
+          );
+        } else if (index == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const JadwalScreen(),
+            ),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PrestasiScreen(),
+            ),
+          );
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 3,
+        height: MediaQuery.of(context).size.height / 6,
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 1,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width / 10,
+              height: MediaQuery.of(context).size.height / 15,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: AssetImage(
+                    icon,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              title,
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget menuHome() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 15,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height / 6,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 6,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Row(
+                    children: [
+                      contentMenu(context, 0, 'assets/icons/chat.png', 'Chat'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      contentMenu(
+                          context, 1, 'assets/images/beasiswa.png', 'Beasiswa'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      contentMenu(
+                          context, 2, 'assets/images/konsultasi.png', 'Jadwal'),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      contentMenu(context, 3, 'assets/images/achievement.png',
+                          'Prestasi'),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget contentPrestasi(
+    String id,
+    String title,
+    String subtitle,
+    String foto,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPrestasi(
+              idPenghargaan: id,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height / 4,
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.circular(
+            20,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 1,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 6,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    foto,
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget prestasiHome() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 15,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height / 3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Our Prestasi',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  'See all',
+                  style: GoogleFonts.poppins(
+                    color: Colors.blueAccent,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+            FutureBuilder<dynamic>(
+              future: _prestasiController.getPretasi(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data.data.length == 0) {
+                      return Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10, bottom: 10),
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height / 4,
+                          child: const Center(
+                            child: Text(
+                              'Belum terdapat pretasi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 4,
+                        child: ListView.builder(
+                          itemCount: snapshot.data.data.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  EdgeInsets.only(left: (index == 0) ? 0 : 10),
+                              child: contentPrestasi(
+                                snapshot.data.data[index].idPenghargaan,
+                                snapshot.data.data[index].namaPenghargaan,
+                                snapshot.data.data[index].eventPenghargaan,
+                                snapshot.data.data[index].fotoKegiatan,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  } else {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 10),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text('Terdapat kesalahan pada server!'),
+                      ),
+                    );
+                  }
+                } else {
+                  return Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator.adaptive(
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget contentBeasiswa(
+    String title,
+    String subtitle,
+  ) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 10,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(
+          20,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    subtitle,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 6,
+            height: MediaQuery.of(context).size.height / 8,
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.more_horiz,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget beasiswaHome() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height / 2,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Our Beasiswa',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 20,
+                    )),
+                Text('See all',
+                    style: GoogleFonts.poppins(
+                      color: Colors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    )),
+              ],
+            ),
+            FutureBuilder<dynamic>(
+              future: _beasiswaController.getBeasiswaTersedia(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      width: double.infinity,
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator.adaptive(
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.data['data'].length == 0) {
+                      return Center(
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height / 2.5,
+                          child: const Center(
+                            child: Text(
+                              'Belum terdapat beasiswa',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 3,
+                        child: ListView.builder(
+                          itemCount: snapshot.data['data'].length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  EdgeInsets.only(top: (index == 0) ? 0 : 10),
+                              child: contentBeasiswa(
+                                snapshot.data['data'][index]['nama_beasiswa'],
+                                snapshot.data['data'][index]['nama_donatur'],
+                              ),
+                            );
+                            // return Padding(
+                            //   padding: const EdgeInsets.all(2.0),
+                            //   child: GestureDetector(
+                            //     onTap: () {
+                            //       Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //           builder: (context) => DetailBeasiswa(
+                            //             namaBeasiswa: snapshot.data['data']
+                            //                 [index]['nama_beasiswa'],
+                            //             namaDonatur: snapshot.data['data']
+                            //                 [index]['nama_donatur'],
+                            //             kuota: snapshot.data['data'][index]
+                            //                 ['kuota'],
+                            //             anggaran: snapshot.data['data'][index]
+                            //                 ['anggaran'],
+                            //             awalPem: snapshot.data['data'][index]
+                            //                 ['awal_periode_pembiayaan'],
+                            //             akhirPem: snapshot.data['data'][index]
+                            //                 ['akhir_periode_pembiayaan'],
+                            //             deskripsi: snapshot.data['data'][index]
+                            //                 ['deskripsi'],
+                            //           ),
+                            //         ),
+                            //       );
+                            //     },
+                            //     child: Card(
+                            //       child: ListTile(
+                            //         title: Text(
+                            //           snapshot.data['data'][index]
+                            //               ['nama_beasiswa'],
+                            //           style: const TextStyle(
+                            //             fontSize: 14,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //         ),
+                            //         subtitle: Column(
+                            //           crossAxisAlignment:
+                            //               CrossAxisAlignment.start,
+                            //           children: [
+                            //             Text(
+                            //               snapshot.data['data'][index]
+                            //                   ['nama_donatur'],
+                            //               style: const TextStyle(
+                            //                 fontSize: 12,
+                            //               ),
+                            //             ),
+                            //             const SizedBox(
+                            //               height: 10,
+                            //             ),
+                            //             Row(
+                            //               children: [
+                            //                 const Icon(
+                            //                   Icons.calendar_today,
+                            //                   color: Colors.blue,
+                            //                   size: 10,
+                            //                 ),
+                            //                 Text(
+                            //                   snapshot.data['data'][index]
+                            //                       ['tgl_input'],
+                            //                   style: const TextStyle(
+                            //                     fontSize: 12,
+                            //                   ),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ],
+                            //         ),
+                            //         isThreeLine: true,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
+                          },
+                        ),
+                      );
+                    }
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      width: double.infinity,
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Terjadi kesalahan server!',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height / 2.5,
+                    width: double.infinity,
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator.adaptive(
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -104,172 +1017,194 @@ class _WorldThemeState extends State<WorldTheme> {
       },
       child: MaterialApp(
         theme: themeNotifier.getTheme(),
-        // initialRoute: '/homePage',
         home: Scaffold(
-          floatingActionButton: buildFloatingActionButton(),
-          appBar: AppBar(
-            elevation: 0,
-            toolbarHeight: 80.h,
-            automaticallyImplyLeading: false,
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromRGBO(0, 171, 233, 1),
-                    Color.fromRGBO(6, 146, 196, 1),
-                  ],
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Container(
+                  color: Color(0XFFD3EAFF),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                SingleChildScrollView(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        child: Text(
-                          'Selamat datang',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        margin: EdgeInsets.only(top: 40.h, left: 24.w),
-                      ),
-                      Container(
-                        child: Text(
-                          _sharedPreference.getString('username').toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        margin: EdgeInsets.only(top: 4.h, left: 24.w),
-                      ),
+                      headerHome(),
+                      menuHome(),
+                      prestasiHome(),
+                      beasiswaHome(),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.only(top: 42.h),
-                          child: Icon(
-                            Icons.notifications_rounded,
-                            color: Colors.white,
-                            size: 28.sp,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      GestureDetector(
-                        onTap: () {
-                          // Sementara untuk logout
-                          _sharedPreference.putInt('isLogin', 0);
-
-                          Get.snackbar('GaneCare', 'Logging Out');
-                          Get.to(
-                            () => LoginScreen(
-                              deviceId: deviceId,
-                              alertMessage: '',
-                              forgotPassLink: LinkData(
-                                title: 'A',
-                                description: 'B',
-                                url: 'C',
-                              ),
-                            ),
-                          );
-                        },
-                        child: (profilePicture != '')
-                            ? Container(
-                                height: 50.h,
-                                width: 44.w,
-                                margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 0.5.w,
-                                  ),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(profilePicture),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      blurRadius: 8,
-                                      offset: const Offset(3, 2),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                height: 50.h,
-                                width: 44.w,
-                                margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  image: const DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage('assets/images/cat.png'),
-                                  ),
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 0.5.w,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      blurRadius: 8,
-                                      offset: const Offset(3, 2),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          body: Stack(
-            children: [
-              _backgroundContainer(),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                child: SingleChildScrollView(
-                  primary: true,
-                  child: Column(
-                    children: [
-                      buildHomeBody(context),
-                      SizedBox(height: 16.h),
-                      _sharedPreference.checkKey('councelor_id')
-                          ? buildQuickHelp(context)
-                          : Container(),
-                      SizedBox(height: 16.h),
-                      buildPrestasi(context),
-                      SizedBox(height: 16.h),
-                      buildBeasiswa(),
-                      // buildScholarshipNews(context),
-                    ],
-                  ),
-                ),
-              ),
-              buildButtonBeasiswa(),
-            ],
-          ),
         ),
+        // initialRoute: '/homePage',
+        // home: Scaffold(
+        //   floatingActionButton: buildFloatingActionButton(),
+        //   appBar: AppBar(
+        //     elevation: 0,
+        //     toolbarHeight: 80.h,
+        //     automaticallyImplyLeading: false,
+        //     flexibleSpace: Container(
+        //       decoration: const BoxDecoration(
+        //         gradient: LinearGradient(
+        //           colors: [
+        //             Color.fromRGBO(0, 171, 233, 1),
+        //             Color.fromRGBO(6, 146, 196, 1),
+        //           ],
+        //           begin: Alignment.centerRight,
+        //           end: Alignment.centerLeft,
+        //         ),
+        //       ),
+        //       child: Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               Container(
+        //                 child: Text(
+        //                   'Selamat datang',
+        //                   style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontSize: 16.sp,
+        //                     fontWeight: FontWeight.w600,
+        //                   ),
+        //                 ),
+        //                 margin: EdgeInsets.only(top: 40.h, left: 24.w),
+        //               ),
+        //               Container(
+        //                 child: Text(
+        //                   _sharedPreference.getString('username').toString(),
+        //                   style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontSize: 14.sp,
+        //                     fontWeight: FontWeight.w600,
+        //                   ),
+        //                 ),
+        //                 margin: EdgeInsets.only(top: 4.h, left: 24.w),
+        //               ),
+        //             ],
+        //           ),
+        //           Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             crossAxisAlignment: CrossAxisAlignment.center,
+        //             children: [
+        //               GestureDetector(
+        //                 onTap: () {},
+        //                 child: Container(
+        //                   margin: EdgeInsets.only(top: 42.h),
+        //                   child: Icon(
+        //                     Icons.notifications_rounded,
+        //                     color: Colors.white,
+        //                     size: 28.sp,
+        //                   ),
+        //                 ),
+        //               ),
+        //               SizedBox(width: 8.w),
+        //               GestureDetector(
+        //                 onTap: () {
+        //                   // Sementara untuk logout
+        //                   _sharedPreference.putInt('isLogin', 0);
+
+        //                   Get.snackbar('GaneCare', 'Logging Out');
+        //                   Get.to(
+        //                     () => LoginScreen(
+        //                       deviceId: deviceId,
+        //                       alertMessage: '',
+        //                       forgotPassLink: LinkData(
+        //                         title: 'A',
+        //                         description: 'B',
+        //                         url: 'C',
+        //                       ),
+        //                     ),
+        //                   );
+        //                 },
+        //                 child: (profilePicture != '')
+        //                     ? Container(
+        //                         height: 50.h,
+        //                         width: 44.w,
+        //                         margin: EdgeInsets.only(right: 24.w, top: 32.h),
+        //                         decoration: BoxDecoration(
+        //                           color: Colors.white,
+        //                           shape: BoxShape.circle,
+        //                           border: Border.all(
+        //                             color: Colors.black,
+        //                             width: 0.5.w,
+        //                           ),
+        //                           image: DecorationImage(
+        //                             fit: BoxFit.cover,
+        //                             image: NetworkImage(profilePicture),
+        //                           ),
+        //                           boxShadow: [
+        //                             BoxShadow(
+        //                               color: Colors.black.withOpacity(0.5),
+        //                               blurRadius: 8,
+        //                               offset: const Offset(3, 2),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       )
+        //                     : Container(
+        //                         height: 50.h,
+        //                         width: 44.w,
+        //                         margin: EdgeInsets.only(right: 24.w, top: 32.h),
+        //                         decoration: BoxDecoration(
+        //                           color: Colors.white,
+        //                           shape: BoxShape.circle,
+        //                           image: const DecorationImage(
+        //                             fit: BoxFit.cover,
+        //                             image: AssetImage('assets/images/cat.png'),
+        //                           ),
+        //                           border: Border.all(
+        //                             color: Colors.black,
+        //                             width: 0.5.w,
+        //                           ),
+        //                           boxShadow: [
+        //                             BoxShadow(
+        //                               color: Colors.black.withOpacity(0.5),
+        //                               blurRadius: 8,
+        //                               offset: const Offset(3, 2),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //               ),
+        //             ],
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        //   body: Stack(
+        //     children: [
+        //       _backgroundContainer(),
+        //       Container(
+        //         margin: EdgeInsets.symmetric(horizontal: 16.w),
+        //         child: SingleChildScrollView(
+        //           primary: true,
+        //           child: Column(
+        //             children: [
+        //               buildHomeBody(context),
+        //               SizedBox(height: 16.h),
+        //               _sharedPreference.checkKey('councelor_id')
+        //                   ? buildQuickHelp(context)
+        //                   : Container(),
+        //               SizedBox(height: 16.h),
+        //               buildPrestasi(context),
+        //               SizedBox(height: 16.h),
+        //               buildBeasiswa(),
+        //               // buildScholarshipNews(context),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       buildButtonBeasiswa(),
+        //     ],
+        //   ),
+        // ),
       ),
     );
   }
@@ -1302,173 +2237,6 @@ class _WorldThemeState extends State<WorldTheme> {
       ),
     );
   }
-
-  // Widget buildScholarshipNews(BuildContext context) {
-  //   String nim = _sharedPreference.getString('nim').toString();
-
-  //   return FutureBuilder<dynamic>(
-  //     future: _homeController.postGetUserid(nim).then(
-  //           (value) => _homeController.postBeasiswa(value['user_id']),
-  //         ),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasData) {
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const CircularProgressIndicator.adaptive();
-  //         } else if (snapshot.connectionState == ConnectionState.done) {
-  //           List list = snapshot.data.content;
-
-  //           if (list.isNotEmpty) {
-  //             return Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               mainAxisAlignment: MainAxisAlignment.start,
-  //               children: [
-  //                 Container(
-  //                   child: const Text(
-  //                     'Beasiswa Terbaru',
-  //                     style: TextStyle(
-  //                       color: Colors.white,
-  //                       fontWeight: FontWeight.w500,
-  //                     ),
-  //                   ),
-  //                   margin: EdgeInsets.only(left: 16.w),
-  //                 ),
-  //                 SizedBox(height: 16.h),
-  //                 SizedBox(
-  //                   width: 1.sw,
-  //                   height: 400.h,
-  //                   child: ListView.builder(
-  //                     itemCount: 3,
-  //                     shrinkWrap: true,
-  //                     itemBuilder: ((context, index) {
-  //                       return Card(
-  //                         child: Container(
-  //                           width: 1.sw,
-  //                           height: 100.h,
-  //                           margin: EdgeInsets.symmetric(horizontal: 16.w),
-  //                           padding: EdgeInsets.all(8.w),
-  //                           child: Row(
-  //                             children: [
-  //                               Image.asset(
-  //                                 'assets/emotes/a1.png',
-  //                                 width: 32.w,
-  //                               ),
-  //                               SizedBox(width: 8.w),
-  //                               Column(
-  //                                 mainAxisAlignment: MainAxisAlignment.center,
-  //                                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                                 children: [
-  //                                   Text(
-  //                                     '${list[index].namaBeasiswa.substring(0, 25)}',
-  //                                     style: TextStyle(
-  //                                       color: Colors.black,
-  //                                       fontSize: 12.sp,
-  //                                     ),
-  //                                   ),
-  //                                   SizedBox(height: 8.h),
-  //                                   Flexible(
-  //                                     child: Text(
-  //                                       '${list[index].deskripsi.substring(0, 40)}',
-  //                                       overflow: TextOverflow.ellipsis,
-  //                                       maxLines: 2,
-  //                                       softWrap: true,
-  //                                       style: TextStyle(
-  //                                         overflow: TextOverflow.ellipsis,
-  //                                         color: Colors.black,
-  //                                         fontSize: 12.sp,
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 ],
-  //                               ),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       );
-  //                     }),
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           } else {
-  //             return Column(
-  //               mainAxisAlignment: MainAxisAlignment.start,
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Container(
-  //                   child: const Text(
-  //                     'Beasiswa Terbaru',
-  //                     style: TextStyle(
-  //                       color: Colors.white,
-  //                       fontWeight: FontWeight.w500,
-  //                     ),
-  //                   ),
-  //                   margin: EdgeInsets.only(left: 16.w),
-  //                 ),
-  //                 SizedBox(height: 16.h),
-  //                 Card(
-  //                   child: Container(
-  //                     width: 1.sw,
-  //                     height: 60.h,
-  //                     margin: EdgeInsets.symmetric(horizontal: 8.w),
-  //                     child: Center(
-  //                       child: Text(
-  //                         'Belum ada beasiswa\nyang tersedia',
-  //                         textAlign: TextAlign.center,
-  //                         style: TextStyle(
-  //                           color: Colors.black,
-  //                           fontWeight: FontWeight.w600,
-  //                           fontSize: 14.sp,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           }
-  //         } else {
-  //           return Container();
-  //         }
-  //       } else {
-  //         return Column(
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Container(
-  //               child: const Text(
-  //                 'Beasiswa Terbaru',
-  //                 style: TextStyle(
-  //                   color: Colors.white,
-  //                   fontWeight: FontWeight.w500,
-  //                 ),
-  //               ),
-  //               margin: EdgeInsets.only(left: 16.w),
-  //             ),
-  //             SizedBox(height: 16.h),
-  //             Card(
-  //               child: Container(
-  //                 width: 1.sw,
-  //                 height: 60.h,
-  //                 margin: EdgeInsets.symmetric(horizontal: 8.w),
-  //                 child: Center(
-  //                   child: Text(
-  //                     'Belum ada beasiswa\nyang tersedia',
-  //                     textAlign: TextAlign.center,
-  //                     style: TextStyle(
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.w600,
-  //                       fontSize: 14.sp,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 
   Widget buildFloatingActionButton() {
     String nim = _sharedPreference.getString('nim').toString();

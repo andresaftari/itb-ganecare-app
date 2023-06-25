@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../data/controllers/prestasi_controller.dart';
 
@@ -87,13 +88,13 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
           Expanded(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 10,
-              child: const Center(
+              child: Center(
                 child: Text(
                   'Detail Prestasi',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.poppins(
                     color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -156,7 +157,8 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
             (namaPrestasi != "") ? namaPrestasi : '-',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: GoogleFonts.poppins(
+              color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -185,18 +187,19 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                 theme: const ExpandableThemeData(iconColor: Colors.white),
                 header: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       "Lingkup/Tingkat",
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -206,8 +209,10 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                   children: [
                     Text(
                       (lingkup != "") ? lingkup : "-",
-                      style: const TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],
@@ -227,18 +232,19 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                 theme: const ExpandableThemeData(iconColor: Colors.white),
                 header: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       "Tanggal",
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -248,40 +254,48 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                   children: [
                     Row(
                       children: [
-                        const SizedBox(
+                        SizedBox(
                           width: 100,
                           child: Text(
                             'Start Date :',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
                         Expanded(
                             child: Text(
                           (startDate != "") ? startDate : "-",
-                          style: const TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
                           ),
                         )),
                       ],
                     ),
                     Row(
                       children: [
-                        const SizedBox(
+                        SizedBox(
                           width: 100,
                           child: Text(
                             'End Date :',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             (endDate != "") ? endDate : "-",
-                            style: const TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
@@ -304,34 +318,36 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                 theme: const ExpandableThemeData(iconColor: Colors.white),
                 header: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       "Deksripsi",
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
                 ),
                 collapsed: const SizedBox(),
-                expanded: SizedBox(
-                  height: MediaQuery.of(context).size.height / 5,
+                expanded: Padding(
+                  padding: const EdgeInsets.all(0),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           (deskripsi != "") ? deskripsi : '-',
-                          style: const TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
                           ),
                         ),
                       ],

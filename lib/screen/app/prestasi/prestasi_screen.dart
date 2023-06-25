@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
 import 'package:itb_ganecare/models/prestasi_model.dart';
 import 'package:itb_ganecare/screen/app/prestasi/detail_prestasi_screen.dart';
@@ -47,15 +48,13 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
           Expanded(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 10,
-              child: const Center(
-                child: Text(
-                  'Daftar Prestasi',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+              child: Center(
+                child: Text('Daftar Prestasi',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    )),
               ),
             ),
           ),
@@ -134,18 +133,18 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     Text(
                       subtitle,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: GoogleFonts.poppins(
+                        fontSize: 10,
                       ),
                     ),
                   ],
