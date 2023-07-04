@@ -403,38 +403,3 @@ class _CouncelingChatScreenState extends State<CouncelingChatScreen> {
     });
   }
 }
-
-class ConversationList extends StatefulWidget {
-  final String name;
-  final String messageText;
-  final String time;
-  final bool isMessageRead;
-
-  const ConversationList({
-    Key? key,
-    required this.name,
-    required this.messageText,
-    required this.time,
-    required this.isMessageRead,
-  }) : super(key: key);
-
-  @override
-  State<ConversationList> createState() => _ConversationListState();
-}
-
-class _ConversationListState extends State<ConversationList> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.only(
-          left: 16.w,
-          right: 16.w,
-          top: 8.h,
-          bottom: 8.h,
-        ),
-      ),
-    );
-  }
-}
