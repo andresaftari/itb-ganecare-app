@@ -82,6 +82,80 @@ class _WorldThemeState extends State<WorldTheme> {
         });
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Logout Aplikasi',
+            style: GoogleFonts.poppins(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Apakah anda yakin keluar aplikasi Ganecare?',
+                  style: GoogleFonts.poppins(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Ya',
+                style: GoogleFonts.poppins(
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Sementara untuk logout
+                _sharedPreference.putInt('isLogin', 0);
+
+                Get.snackbar('GaneCare', 'Logging Out');
+                Get.to(
+                  () => LoginScreen(
+                    deviceId: deviceId,
+                    alertMessage: '',
+                    forgotPassLink: LinkData(
+                      title: 'A',
+                      description: 'B',
+                      url: 'C',
+                    ),
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Tidak',
+                style: GoogleFonts.poppins(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget headerHome() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -117,36 +191,46 @@ class _WorldThemeState extends State<WorldTheme> {
               ],
             ),
             (profilePicture != "")
-                ? Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 0.5.w,
-                      ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(profilePicture),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 1), // changes position of shadow
+                ? GestureDetector(
+                    onTap: () {
+                      _showMyDialog();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 0.5.w,
                         ),
-                      ],
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(profilePicture),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: Offset(0, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
                     ),
                   )
-                : Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(100),
+                : GestureDetector(
+                    onTap: () {
+                      _showMyDialog();
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
                     ),
                   )
           ],
@@ -529,7 +613,7 @@ class _WorldThemeState extends State<WorldTheme> {
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 2,
-        height: MediaQuery.of(context).size.height / 4,
+        height: MediaQuery.of(context).size.height / 3,
         decoration: BoxDecoration(
           color: Colors.blueAccent,
           borderRadius: BorderRadius.circular(
@@ -550,7 +634,7 @@ class _WorldThemeState extends State<WorldTheme> {
           children: [
             Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 6,
+              height: MediaQuery.of(context).size.height / 5,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -565,7 +649,7 @@ class _WorldThemeState extends State<WorldTheme> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -610,7 +694,7 @@ class _WorldThemeState extends State<WorldTheme> {
       ),
       child: SizedBox(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height / 3,
+        height: MediaQuery.of(context).size.height / 2.5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -677,7 +761,7 @@ class _WorldThemeState extends State<WorldTheme> {
                       return Container(
                         margin: const EdgeInsets.only(top: 10, bottom: 10),
                         width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 4,
+                        height: MediaQuery.of(context).size.height / 3.5,
                         child: ListView.builder(
                           itemCount: snapshot.data.data.length,
                           shrinkWrap: true,

@@ -152,7 +152,7 @@ class _BeasiswaTersediaScreenState extends State<BeasiswaTersediaScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height / 8,
+            top: MediaQuery.of(context).size.height / 6,
           ),
           child: Column(
             children: [

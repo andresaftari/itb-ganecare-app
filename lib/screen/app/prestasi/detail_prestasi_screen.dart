@@ -170,7 +170,7 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
 
   Widget contenThree() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 2,
+      height: MediaQuery.of(context).size.height / 1.5,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +327,7 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 12,
-                        fontWeight: FontWeight.w300,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(
@@ -344,6 +344,8 @@ class _DetailPrestasiState extends State<DetailPrestasi> {
                       children: [
                         Text(
                           (deskripsi != "") ? deskripsi : '-',
+                          // overflow: TextOverflow.ellipsis,
+                          // maxLines: 3,
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 12,

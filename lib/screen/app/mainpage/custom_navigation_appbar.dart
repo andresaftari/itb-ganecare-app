@@ -13,7 +13,7 @@ class CustomAppbarNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        height: MediaQuery.of(context).size.height / 8,
+        height: MediaQuery.of(context).size.height / 6,
         width: double.infinity,
         margin: EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
