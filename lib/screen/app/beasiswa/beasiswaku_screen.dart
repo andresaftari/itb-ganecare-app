@@ -153,7 +153,7 @@ class _BeasiswakuScreenState extends State<BeasiswakuScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height / 8,
+            top: MediaQuery.of(context).size.height / 6,
           ),
           child: Column(
             children: [

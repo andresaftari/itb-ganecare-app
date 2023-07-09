@@ -2905,7 +2905,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
     return Container(
       margin: const EdgeInsets.all(20),
       width: double.infinity,
-      height: MediaQuery.of(context).size.height / 2.2,
+      height: MediaQuery.of(context).size.height / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
@@ -2965,7 +2965,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
           ),
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 5.5,
+            height: MediaQuery.of(context).size.height / 4.5,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
@@ -3142,7 +3142,7 @@ class _CouncelorProfileScreenState extends State<CouncelorProfileScreen> {
             ],
           ),
         ),
-        floatingActionButton: buildFloatingActionButton(),
+        // floatingActionButton: buildFloatingActionButton(),
       ),
     );
   }

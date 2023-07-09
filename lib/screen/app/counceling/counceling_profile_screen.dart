@@ -251,7 +251,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     return Container(
       margin: const EdgeInsets.all(20),
       width: double.infinity,
-      height: MediaQuery.of(context).size.height / 2.2,
+      height: MediaQuery.of(context).size.height / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
@@ -311,7 +311,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           ),
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 5.5,
+            height: MediaQuery.of(context).size.height / 4.5,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
@@ -449,9 +449,9 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
 
   Widget content() {
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 100),
       width: MediaQuery.of(context).size.height / 1,
-      height: MediaQuery.of(context).size.height / 4,
+      height: MediaQuery.of(context).size.height / 3,
       child: FutureBuilder<dynamic>(
         future: _moodTrackerController.getMoodTracker(),
         builder: (context, snapshot) {
@@ -473,18 +473,28 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
             } else if (snapshot.connectionState == ConnectionState.done) {
               return SizedBox(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 4,
+                height: MediaQuery.of(context).size.height / 3,
                 child: ListView.builder(
                     itemCount: snapshot.data.data.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
+                      int reversedIndex =
+                          snapshot.data.data.length - 1 - index;
                       return contentData(
-                        index,
-                        snapshot.data.data[index].text,
-                        snapshot.data.data[index].mood.toString(),
-                        snapshot.data.data[index].emotion.toString(),
-                        convertDateTime(snapshot.data.data[index].createdAt),
+                        reversedIndex,
+                        snapshot.data.data[reversedIndex].text,
+                        snapshot.data.data[reversedIndex].mood.toString(),
+                        snapshot.data.data[reversedIndex].emotion.toString(),
+                        convertDateTime(
+                            snapshot.data.data[reversedIndex].createdAt),
                       );
+                      // return contentData(
+                      //   index,
+                      //   snapshot.data.data[index].text,
+                      //   snapshot.data.data[index].mood.toString(),
+                      //   snapshot.data.data[index].emotion.toString(),
+                      //   convertDateTime(snapshot.data.data[index].createdAt),
+                      // );
                     }),
               );
             } else {
@@ -525,9 +535,13 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
     String date,
   ) {
     return Container(
-      margin: EdgeInsets.only(left: (index == 0) ? 0 : 10),
+      margin: EdgeInsets.only(
+        left: (index == 0) ? 5 : 10,
+        top: 5,
+        bottom: 5,
+      ),
       width: MediaQuery.of(context).size.width / 2.5,
-      height: MediaQuery.of(context).size.height / 4,
+      height: MediaQuery.of(context).size.height / 3,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -572,6 +586,8 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           ),
           Text(
             text,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.black,
               fontSize: 12,
@@ -583,7 +599,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           ),
           Text(
             text,
-            maxLines: 3,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.black,
@@ -620,7 +636,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
 
   Widget buildFloatingActionButton() {
     return Container(
-      margin: EdgeInsets.only(bottom: 55.h),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 7),
       child: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet<void>(
