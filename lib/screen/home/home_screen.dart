@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:itb_ganecare/data/controllers/auth_controller.dart';
 import 'package:itb_ganecare/data/controllers/beasiswa_controller.dart';
 import 'package:itb_ganecare/data/controllers/home_controller.dart';
 import 'package:itb_ganecare/data/controllers/prestasi_controller.dart';
@@ -58,6 +59,8 @@ class _WorldThemeState extends State<WorldTheme> {
   final ProfileController _profileController = Get.find();
   final BeasiswaController _beasiswaController = Get.find();
   final PrestasiController _prestasiController = Get.find();
+  final AuthController _authController = Get.find();
+
   final SharedPrefUtils _sharedPreference = SharedPrefUtils();
 
   late Map<String, dynamic> _deviceData = <String, dynamic>{'id': ''};
@@ -123,8 +126,10 @@ class _WorldThemeState extends State<WorldTheme> {
                 Navigator.of(context).pop();
                 // Sementara untuk logout
                 _sharedPreference.putInt('isLogin', 0);
+                _authController.azureLogout();
 
                 Get.snackbar('GaneCare', 'Logging Out');
+
                 Get.to(
                   () => LoginScreen(
                     deviceId: deviceId,

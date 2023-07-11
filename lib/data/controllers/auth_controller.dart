@@ -8,11 +8,6 @@ import 'package:itb_ganecare/data/api/auth_service.dart';
 import 'package:itb_ganecare/main.dart';
 
 class AuthController {
-  final AuthService _authService = AuthService(Dio());
-
-  RxBool hasError = false.obs;
-  RxString errorValue = ''.obs;
-
   static final Config config = Config(
     tenant: 'db6e1183-4c65-405c-82ce-7cd53fa6e9dc',
     clientId: '91c3fb03-924e-4446-ad6f-06ab9f1ab372',
@@ -22,10 +17,17 @@ class AuthController {
     navigatorKey: navigatorKey,
   );
 
+  final AuthService _authService = AuthService(Dio());
+  final AadOAuth oauth = AadOAuth(config);
+
+  RxBool hasError = false.obs;
+  RxString errorValue = ''.obs;
+
+  Future azureLogout() async => await oauth.logout();
+
   Future azureLogin() async {
     var res;
 
-    final AadOAuth oauth = AadOAuth(config);
     final result = await oauth.login();
 
     result.fold((l) {
