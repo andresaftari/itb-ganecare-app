@@ -28,3 +28,10 @@ const String peerConseleeUrl_ = '/api/v1/dashboard/get_counselee';
 
 // CHAT
 const String endChatUrl_ = '/api/v1/chat/end_chat';
+
+
+// Dummy:
+// user : dummy.mhs.ditmawa@mahasiswa.itb.ac.id
+// user : dummy.mhs1.ditmawa@mahasiswa.itb.ac.id
+// user : dummy.mhs2.ditmawa@mahasiswa.itb.ac.id
+// pass : ITBitb2023!

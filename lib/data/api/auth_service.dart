@@ -1,15 +1,27 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:itb_ganecare/data/endpoint.dart';
 import 'package:itb_ganecare/data/failed.dart';
 import 'package:itb_ganecare/data/repo/auth_repo.dart';
 import 'package:itb_ganecare/models/auth.dart';
-import 'package:itb_ganecare/data/endpoint.dart';
 
 class AuthService extends AuthRepository {
-  final Dio _dio;
+  // {
+  //   "client_id" : "91c3fb03-924e-4446-ad6f-06ab9f1ab372",
+  //   "authorization_user_agent" : "DEFAULT",
+  //   "redirect_uri" : "msauth://com.GaneCare.itb_ganecare/CBdt1odkmieyoqRQEYgAIwitlqQ%3D",
+  //   "authorities" : [
+  //     {
+  //       "type": "AAD",
+  //       "audience": {
+  //         "type": "AzureADMyOrg",
+  //         "tenant_id": "db6e1183-4c65-405c-82ce-7cd53fa6e9dc"
+  //       }
+  //     }
+  //   ]
+  // }
 
+  final Dio _dio;
   AuthService(this._dio);
 
   @override
@@ -30,10 +42,12 @@ class AuthService extends AuthRepository {
     );
 
     try {
-      final response = await _dio.postUri(
-        Uri.http(kemahasiswaanBaseUrl_, loginUrl_),
-        data: formData,
-      ).timeout(const Duration(minutes: 1));
+      final response = await _dio
+          .postUri(
+            Uri.http(kemahasiswaanBaseUrl_, loginUrl_),
+            data: formData,
+          )
+          .timeout(const Duration(minutes: 1));
 
       if (response.statusCode == 200) {
         // log('${response.data}', name: 'post-login');

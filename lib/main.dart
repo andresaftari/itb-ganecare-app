@@ -17,6 +17,7 @@ import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/screen/splash_screen.dart';
 
 import 'data/controllers/jadwal_conselor_controller.dart';
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,11 +67,12 @@ class MyApp extends StatelessWidget {
 
     return ScreenUtilInit(
       builder: (context) {
-        return const GetMaterialApp(
+        return GetMaterialApp(
           // initialBinding: ,
+          navigatorKey: navigatorKey,
           title: 'ITB Wellbeing apps',
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(),
+          home: const SplashScreen(),
         );
       },
     );

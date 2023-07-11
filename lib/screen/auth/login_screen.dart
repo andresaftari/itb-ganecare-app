@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -178,127 +176,144 @@ class _LoginScreenState extends State<LoginScreen> {
                                       setState(() {
                                         isLoading = true;
                                       });
+
+                                      // DEBUGGING AZURE LOGIN
                                       _authController
-                                          .postLogin(
-                                        username,
-                                        password,
-                                        widget.deviceId,
-                                      )
+                                          .azureLogin()
                                           .then((value) {
-                                        if (value.statusCode == 200) {
-                                          _sharedPreference.putString(
-                                            'username',
+                                        if (value.accessToken != null &&
+                                            value.accessToken != '') {
+                                          _authController
+                                              .postLogin(
                                             username,
-                                          );
+                                            password,
+                                            widget.deviceId,
+                                          )
+                                              .then((value) {
+                                            if (value.statusCode == 200) {
+                                              _sharedPreference.putString(
+                                                'username',
+                                                username,
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'name',
-                                            value.data.name,
-                                          );
+                                              _sharedPreference.putString(
+                                                'name',
+                                                value.data.name,
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'nim',
-                                            value.data.nim,
-                                          );
-                                          _sharedPreference.putString(
-                                            'noreg',
-                                            value.data.id,
-                                          );
+                                              _sharedPreference.putString(
+                                                'nim',
+                                                value.data.nim,
+                                              );
+                                              _sharedPreference.putString(
+                                                'noreg',
+                                                value.data.id,
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'token_user',
-                                            value.auth.tokenMahasiswa.token,
-                                          );
+                                              _sharedPreference.putString(
+                                                'token_user',
+                                                value.auth.tokenMahasiswa.token,
+                                              );
 
-                                          _sharedPreference.putInt(
-                                            'angkatan',
-                                            value.auth.user?.angkatan ??
-                                                value.auth.counselor?.angkatan,
-                                          );
+                                              _sharedPreference.putInt(
+                                                'angkatan',
+                                                value.auth.user?.angkatan ??
+                                                    value.auth.counselor
+                                                        ?.angkatan,
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'major',
-                                            value.auth.user?.jurusan ??
-                                                value.auth.counselor?.jurusan
-                                                    .substring(
-                                                        value
-                                                                .auth
-                                                                .counselor
-                                                                ?.jurusan
-                                                                .length -
-                                                            1,
-                                                        value.auth.counselor
-                                                                ?.jurusan -
-                                                            5),
-                                          );
+                                              _sharedPreference.putString(
+                                                'major',
+                                                value.auth.user?.jurusan ??
+                                                    value
+                                                        .auth.counselor?.jurusan
+                                                        .substring(
+                                                            value
+                                                                    .auth
+                                                                    .counselor
+                                                                    ?.jurusan
+                                                                    .length -
+                                                                1,
+                                                            value.auth.counselor
+                                                                    ?.jurusan -
+                                                                5),
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'gender',
-                                            value.auth.user?.gender ??
-                                                value.auth.counselor?.gender,
-                                          );
+                                              _sharedPreference.putString(
+                                                'gender',
+                                                value.auth.user?.gender ??
+                                                    value
+                                                        .auth.counselor?.gender,
+                                              );
 
-                                          if (value.userGroup.conselee == '') {
-                                            _sharedPreference.putString(
-                                              'councelee_id',
-                                              value.userGroup.conselee,
-                                            );
-                                          } else if (value.userGroup.conselee !=
-                                              '') {
-                                            _sharedPreference.putString(
-                                              'councelee_id',
-                                              value.userGroup.conselee,
-                                            );
-                                          }
+                                              if (value.userGroup.conselee ==
+                                                  '') {
+                                                _sharedPreference.putString(
+                                                  'councelee_id',
+                                                  value.userGroup.conselee,
+                                                );
+                                              } else if (value
+                                                      .userGroup.conselee !=
+                                                  '') {
+                                                _sharedPreference.putString(
+                                                  'councelee_id',
+                                                  value.userGroup.conselee,
+                                                );
+                                              }
 
-                                          if (value.userGroup.conselor == '') {
-                                            _sharedPreference.putString(
-                                              'councelor_id',
-                                              value.userGroup.conselor,
-                                            );
-                                          } else if (value.userGroup.conselor !=
-                                              '') {
-                                            _sharedPreference.putString(
-                                              'councelor_id',
-                                              value.userGroup.conselor,
-                                            );
-                                          }
+                                              if (value.userGroup.conselor ==
+                                                  '') {
+                                                _sharedPreference.putString(
+                                                  'councelor_id',
+                                                  value.userGroup.conselor,
+                                                );
+                                              } else if (value
+                                                      .userGroup.conselor !=
+                                                  '') {
+                                                _sharedPreference.putString(
+                                                  'councelor_id',
+                                                  value.userGroup.conselor,
+                                                );
+                                              }
 
-                                          _sharedPreference.putString(
-                                            'nickname',
-                                            value.auth.user.nickname,
-                                          );
+                                              _sharedPreference.putString(
+                                                'nickname',
+                                                value.auth.user.nickname,
+                                              );
 
-                                          log(
-                                            '${value.auth.user.nickname}',
-                                            name: 'nickname',
-                                          );
+                                              _sharedPreference.putInt(
+                                                'isLogin',
+                                                1,
+                                              );
 
-                                          _sharedPreference.putInt(
-                                            'isLogin',
-                                            1,
-                                          );
+                                              _sharedPreference.putString(
+                                                'nickname',
+                                                value.auth.user.nickname,
+                                              );
 
-                                          _sharedPreference.putString(
-                                            'nickname',
-                                            value.auth.user.nickname,
-                                          );
-
-                                          Get.off(
-                                            () => const HomePage(
-                                                isDarkMode: false),
-                                          );
-                                          setState(() {
-                                            isLoading = false;
+                                              Get.off(
+                                                () => const HomePage(
+                                                    isDarkMode: false),
+                                              );
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                            }
                                           });
                                         }
                                       });
+                                      // DEBUGGING AZURE LOGIN
+
                                       // In case of server error, uncomment these code
                                       // below & comment the main code above to check
                                       // login-screen function
                                       // Get.off(
                                       //       () => const HomePage(isDarkMode: false),
                                       // );
+
+                                      // setState(() {
+                                      //   isLoading = false;
+                                      // });
                                     } else {
                                       setState(() {
                                         isLoading = false;
