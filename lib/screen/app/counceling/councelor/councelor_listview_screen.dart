@@ -41,7 +41,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
         });
   }
 
-  Future<void> _showMyDialog() async {
+  Future<void> _showMyDialog(String id) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -78,8 +78,12 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+                await _firestoreUtils.updateRoom(
+                  id,
+                  'approve',
+                );
               },
             ),
             TextButton(
@@ -90,8 +94,12 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+                await _firestoreUtils.updateRoom(
+                  id,
+                  'ended',
+                );
               },
             ),
           ],
@@ -456,7 +464,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  _showMyDialog();
+                                  _showMyDialog(temp[index].id);
                                 },
                                 icon: Icon(
                                   Icons.more_horiz,
