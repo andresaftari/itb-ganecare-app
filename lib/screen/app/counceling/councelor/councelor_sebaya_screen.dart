@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
@@ -12,6 +13,7 @@ import 'package:itb_ganecare/screen/app/counceling/councelor/councelor_listview_
 import 'package:itb_ganecare/screen/app/counceling/councelor_profile_screen.dart';
 
 import '../../../../data/controllers/profile_controller.dart';
+import '../../../home/home_screen.dart';
 
 class CouncelorSebayaScreen extends StatefulWidget {
   const CouncelorSebayaScreen({Key? key}) : super(key: key);
@@ -124,256 +126,379 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: 80.h,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
+      backgroundColor: Colors.blueAccent,
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   toolbarHeight: 80.h,
+      //   automaticallyImplyLeading: false,
+      //   leading: GestureDetector(
+      //     onTap: () {
+      //       Navigator.pop(context);
+      //       Navigator.pop(context);
+      //     },
+      //     child: const Icon(
+      //       Icons.close,
+      //       color: Colors.white,
+      //     ),
+      //   ),
+      //   flexibleSpace: Container(
+      //     decoration: const BoxDecoration(
+      //       gradient: LinearGradient(
+      //         colors: [
+      //           Color.fromRGBO(0, 171, 233, 1),
+      //           Color.fromRGBO(6, 146, 196, 1),
+      //         ],
+      //         begin: Alignment.centerRight,
+      //         end: Alignment.centerLeft,
+      //       ),
+      //     ),
+      //     child: Container(
+      //       margin: EdgeInsets.only(left: 24.w),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: [
+      //           Column(
+      //             crossAxisAlignment: CrossAxisAlignment.start,
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               Container(
+      //                 child: Text(
+      //                   'Selamat datang',
+      //                   style: TextStyle(
+      //                     color: Colors.white,
+      //                     fontSize: 16.sp,
+      //                     fontWeight: FontWeight.w600,
+      //                   ),
+      //                 ),
+      //                 margin: EdgeInsets.only(left: 24.w),
+      //               ),
+      //               Container(
+      //                 child: Text(
+      //                   _sharedPreference
+      //                           .getString('nickname')
+      //                           .toString()
+      //                           .contains('Konselor')
+      //                       ? _sharedPreference.getString('nickname').toString()
+      //                       : 'Konselor',
+      //                   style: TextStyle(
+      //                     color: Colors.white,
+      //                     fontSize: 14.sp,
+      //                     fontWeight: FontWeight.w600,
+      //                   ),
+      //                 ),
+      //                 margin: EdgeInsets.only(top: 4.h, left: 24.w),
+      //               ),
+      //             ],
+      //           ),
+      //           Row(
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               GestureDetector(
+      //                 onTap: () {},
+      //                 child: Icon(
+      //                   Icons.notifications_rounded,
+      //                   color: Colors.white,
+      //                   size: 28.sp,
+      //                 ),
+      //               ),
+      //               SizedBox(width: 8.w),
+      //               (profilePicture != '')
+      //                   ? Container(
+      //                       height: 50.h,
+      //                       width: 44.w,
+      //                       margin: EdgeInsets.only(right: 24.w),
+      //                       decoration: BoxDecoration(
+      //                         color: Colors.white,
+      //                         shape: BoxShape.circle,
+      //                         border: Border.all(
+      //                           color: Colors.black,
+      //                           width: 0.5.w,
+      //                         ),
+      //                         image: DecorationImage(
+      //                           fit: BoxFit.cover,
+      //                           image: NetworkImage(profilePicture),
+      //                         ),
+      //                         boxShadow: [
+      //                           BoxShadow(
+      //                             color: Colors.black.withOpacity(0.5),
+      //                             blurRadius: 8,
+      //                             offset: const Offset(3, 2),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     )
+      //                   : Container(
+      //                       height: 50.h,
+      //                       width: 44.w,
+      //                       margin: EdgeInsets.only(right: 24.w),
+      //                       decoration: BoxDecoration(
+      //                         color: Colors.white,
+      //                         shape: BoxShape.circle,
+      //                         image: const DecorationImage(
+      //                           fit: BoxFit.cover,
+      //                           image: AssetImage('assets/images/cat.png'),
+      //                         ),
+      //                         border: Border.all(
+      //                           color: Colors.black,
+      //                           width: 0.5.w,
+      //                         ),
+      //                         boxShadow: [
+      //                           BoxShadow(
+      //                             color: Colors.black.withOpacity(0.5),
+      //                             blurRadius: 8,
+      //                             offset: const Offset(3, 2),
+      //                           ),
+      //                         ],
+      //                       ),
+      //                     ),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildHeader(context),
+            buildCounselorWidget(context),
+          ],
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(0, 171, 233, 1),
-                Color.fromRGBO(6, 146, 196, 1),
-              ],
-              begin: Alignment.centerRight,
-              end: Alignment.centerLeft,
-            ),
-          ),
-          child: Container(
-            margin: EdgeInsets.only(left: 24.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Selamat datang',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(left: 24.w),
-                    ),
-                    Container(
-                      child: Text(
-                        _sharedPreference
-                                .getString('nickname')
-                                .toString()
-                                .contains('Konselor')
-                            ? _sharedPreference.getString('nickname').toString()
-                            : 'Konselor',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.notifications_rounded,
-                        color: Colors.white,
-                        size: 28.sp,
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    (profilePicture != '')
-                        ? Container(
-                            height: 50.h,
-                            width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 0.5.w,
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(profilePicture),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 8,
-                                  offset: const Offset(3, 2),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(
-                            height: 50.h,
-                            width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              image: const DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/images/cat.png'),
-                              ),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 0.5.w,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 8,
-                                  offset: const Offset(3, 2),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          buildHeader(context),
-          buildCounselorWidget(context),
-        ],
       ),
     );
   }
 
+  // Widget buildHeader(BuildContext context) {
+  //   return Container(
+  //     height: 52.h,
+  //     color: const Color.fromRGBO(253, 143, 1, 1),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Padding(
+  //           padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
+  //           child: Text(
+  //             'Daftar Conselee Kamu',
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //               fontSize: 16.sp,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //         ),
+  //         GestureDetector(
+  //           onTap: () {
+  //             showBottomSheet(
+  //               context: context,
+  //               backgroundColor: Colors.white,
+  //               builder: (context) => GestureDetector(
+  //                 onTap: () => Navigator.pop(context),
+  //                 child: Container(
+  //                   height: 300.h,
+  //                   padding: EdgeInsets.symmetric(horizontal: 16.w),
+  //                   child: BackdropFilter(
+  //                     filter: ImageFilter.blur(
+  //                       sigmaX: 10.w,
+  //                       sigmaY: 10.h,
+  //                     ),
+  //                     child: Column(
+  //                       children: [
+  //                         Text(
+  //                           'Filter',
+  //                           style: TextStyle(
+  //                             fontSize: 18.sp,
+  //                             color: Colors.black,
+  //                             fontWeight: FontWeight.w400,
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 24.h),
+  //                         Expanded(
+  //                           child: Column(
+  //                             children: [
+  //                               Row(
+  //                                 children: [
+  //                                   Text(
+  //                                     'Jenis Kelamin',
+  //                                     style: TextStyle(
+  //                                       color: Colors.black,
+  //                                       fontSize: 12.sp,
+  //                                     ),
+  //                                   ),
+  //                                   SizedBox(width: 16.w),
+  //                                   Container(
+  //                                     padding: EdgeInsets.all(8.w),
+  //                                     decoration: BoxDecoration(
+  //                                       border: Border.all(
+  //                                         color: Colors.black,
+  //                                         width: 0.8.w,
+  //                                       ),
+  //                                       borderRadius: BorderRadius.all(
+  //                                         Radius.circular(16.r),
+  //                                       ),
+  //                                     ),
+  //                                     child: Text(
+  //                                       'Laki-Laki',
+  //                                       style: TextStyle(fontSize: 14.sp),
+  //                                     ),
+  //                                   ),
+  //                                   SizedBox(width: 8.w),
+  //                                   Container(
+  //                                     padding: EdgeInsets.all(8.w),
+  //                                     decoration: BoxDecoration(
+  //                                       border: Border.all(
+  //                                         color: Colors.black,
+  //                                         width: 0.8.w,
+  //                                       ),
+  //                                       borderRadius: BorderRadius.all(
+  //                                         Radius.circular(16.r),
+  //                                       ),
+  //                                     ),
+  //                                     child: Text(
+  //                                       'Perempuan',
+  //                                       style: TextStyle(fontSize: 14.sp),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //           child: Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 8.w),
+  //             child: Icon(CupertinoIcons.sort_down,
+  //                 color: Colors.black, size: 26.w),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget buildHeader(BuildContext context) {
     return Container(
-      height: 52.h,
-      color: const Color.fromRGBO(253, 143, 1, 1),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
-            child: Text(
-              'Daftar Conselee Kamu',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              showBottomSheet(
-                context: context,
-                backgroundColor: Colors.white,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Container(
-                    height: 300.h,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 10.w,
-                        sigmaY: 10.h,
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 6,
+      color: Colors.blueAccent,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 8,
+          right: 8,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(
+                          isDarkMode: false,
+                        ),
                       ),
-                      child: Column(
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
                           Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
+                            'Hi, ',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
-                          SizedBox(height: 24.h),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Jenis Kelamin',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                    SizedBox(width: 16.w),
-                                    Container(
-                                      padding: EdgeInsets.all(8.w),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 0.8.w,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(16.r),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'Laki-Laki',
-                                        style: TextStyle(fontSize: 14.sp),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Container(
-                                      padding: EdgeInsets.all(8.w),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 0.8.w,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(16.r),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'Perempuan',
-                                        style: TextStyle(fontSize: 14.sp),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          Text(
+                            _sharedPreference
+                                    .getString('nickname')
+                                    .toString()
+                                    .contains('Konselor')
+                                ? _sharedPreference
+                                    .getString('nickname')
+                                    .toString()
+                                : 'Konselor',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Daftar',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Concelee Kamu',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: Icon(CupertinoIcons.sort_down,
-                  color: Colors.black, size: 26.w),
+                (profilePicture != '')
+                    ? Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(profilePicture),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                          image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/cat.png'),
+                          ),
+                        ),
+                      ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -428,168 +553,227 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
         }
       }
 
-      return SizedBox(
+      return Container(
         width: 1.sw,
         height: 260.h,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: temp.length,
-          itemBuilder: (context, index) {
-            if (temp[index].idConselor.toString() == currentUserId) {
-              return GestureDetector(
-                onTap: () {
-                  // log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
-
-                  _sharedPreference.putString(
-                    'roomId',
-                    temp[index].id,
-                  );
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return CouncelingChatScreen(
-                          conseleeId: temp[index].idConselee,
-                          conselorId: temp[index].idConselor,
-                          currentId: currentUserId,
-                        );
-                      },
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 30,
+                left: 15,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'Pinned',
+                    style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    'Concelee',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
                     ),
-                  );
-                },
-                child: Card(
-                  child: Container(
-                    width: 1.sw,
-                    height: 80.h,
-                    margin: EdgeInsets.symmetric(horizontal: 16.w),
-                    padding: EdgeInsets.all(8.w),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8.w),
-                          child: Image.asset(
-                            'assets/images/cat.png',
-                            width: 46.w,
-                            height: 46.h,
-                          ),
+                  ),
+                ],
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: temp.length,
+              itemBuilder: (context, index) {
+                if (temp[index].idConselor.toString() == currentUserId) {
+                  return GestureDetector(
+                    onTap: () {
+                      // log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
+
+                      _sharedPreference.putString(
+                        'roomId',
+                        temp[index].id,
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CouncelingChatScreen(
+                              conseleeId: temp[index].idConselee,
+                              conselorId: temp[index].idConselor,
+                              currentId: currentUserId,
+                            );
+                          },
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                temp[index].genderConselor.toString() == 'P'
-                                    ? const Icon(
-                                        Icons.female,
-                                        color: Colors.pinkAccent,
-                                      )
-                                    : const Icon(
-                                        Icons.male,
-                                        color: Colors.blueAccent,
-                                      ),
-                                Text(
-                                  'Anonymous',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 14.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 2.h),
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.h),
-                              child: Text(
-                                temp[index].lastMessageConselor.length >= 30
-                                    ? temp[index]
-                                        .lastMessageConselor
-                                        .substring(0, 20)
-                                    : temp[index].lastMessageConselor,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                softWrap: true,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10.sp,
+                      );
+                    },
+                    child: Container(
+                      width: 1.sw,
+                      height: 80.h,
+                      padding: EdgeInsets.all(8.w),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
+                              image: const DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(
+                                  'assets/images/cat.png',
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(width: 24.w),
-                        Column(
-                          children: [
-                            Row(
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  temp[index].generationConselor,
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 9.sp,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Anonymous',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      temp[index].genderConselor.toString() ==
+                                              'P'
+                                          ? const Icon(
+                                              Icons.female,
+                                              color: Colors.pinkAccent,
+                                              size: 15,
+                                            )
+                                          : const Icon(
+                                              Icons.male,
+                                              color: Colors.blueAccent,
+                                              size: 15,
+                                            ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: 2.w),
-                                Text(
-                                  temp[index]
-                                          .majorConselor
-                                          .contains('Tahap Tahun Pertama')
-                                      ? temp[index].majorConselor.substring(20)
-                                      : temp[index]
-                                              .majorConselor
-                                              .contains('Tahap Tahun Kedua')
-                                          ? temp[index]
-                                              .majorConselor
-                                              .substring(18)
-                                          : temp[index].majorConselor.contains(
-                                                  'Tahap Tahun Ketiga')
-                                              ? temp[index]
-                                                  .majorConselor
-                                                  .substring(19)
-                                              : temp[index]
-                                                      .majorConselor
-                                                      .contains(
-                                                          'Tahap Tahun Keempat')
-                                                  ? temp[index]
-                                                      .majorConselor
-                                                      .substring(20)
-                                                  : temp[index].majorConselor,
-                                  style: TextStyle(
-                                    backgroundColor:
-                                        Colors.grey.withOpacity(0.4),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 9.sp,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    temp[index].lastMessageConselor.length >= 30
+                                        ? temp[index]
+                                            .lastMessageConselor
+                                            .substring(0, 20)
+                                        : temp[index].lastMessageConselor,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10.sp,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.more_horiz,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          // Column(
+                          //   children: [
+                          //     Row(
+                          //       children: [
+                          //         Text(
+                          //           temp[index].generationConselor,
+                          //           style: TextStyle(
+                          //             backgroundColor:
+                          //                 Colors.grey.withOpacity(0.4),
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.w500,
+                          //             fontSize: 9.sp,
+                          //           ),
+                          //         ),
+                          //         SizedBox(width: 2.w),
+                          //         Text(
+                          //           temp[index]
+                          //                   .majorConselor
+                          //                   .contains('Tahap Tahun Pertama')
+                          //               ? temp[index]
+                          //                   .majorConselor
+                          //                   .substring(20)
+                          //               : temp[index]
+                          //                       .majorConselor
+                          //                       .contains('Tahap Tahun Kedua')
+                          //                   ? temp[index]
+                          //                       .majorConselor
+                          //                       .substring(18)
+                          //                   : temp[index]
+                          //                           .majorConselor
+                          //                           .contains(
+                          //                               'Tahap Tahun Ketiga')
+                          //                       ? temp[index]
+                          //                           .majorConselor
+                          //                           .substring(19)
+                          //                       : temp[index]
+                          //                               .majorConselor
+                          //                               .contains(
+                          //                                   'Tahap Tahun Keempat')
+                          //                           ? temp[index]
+                          //                               .majorConselor
+                          //                               .substring(20)
+                          //                           : temp[index].majorConselor,
+                          //           style: TextStyle(
+                          //             backgroundColor:
+                          //                 Colors.grey.withOpacity(0.4),
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.w500,
+                          //             fontSize: 9.sp,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: const Text('No chat history'),
-                ),
-              );
-            }
-          },
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: const Text('No chat history'),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       );
     } else {
@@ -614,19 +798,36 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
         if (r.roomStatus == 'ended') temp.add(r);
       }
 
-      return SizedBox(
+      return Container(
+        color: Colors.white,
         width: 1.sw,
+        padding: EdgeInsets.only(top: 15, bottom: 100),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Text(
-                'History Counseling',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.sp,
-                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
+                children: [
+                  Text(
+                    'History',
+                    style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    'Conceling',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
               ),
             ),
             ListView.builder(
@@ -636,53 +837,59 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                 if (temp[index].idConselor.toString() == currentUserId) {
                   return GestureDetector(
                     onTap: () {},
-                    child: Card(
-                      child: Container(
-                        width: 1.sw,
-                        height: 80.h,
-                        padding: EdgeInsets.all(8.w),
-                        margin: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.w),
-                              child: Image.asset(
-                                'assets/images/cat.png',
-                                width: 46.w,
-                                height: 46.h,
+                    child: Container(
+                      width: 1.sw,
+                      height: 80.h,
+                      padding: EdgeInsets.all(8.w),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.white,
+                              image: const DecorationImage(
+                                image: AssetImage('assets/images/cat.png'),
                               ),
                             ),
-                            Column(
+                          ),
+                          Expanded(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    temp[index].genderConselor.toString() == 'P'
-                                        ? const Icon(
-                                            Icons.female,
-                                            color: Colors.pinkAccent,
-                                          )
-                                        : const Icon(
-                                            Icons.male,
-                                            color: Colors.blueAccent,
-                                          ),
-                                    Text(
-                                      'Anonymous',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Colors.black,
-                                        fontSize: 14.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 2.h),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 8.h),
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Anonymous',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      temp[index].genderConselor.toString() ==
+                                              'P'
+                                          ? const Icon(
+                                              Icons.female,
+                                              color: Colors.pinkAccent,
+                                              size: 15,
+                                            )
+                                          : const Icon(
+                                              Icons.male,
+                                              color: Colors.blueAccent,
+                                              size: 15,
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 15),
                                   child: Text(
                                     temp[index].lastMessageConselor,
                                     overflow: TextOverflow.ellipsis,
@@ -698,65 +905,70 @@ class _CouncelorSebayaViewsState extends State<CouncelorSebayaViews> {
                                 ),
                               ],
                             ),
-                            SizedBox(width: 24.w),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      temp[index].generationConselor,
-                                      style: TextStyle(
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.4),
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 9.sp,
-                                      ),
-                                    ),
-                                    SizedBox(width: 2.w),
-                                    Text(
-                                      temp[index]
-                                              .majorConselor
-                                              .contains('Tahap Tahun Pertama')
-                                          ? temp[index]
-                                              .majorConselor
-                                              .substring(20)
-                                          : temp[index]
-                                                  .majorConselor
-                                                  .contains('Tahap Tahun Kedua')
-                                              ? temp[index]
-                                                  .majorConselor
-                                                  .substring(18)
-                                              : temp[index]
-                                                      .majorConselor
-                                                      .contains(
-                                                          'Tahap Tahun Ketiga')
-                                                  ? temp[index]
-                                                      .majorConselor
-                                                      .substring(19)
-                                                  : temp[index]
-                                                          .majorConselor
-                                                          .contains(
-                                                              'Tahap Tahun Keempat')
-                                                      ? temp[index]
-                                                          .majorConselor
-                                                          .substring(20)
-                                                      : temp[index]
-                                                          .majorConselor,
-                                      style: TextStyle(
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.4),
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 9.sp,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Colors.blueAccent,
                             ),
-                          ],
-                        ),
+                          ),
+                          // Column(
+                          //   children: [
+                          //     Row(
+                          //       children: [
+                          //         Text(
+                          //           temp[index].generationConselor,
+                          //           style: TextStyle(
+                          //             backgroundColor:
+                          //                 Colors.grey.withOpacity(0.4),
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.w500,
+                          //             fontSize: 9.sp,
+                          //           ),
+                          //         ),
+                          //         SizedBox(width: 2.w),
+                          //         Text(
+                          //           temp[index]
+                          //                   .majorConselor
+                          //                   .contains('Tahap Tahun Pertama')
+                          //               ? temp[index]
+                          //                   .majorConselor
+                          //                   .substring(20)
+                          //               : temp[index]
+                          //                       .majorConselor
+                          //                       .contains('Tahap Tahun Kedua')
+                          //                   ? temp[index]
+                          //                       .majorConselor
+                          //                       .substring(18)
+                          //                   : temp[index]
+                          //                           .majorConselor
+                          //                           .contains(
+                          //                               'Tahap Tahun Ketiga')
+                          //                       ? temp[index]
+                          //                           .majorConselor
+                          //                           .substring(19)
+                          //                       : temp[index]
+                          //                               .majorConselor
+                          //                               .contains(
+                          //                                   'Tahap Tahun Keempat')
+                          //                           ? temp[index]
+                          //                               .majorConselor
+                          //                               .substring(20)
+                          //                           : temp[index].majorConselor,
+                          //           style: TextStyle(
+                          //             backgroundColor:
+                          //                 Colors.grey.withOpacity(0.4),
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.w500,
+                          //             fontSize: 9.sp,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
                       ),
                     ),
                   );
