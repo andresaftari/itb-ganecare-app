@@ -11,7 +11,7 @@ class AuthController {
   static final Config config = Config(
     tenant: 'db6e1183-4c65-405c-82ce-7cd53fa6e9dc',
     clientId: '91c3fb03-924e-4446-ad6f-06ab9f1ab372',
-    scope: 'openid profile offline_access',
+    scope: 'openid profile',
     redirectUri:
     'msauth://com.GaneCare.itb_ganecare/CBdt1odkmieyoqRQEYgAIwitlqQ%3D',
     navigatorKey: navigatorKey,
