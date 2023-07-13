@@ -99,40 +99,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 30.h),
 
                       // Email field
-                      TextFormField(
-                        autocorrect: false,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          contentPadding: EdgeInsets.all(0.w),
-                        ),
-                        validator: (usernameValue) {
-                          if (usernameValue!.isEmpty) {
-                            return 'Tolong input dengan benar';
-                          }
-
-                          username = usernameValue;
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 10.h),
+                      // TextFormField(
+                      //   autocorrect: false,
+                      //   keyboardType: TextInputType.text,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Username',
+                      //     contentPadding: EdgeInsets.all(0.w),
+                      //   ),
+                      //   validator: (usernameValue) {
+                      //     if (usernameValue!.isEmpty) {
+                      //       return 'Tolong input dengan benar';
+                      //     }
+                      //
+                      //     username = usernameValue;
+                      //     return null;
+                      //   },
+                      // ),
+                      // SizedBox(height: 10.h),
 
                       // Password field
-                      TextFormField(
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          contentPadding: EdgeInsets.all(0.w),
-                        ),
-                        validator: (passwordValue) {
-                          if (passwordValue!.isEmpty) {
-                            return 'Tolong input dengan benar';
-                          }
-                          password = passwordValue;
-                          return null;
-                        },
-                      ),
+                      // TextFormField(
+                      //   keyboardType: TextInputType.text,
+                      //   obscureText: true,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Password',
+                      //     contentPadding: EdgeInsets.all(0.w),
+                      //   ),
+                      //   validator: (passwordValue) {
+                      //     if (passwordValue!.isEmpty) {
+                      //       return 'Tolong input dengan benar';
+                      //     }
+                      //     password = passwordValue;
+                      //     return null;
+                      //   },
+                      // ),
 
                       SizedBox(height: 30.h),
 
@@ -157,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.orange),
+                                      Colors.orange,
+                                    ),
                                   ),
                                   child: FittedBox(
                                     child: Text(
@@ -172,153 +173,156 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
+                                    // if (_formKey.currentState!.validate()) {
+                                    //   setState(() {
+                                    //     isLoading = true;
+                                    //   });
+                                    //
+                                    //
+                                    //
+                                    //   // In case of server error, uncomment these code
+                                    //   // below & comment the main code above to check
+                                    //   // login-screen function
+                                    //   // Get.off(
+                                    //   //       () => const HomePage(isDarkMode: false),
+                                    //   // );
+                                    // DEBUGGING AZURE LOGIN
+                                    _authController.azureLogin().then((azure) {
+                                      if (azure.accessToken != null &&
+                                          azure.accessToken != '') {
+                                        _sharedPreference.putString(
+                                          'accessToken',
+                                          azure.accessToken,
+                                        );
 
-                                      // DEBUGGING AZURE LOGIN
-                                      _authController
-                                          .azureLogin()
-                                          .then((value) {
-                                        if (value.accessToken != null &&
-                                            value.accessToken != '') {
-                                          _authController
-                                              .postLogin(
-                                            username,
-                                            password,
-                                            widget.deviceId,
-                                          )
-                                              .then((value) {
-                                            if (value.statusCode == 200) {
+                                        _sharedPreference.putString(
+                                          'id_token',
+                                          azure.idToken,
+                                        );
+
+                                        _authController
+                                            .postLogin(
+                                          '16022169',
+                                          'bebasaapaja',
+                                          '1234567',
+                                        )
+                                            .then((value) {
+                                          if (value.statusCode == 200) {
+                                            _sharedPreference.putString(
+                                              'username',
+                                              username,
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'name',
+                                              value.data.name,
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'nim',
+                                              value.data.nim,
+                                            );
+                                            _sharedPreference.putString(
+                                              'noreg',
+                                              value.data.id,
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'token_user',
+                                              value.auth.tokenMahasiswa.token,
+                                            );
+
+                                            _sharedPreference.putInt(
+                                              'angkatan',
+                                              value.auth.user?.angkatan ??
+                                                  value
+                                                      .auth.counselor?.angkatan,
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'major',
+                                              value.auth.user?.jurusan ??
+                                                  value.auth.counselor?.jurusan
+                                                      .substring(
+                                                          value
+                                                                  .auth
+                                                                  .counselor
+                                                                  ?.jurusan
+                                                                  .length -
+                                                              1,
+                                                          value.auth.counselor
+                                                                  ?.jurusan -
+                                                              5),
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'gender',
+                                              value.auth.user?.gender ??
+                                                  value.auth.counselor?.gender,
+                                            );
+
+                                            if (value.userGroup.conselee ==
+                                                '') {
                                               _sharedPreference.putString(
-                                                'username',
-                                                username,
+                                                'councelee_id',
+                                                value.userGroup.conselee,
                                               );
-
+                                            } else if (value
+                                                    .userGroup.conselee !=
+                                                '') {
                                               _sharedPreference.putString(
-                                                'name',
-                                                value.data.name,
+                                                'councelee_id',
+                                                value.userGroup.conselee,
                                               );
-
-                                              _sharedPreference.putString(
-                                                'nim',
-                                                value.data.nim,
-                                              );
-                                              _sharedPreference.putString(
-                                                'noreg',
-                                                value.data.id,
-                                              );
-
-                                              _sharedPreference.putString(
-                                                'token_user',
-                                                value.auth.tokenMahasiswa.token,
-                                              );
-
-                                              _sharedPreference.putInt(
-                                                'angkatan',
-                                                value.auth.user?.angkatan ??
-                                                    value.auth.counselor
-                                                        ?.angkatan,
-                                              );
-
-                                              _sharedPreference.putString(
-                                                'major',
-                                                value.auth.user?.jurusan ??
-                                                    value
-                                                        .auth.counselor?.jurusan
-                                                        .substring(
-                                                            value
-                                                                    .auth
-                                                                    .counselor
-                                                                    ?.jurusan
-                                                                    .length -
-                                                                1,
-                                                            value.auth.counselor
-                                                                    ?.jurusan -
-                                                                5),
-                                              );
-
-                                              _sharedPreference.putString(
-                                                'gender',
-                                                value.auth.user?.gender ??
-                                                    value
-                                                        .auth.counselor?.gender,
-                                              );
-
-                                              if (value.userGroup.conselee ==
-                                                  '') {
-                                                _sharedPreference.putString(
-                                                  'councelee_id',
-                                                  value.userGroup.conselee,
-                                                );
-                                              } else if (value
-                                                      .userGroup.conselee !=
-                                                  '') {
-                                                _sharedPreference.putString(
-                                                  'councelee_id',
-                                                  value.userGroup.conselee,
-                                                );
-                                              }
-
-                                              if (value.userGroup.conselor ==
-                                                  '') {
-                                                _sharedPreference.putString(
-                                                  'councelor_id',
-                                                  value.userGroup.conselor,
-                                                );
-                                              } else if (value
-                                                      .userGroup.conselor !=
-                                                  '') {
-                                                _sharedPreference.putString(
-                                                  'councelor_id',
-                                                  value.userGroup.conselor,
-                                                );
-                                              }
-
-                                              _sharedPreference.putString(
-                                                'nickname',
-                                                value.auth.user.nickname,
-                                              );
-
-                                              _sharedPreference.putInt(
-                                                'isLogin',
-                                                1,
-                                              );
-
-                                              _sharedPreference.putString(
-                                                'nickname',
-                                                value.auth.user.nickname,
-                                              );
-
-                                              Get.off(
-                                                () => const HomePage(
-                                                    isDarkMode: false),
-                                              );
-                                              setState(() {
-                                                isLoading = false;
-                                              });
                                             }
-                                          });
-                                        }
-                                      });
-                                      // DEBUGGING AZURE LOGIN
 
-                                      // In case of server error, uncomment these code
-                                      // below & comment the main code above to check
-                                      // login-screen function
-                                      // Get.off(
-                                      //       () => const HomePage(isDarkMode: false),
-                                      // );
+                                            if (value.userGroup.conselor ==
+                                                '') {
+                                              _sharedPreference.putString(
+                                                'councelor_id',
+                                                value.userGroup.conselor,
+                                              );
+                                            } else if (value
+                                                    .userGroup.conselor !=
+                                                '') {
+                                              _sharedPreference.putString(
+                                                'councelor_id',
+                                                value.userGroup.conselor,
+                                              );
+                                            }
 
-                                      // setState(() {
-                                      //   isLoading = false;
-                                      // });
-                                    } else {
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    }
+                                            _sharedPreference.putString(
+                                              'nickname',
+                                              value.auth.user.nickname,
+                                            );
+
+                                            _sharedPreference.putInt(
+                                              'isLogin',
+                                              1,
+                                            );
+
+                                            _sharedPreference.putString(
+                                              'nickname',
+                                              value.auth.user.nickname,
+                                            );
+
+                                            Get.off(
+                                              () => const HomePage(
+                                                  isDarkMode: false),
+                                            );
+
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                          }
+                                        });
+                                      } else {
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    });
+                                    // DEBUGGING AZURE LOGIN
                                   },
                                 ),
                               ),
