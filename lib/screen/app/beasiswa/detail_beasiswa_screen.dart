@@ -259,7 +259,7 @@ class _DetailBeasiswaState extends State<DetailBeasiswa> {
 
   Widget contentThree() {
     return Container(
-      height: MediaQuery.of(context).size.height / 6,
+      height: MediaQuery.of(context).size.height / 4,
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10, top: 10),
       child: Column(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
 import 'package:itb_ganecare/data_provider/chat_room_utils.dart';
 import 'package:itb_ganecare/models/chats.dart';
 
 import '../../../../data/controllers/profile_controller.dart';
+import '../../../home/home_screen.dart';
 
 class CouncelorListViewScreen extends StatefulWidget {
   const CouncelorListViewScreen({Key? key}) : super(key: key);
@@ -39,145 +41,90 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
         });
   }
 
+  Future<void> _showMyDialog(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Konfirmasi Request',
+            style: GoogleFonts.poppins(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Apakah anda menyetujui request concelee ini?',
+                  style: GoogleFonts.poppins(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Ya',
+                style: GoogleFonts.poppins(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _firestoreUtils.updateRoom(
+                  id,
+                  'approve',
+                );
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Tidak',
+                style: GoogleFonts.poppins(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _firestoreUtils.updateRoom(
+                  id,
+                  'ended',
+                );
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Tutup',
+                style: GoogleFonts.poppins(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: 80.h,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(0, 171, 233, 1),
-                Color.fromRGBO(6, 146, 196, 1),
-              ],
-              begin: Alignment.centerRight,
-              end: Alignment.centerLeft,
-            ),
-          ),
-          child: Container(
-            margin: EdgeInsets.only(left: 24.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Selamat datang',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(top: 40.h, left: 24.w),
-                    ),
-                    Container(
-                      child: Text(
-                        _sharedPreference
-                                .getString('nickname')
-                                .toString()
-                                .contains('Konselor')
-                            ? _sharedPreference.getString('nickname').toString()
-                            : 'Konselor',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      margin: EdgeInsets.only(top: 4.h, left: 24.w),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        margin: EdgeInsets.only(top: 42.h),
-                        child: Icon(
-                          Icons.notifications_rounded,
-                          color: Colors.white,
-                          size: 28.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    (profilePicture != '')
-                        ? Container(
-                            height: 50.h,
-                            width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 0.5.w,
-                              ),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(profilePicture),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 8,
-                                  offset: const Offset(3, 2),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(
-                            height: 50.h,
-                            width: 44.w,
-                            margin: EdgeInsets.only(right: 24.w, top: 32.h),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              image: const DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/images/cat.png'),
-                              ),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 0.5.w,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 8,
-                                  offset: const Offset(3, 2),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      backgroundColor: Colors.blueAccent,
       body: SingleChildScrollView(
         primary: true,
         child: Column(
@@ -218,162 +165,276 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
               }
             }
 
-            return SizedBox(
+            return Container(
               width: 1.sw,
               height: 1.sh,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 30,
+                      left: 15,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Pilih',
+                          style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Concelee',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: temp.length,
                     itemBuilder: (context, index) {
                       if (temp[index].idConselor.toString() == currentUserId) {
-                        return Card(
-                          child: Container(
-                            width: 1.sw,
-                            height: 80.h,
-                            padding: EdgeInsets.all(8.w),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.w),
-                                  child: Image.asset(
-                                    'assets/images/cat.png',
-                                    width: 46.w,
-                                    height: 46.h,
+                        return Container(
+                          width: 1.sw,
+                          height: 80.h,
+                          padding: EdgeInsets.all(8.w),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                  image: const DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage(
+                                      'assets/images/cat.png',
+                                    ),
                                   ),
                                 ),
-                                Column(
+                              ),
+                              Expanded(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(left: 8.w),
-                                      child: Text(
-                                        '#${temp[index].idConselee}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 10.sp,
-                                        ),
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Anonymous',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            softWrap: true,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          temp[index]
+                                                      .genderConselee
+                                                      .toString() ==
+                                                  'P'
+                                              ? const Icon(
+                                                  Icons.female,
+                                                  color: Colors.pinkAccent,
+                                                  size: 15,
+                                                )
+                                              : const Icon(
+                                                  Icons.male,
+                                                  color: Colors.blueAccent,
+                                                  size: 15,
+                                                ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(height: 8.h),
-                                    Row(
-                                      children: [
-                                        temp[index].genderConselee.toString() ==
-                                                'P'
-                                            ? const Icon(
-                                                Icons.female,
-                                                color: Colors.pinkAccent,
-                                              )
-                                            : const Icon(
-                                                Icons.male,
-                                                color: Colors.blueAccent,
-                                              ),
-                                        Text(
-                                          'Anonymous',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Colors.black,
-                                            fontSize: 14.sp,
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '#${temp[index].idConselee}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            '-',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            rooms[index].generationConselee,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            '-',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            temp[index].majorConselee.contains(
+                                                    'Tahap Tahun Pertama')
+                                                ? temp[index]
+                                                    .majorConselee
+                                                    .substring(20)
+                                                : temp[index]
+                                                        .majorConselee
+                                                        .contains(
+                                                            'Tahap Tahun Kedua')
+                                                    ? temp[index]
+                                                        .majorConselee
+                                                        .substring(18)
+                                                    : temp[index]
+                                                            .majorConselee
+                                                            .contains(
+                                                                'Tahap Tahun Ketiga')
+                                                        ? temp[index]
+                                                            .majorConselee
+                                                            .substring(19)
+                                                        : temp[index]
+                                                                .majorConselee
+                                                                .contains(
+                                                                    'Tahap Tahun Keempat')
+                                                            ? temp[index]
+                                                                .majorConselee
+                                                                .substring(20)
+                                                            : temp[index]
+                                                                .majorConselee,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 24.w),
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          rooms[index].generationConselee,
-                                          style: TextStyle(
-                                            backgroundColor:
-                                                Colors.grey.withOpacity(0.4),
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 9.sp,
-                                          ),
-                                        ),
-                                        SizedBox(width: 2.w),
-                                        Text(
-                                          temp[index].majorConselee.contains(
-                                                  'Tahap Tahun Pertama')
-                                              ? temp[index]
-                                                  .majorConselee
-                                                  .substring(20)
-                                              : temp[index]
-                                                      .majorConselee
-                                                      .contains(
-                                                          'Tahap Tahun Kedua')
-                                                  ? temp[index]
-                                                      .majorConselee
-                                                      .substring(18)
-                                                  : temp[index]
-                                                          .majorConselee
-                                                          .contains(
-                                                              'Tahap Tahun Ketiga')
-                                                      ? temp[index]
-                                                          .majorConselee
-                                                          .substring(19)
-                                                      : temp[index]
-                                                              .majorConselee
-                                                              .contains(
-                                                                  'Tahap Tahun Keempat')
-                                                          ? temp[index]
-                                                              .majorConselee
-                                                              .substring(20)
-                                                          : temp[index]
-                                                              .majorConselee,
-                                          style: TextStyle(
-                                            backgroundColor:
-                                                Colors.grey.withOpacity(0.4),
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 9.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          onPressed: () async {
-                                            await _firestoreUtils.updateRoom(
-                                              temp[index].id,
-                                              'approve',
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.check_circle,
-                                            color: Colors.greenAccent,
-                                          ),
-                                        ),
-                                        SizedBox(width: 2.w),
-                                        IconButton(
-                                          onPressed: () async {
-                                            await _firestoreUtils.updateRoom(
-                                              temp[index].id,
-                                              'ended',
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.cancel_rounded,
-                                            color: Colors.redAccent,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _showMyDialog(temp[index].id);
+                                },
+                                icon: Icon(
+                                  Icons.more_horiz,
+                                  color: Colors.blueAccent,
                                 ),
-                              ],
-                            ),
+                              ),
+                              // Column(
+                              //   children: [
+                              //     Row(
+                              //       children: [
+                              //         Text(
+                              //           rooms[index].generationConselee,
+                              //           style: TextStyle(
+                              //             backgroundColor:
+                              //                 Colors.grey.withOpacity(0.4),
+                              //             color: Colors.black,
+                              //             fontWeight: FontWeight.w500,
+                              //             fontSize: 9.sp,
+                              //           ),
+                              //         ),
+                              //         SizedBox(width: 2.w),
+                              //         Text(
+                              //           temp[index]
+                              //                   .majorConselee
+                              //                   .contains('Tahap Tahun Pertama')
+                              //               ? temp[index]
+                              //                   .majorConselee
+                              //                   .substring(20)
+                              //               : temp[index]
+                              //                       .majorConselee
+                              //                       .contains(
+                              //                           'Tahap Tahun Kedua')
+                              //                   ? temp[index]
+                              //                       .majorConselee
+                              //                       .substring(18)
+                              //                   : temp[index]
+                              //                           .majorConselee
+                              //                           .contains(
+                              //                               'Tahap Tahun Ketiga')
+                              //                       ? temp[index]
+                              //                           .majorConselee
+                              //                           .substring(19)
+                              //                       : temp[index]
+                              //                               .majorConselee
+                              //                               .contains(
+                              //                                   'Tahap Tahun Keempat')
+                              //                           ? temp[index]
+                              //                               .majorConselee
+                              //                               .substring(20)
+                              //                           : temp[index]
+                              //                               .majorConselee,
+                              //           style: TextStyle(
+                              //             backgroundColor:
+                              //                 Colors.grey.withOpacity(0.4),
+                              //             color: Colors.black,
+                              //             fontWeight: FontWeight.w500,
+                              //             fontSize: 9.sp,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     Row(
+                              //       children: [
+                              //         IconButton(
+                              //           onPressed: () async {
+                              //             await _firestoreUtils.updateRoom(
+                              //               temp[index].id,
+                              //               'approve',
+                              //             );
+                              //           },
+                              //           icon: const Icon(
+                              //             Icons.check_circle,
+                              //             color: Colors.greenAccent,
+                              //           ),
+                              //         ),
+                              //         SizedBox(width: 2.w),
+                              //         IconButton(
+                              //           onPressed: () async {
+                              //             await _firestoreUtils.updateRoom(
+                              //               temp[index].id,
+                              //               'ended',
+                              //             );
+                              //           },
+                              //           icon: const Icon(
+                              //             Icons.cancel_rounded,
+                              //             color: Colors.redAccent,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // ),
+                            ],
                           ),
                         );
                       } else {
@@ -404,21 +465,139 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
 
   Widget buildHeader(BuildContext context) {
     return Container(
-      width: 1.sw,
-      height: 52.h,
-      color: const Color.fromRGBO(253, 143, 1, 1),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height / 6,
+      color: Colors.blueAccent,
       child: Padding(
-        padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
-        child: Text(
-          'Daftar Request Conselee',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
+        padding: const EdgeInsets.only(
+          left: 8,
+          right: 8,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(
+                          isDarkMode: false,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Hi, ',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            _sharedPreference
+                                    .getString('nickname')
+                                    .toString()
+                                    .contains('Konselor')
+                                ? _sharedPreference
+                                    .getString('nickname')
+                                    .toString()
+                                : 'Konselor',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Daftar',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Request Concelee',
+                            style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                (profilePicture != '')
+                    ? Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(profilePicture),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                          image: const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/cat.png'),
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          ],
         ),
       ),
     );
+
+    // return Container(
+    //   width: 1.sw,
+    //   height: 52.h,
+    //   color: const Color.fromRGBO(253, 143, 1, 1),
+    //   child: Padding(
+    //     padding: EdgeInsets.only(top: 16.h, bottom: 16.h, left: 16.w),
+    //     child: Text(
+    //       'Daftar Request Conselee',
+    //       style: TextStyle(
+    //         color: Colors.black,
+    //         fontSize: 16.sp,
+    //         fontWeight: FontWeight.w600,
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
 // Widget buildCouncelee(BuildContext context) {

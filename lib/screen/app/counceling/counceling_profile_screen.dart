@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itb_ganecare/data/controllers/moodtracker_controller.dart';
 import 'package:itb_ganecare/data/sharedprefs.dart';
@@ -208,12 +209,12 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
           Expanded(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 15,
-              child: const Center(
+              child: Center(
                 child: Text(
                   'Profile Page',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -478,8 +479,7 @@ class _CouncelingProfileScreenState extends State<CouncelingProfileScreen> {
                     itemCount: snapshot.data.data.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      int reversedIndex =
-                          snapshot.data.data.length - 1 - index;
+                      int reversedIndex = snapshot.data.data.length - 1 - index;
                       return contentData(
                         reversedIndex,
                         snapshot.data.data[reversedIndex].text,
