@@ -50,141 +50,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.blueAccent,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   toolbarHeight: 80.h,
-      //   automaticallyImplyLeading: false,
-      //   leading: GestureDetector(
-      //     onTap: () {
-      //       Navigator.pop(context);
-      //       Navigator.pop(context);
-      //     },
-      //     child: const Icon(
-      //       Icons.close,
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      //   flexibleSpace: Container(
-      //     decoration: const BoxDecoration(
-      //       gradient: LinearGradient(
-      //         colors: [
-      //           Color.fromRGBO(0, 171, 233, 1),
-      //           Color.fromRGBO(6, 146, 196, 1),
-      //         ],
-      //         begin: Alignment.centerRight,
-      //         end: Alignment.centerLeft,
-      //       ),
-      //     ),
-      //     child: Container(
-      //       margin: EdgeInsets.only(left: 24.w),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               Container(
-      //                 child: Text(
-      //                   'Selamat datang Hello',
-      //                   style: TextStyle(
-      //                     color: Colors.white,
-      //                     fontSize: 16.sp,
-      //                     fontWeight: FontWeight.w600,
-      //                   ),
-      //                 ),
-      //                 margin: EdgeInsets.only(top: 40.h, left: 24.w),
-      //               ),
-      //               Container(
-      //                 child: Text(
-      //                   _sharedPreference
-      //                           .getString('nickname')
-      //                           .toString()
-      //                           .contains('Konselee')
-      //                       ? _sharedPreference.getString('nickname').toString()
-      //                       : 'Konselee',
-      //                   style: TextStyle(
-      //                     color: Colors.white,
-      //                     fontSize: 14.sp,
-      //                     fontWeight: FontWeight.w600,
-      //                   ),
-      //                 ),
-      //                 margin: EdgeInsets.only(top: 4.h, left: 24.w),
-      //               ),
-      //             ],
-      //           ),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             crossAxisAlignment: CrossAxisAlignment.center,
-      //             children: [
-      //               GestureDetector(
-      //                 onTap: () {},
-      //                 child: Container(
-      //                   margin: EdgeInsets.only(top: 42.h),
-      //                   child: Icon(
-      //                     Icons.notifications_rounded,
-      //                     color: Colors.white,
-      //                     size: 28.sp,
-      //                   ),
-      //                 ),
-      //               ),
-      //               SizedBox(width: 8.w),
-      //               (profilePicture != '')
-      //                   ? Container(
-      //                       height: 50.h,
-      //                       width: 44.w,
-      //                       margin: EdgeInsets.only(right: 24.w, top: 32.h),
-      //                       decoration: BoxDecoration(
-      //                         color: Colors.white,
-      //                         shape: BoxShape.circle,
-      //                         border: Border.all(
-      //                           color: Colors.black,
-      //                           width: 0.5.w,
-      //                         ),
-      //                         image: DecorationImage(
-      //                           fit: BoxFit.cover,
-      //                           image: NetworkImage(profilePicture),
-      //                         ),
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: Colors.black.withOpacity(0.5),
-      //                             blurRadius: 8,
-      //                             offset: const Offset(3, 2),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     )
-      //                   : Container(
-      //                       height: 50.h,
-      //                       width: 44.w,
-      //                       margin: EdgeInsets.only(right: 24.w, top: 32.h),
-      //                       decoration: BoxDecoration(
-      //                         color: Colors.white,
-      //                         shape: BoxShape.circle,
-      //                         image: const DecorationImage(
-      //                           fit: BoxFit.cover,
-      //                           image: AssetImage('assets/images/cat.png'),
-      //                         ),
-      //                         border: Border.all(
-      //                           color: Colors.black,
-      //                           width: 0.5.w,
-      //                         ),
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: Colors.black.withOpacity(0.5),
-      //                             blurRadius: 8,
-      //                             offset: const Offset(3, 2),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     ),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         primary: true,
         child: Column(
@@ -375,7 +240,7 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
 
       return Container(
         width: 1.sw,
-        height: 260.h,
+        height: MediaQuery.of(context).size.height / 2.5,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -614,7 +479,6 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
 
             return Container(
               color: Colors.white,
-              width: 1.sw,
               padding: EdgeInsets.only(bottom: 100),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,149 +508,159 @@ class _CounceleeListViewScreenState extends State<CounceleeListViewScreen> {
                       ],
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: temp.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 1.sw,
-                          height: 80.h,
-                          padding: EdgeInsets.all(8.w),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.white,
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/images/cat.png'),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 2.5,
+                    width: double.infinity,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: temp.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: 1.sw,
+                            height: 80.h,
+                            padding: EdgeInsets.all(8.w),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.white,
+                                    image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/images/cat.png'),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Anonymous',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            softWrap: true,
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Anonymous',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              softWrap: true,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          temp[index]
-                                                      .genderConselor
-                                                      .toString() ==
-                                                  'P'
-                                              ? const Icon(
-                                                  Icons.female,
-                                                  color: Colors.pinkAccent,
-                                                  size: 15,
-                                                )
-                                              : const Icon(
-                                                  Icons.male,
-                                                  color: Colors.blueAccent,
-                                                  size: 15,
-                                                ),
-                                        ],
+                                            temp[index]
+                                                        .genderConselor
+                                                        .toString() ==
+                                                    'P'
+                                                ? const Icon(
+                                                    Icons.female,
+                                                    color: Colors.pinkAccent,
+                                                    size: 15,
+                                                  )
+                                                : const Icon(
+                                                    Icons.male,
+                                                    color: Colors.blueAccent,
+                                                    size: 15,
+                                                  ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '#${temp[index].idConselor}',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              color: Colors.grey,
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '#${temp[index].idConselor}',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            '-',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              color: Colors.grey,
+                                            Text(
+                                              '-',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            rooms[index].generationConselor,
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              color: Colors.grey,
+                                            Text(
+                                              rooms[index].generationConselor,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            '-',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              color: Colors.grey,
+                                            Text(
+                                              '-',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            temp[index].majorConselor.contains(
-                                                    'Tahap Tahun Pertama')
-                                                ? temp[index]
-                                                    .majorConselor
-                                                    .substring(20)
-                                                : temp[index]
-                                                        .majorConselor
-                                                        .contains(
-                                                            'Tahap Tahun Kedua')
-                                                    ? temp[index]
-                                                        .majorConselor
-                                                        .substring(18)
-                                                    : temp[index]
-                                                            .majorConselor
-                                                            .contains(
-                                                                'Tahap Tahun Ketiga')
-                                                        ? temp[index]
-                                                            .majorConselor
-                                                            .substring(19)
-                                                        : temp[index]
-                                                                .majorConselor
-                                                                .contains(
-                                                                    'Tahap Tahun Keempat')
-                                                            ? temp[index]
-                                                                .majorConselor
-                                                                .substring(20)
-                                                            : temp[index]
-                                                                .majorConselor,
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              color: Colors.grey,
+                                            Text(
+                                              temp[index]
+                                                      .majorConselor
+                                                      .contains(
+                                                          'Tahap Tahun Pertama')
+                                                  ? temp[index]
+                                                      .majorConselor
+                                                      .substring(20)
+                                                  : temp[index]
+                                                          .majorConselor
+                                                          .contains(
+                                                              'Tahap Tahun Kedua')
+                                                      ? temp[index]
+                                                          .majorConselor
+                                                          .substring(18)
+                                                      : temp[index]
+                                                              .majorConselor
+                                                              .contains(
+                                                                  'Tahap Tahun Ketiga')
+                                                          ? temp[index]
+                                                              .majorConselor
+                                                              .substring(19)
+                                                          : temp[index]
+                                                                  .majorConselor
+                                                                  .contains(
+                                                                      'Tahap Tahun Keempat')
+                                                              ? temp[index]
+                                                                  .majorConselor
+                                                                  .substring(20)
+                                                              : temp[index]
+                                                                  .majorConselor,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.more_horiz,
-                                  color: Colors.blueAccent,
-                                ),
-                              )
-                            ],
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.more_horiz,
+                                    color: Colors.blueAccent,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

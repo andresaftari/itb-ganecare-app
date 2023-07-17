@@ -59,7 +59,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Apakah anda menyetujui request conecelee ini?',
+                  'Apakah anda menyetujui request concelee ini?',
                   style: GoogleFonts.poppins(
                     color: Colors.blueAccent,
                     fontWeight: FontWeight.w300,
@@ -74,7 +74,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
               child: Text(
                 'Ya',
                 style: GoogleFonts.poppins(
-                  color: Colors.blueAccent,
+                  color: Colors.green,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -90,7 +90,7 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
               child: Text(
                 'Tidak',
                 style: GoogleFonts.poppins(
-                  color: Colors.grey,
+                  color: Colors.red,
                   fontWeight: FontWeight.w300,
                 ),
               ),
@@ -100,6 +100,18 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
                   id,
                   'ended',
                 );
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Tutup',
+                style: GoogleFonts.poppins(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -113,141 +125,6 @@ class _CouncelorListViewScreenState extends State<CouncelorListViewScreen> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.blueAccent,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   toolbarHeight: 80.h,
-      //   automaticallyImplyLeading: false,
-      //   leading: GestureDetector(
-      //     onTap: () {
-      //       Navigator.pop(context);
-      //       Navigator.pop(context);
-      //     },
-      //     child: const Icon(
-      //       Icons.close,
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      //   flexibleSpace: Container(
-      //     decoration: const BoxDecoration(
-      //       gradient: LinearGradient(
-      //         colors: [
-      //           Color.fromRGBO(0, 171, 233, 1),
-      //           Color.fromRGBO(6, 146, 196, 1),
-      //         ],
-      //         begin: Alignment.centerRight,
-      //         end: Alignment.centerLeft,
-      //       ),
-      //     ),
-      //     child: Container(
-      //       margin: EdgeInsets.only(left: 24.w),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           Column(
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               Container(
-      //                 child: Text(
-      //                   'Selamat datang',
-      //                   style: TextStyle(
-      //                     color: Colors.white,
-      //                     fontSize: 16.sp,
-      //                     fontWeight: FontWeight.w600,
-      //                   ),
-      //                 ),
-      //                 margin: EdgeInsets.only(top: 40.h, left: 24.w),
-      //               ),
-      //               Container(
-      //                 child: Text(
-      //                   _sharedPreference
-      //                           .getString('nickname')
-      //                           .toString()
-      //                           .contains('Konselor')
-      //                       ? _sharedPreference.getString('nickname').toString()
-      //                       : 'Konselor',
-      //                   style: TextStyle(
-      //                     color: Colors.white,
-      //                     fontSize: 14.sp,
-      //                     fontWeight: FontWeight.w600,
-      //                   ),
-      //                 ),
-      //                 margin: EdgeInsets.only(top: 4.h, left: 24.w),
-      //               ),
-      //             ],
-      //           ),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             crossAxisAlignment: CrossAxisAlignment.center,
-      //             children: [
-      //               GestureDetector(
-      //                 onTap: () {},
-      //                 child: Container(
-      //                   margin: EdgeInsets.only(top: 42.h),
-      //                   child: Icon(
-      //                     Icons.notifications_rounded,
-      //                     color: Colors.white,
-      //                     size: 28.sp,
-      //                   ),
-      //                 ),
-      //               ),
-      //               SizedBox(width: 8.w),
-      //               (profilePicture != '')
-      //                   ? Container(
-      //                       height: 50.h,
-      //                       width: 44.w,
-      //                       margin: EdgeInsets.only(right: 24.w, top: 32.h),
-      //                       decoration: BoxDecoration(
-      //                         color: Colors.white,
-      //                         shape: BoxShape.circle,
-      //                         border: Border.all(
-      //                           color: Colors.black,
-      //                           width: 0.5.w,
-      //                         ),
-      //                         image: DecorationImage(
-      //                           fit: BoxFit.cover,
-      //                           image: NetworkImage(profilePicture),
-      //                         ),
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: Colors.black.withOpacity(0.5),
-      //                             blurRadius: 8,
-      //                             offset: const Offset(3, 2),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     )
-      //                   : Container(
-      //                       height: 50.h,
-      //                       width: 44.w,
-      //                       margin: EdgeInsets.only(right: 24.w, top: 32.h),
-      //                       decoration: BoxDecoration(
-      //                         color: Colors.white,
-      //                         shape: BoxShape.circle,
-      //                         image: const DecorationImage(
-      //                           fit: BoxFit.cover,
-      //                           image: AssetImage('assets/images/cat.png'),
-      //                         ),
-      //                         border: Border.all(
-      //                           color: Colors.black,
-      //                           width: 0.5.w,
-      //                         ),
-      //                         boxShadow: [
-      //                           BoxShadow(
-      //                             color: Colors.black.withOpacity(0.5),
-      //                             blurRadius: 8,
-      //                             offset: const Offset(3, 2),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     ),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
       body: SingleChildScrollView(
         primary: true,
         child: Column(

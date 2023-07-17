@@ -124,7 +124,6 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueAccent,
-          
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -262,7 +261,6 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
         ),
       ),
     );
-  
   }
 
   StreamBuilder buildCouncelee(BuildContext context) {
@@ -325,8 +323,6 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
       }
 
       return Container(
-        width: 1.sw,
-        height: MediaQuery.of(context).size.height / 2,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -365,175 +361,180 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
                 ],
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: temp.length,
-              itemBuilder: (context, index) {
-                if (temp[index].idConselee.toString() == currentUserId) {
-                  return GestureDetector(
-                    onTap: () {
-                      // log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 2.5,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: temp.length,
+                itemBuilder: (context, index) {
+                  if (temp[index].idConselee.toString() == currentUserId) {
+                    return GestureDetector(
+                      onTap: () {
+                        // log('Logged ee: ${temp[index].idConselee} - or: ${temp[index].idConselor}');
 
-                      _sharedPreference.putString(
-                        'roomId',
-                        temp[index].id,
-                      );
+                        _sharedPreference.putString(
+                          'roomId',
+                          temp[index].id,
+                        );
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return CouncelingChatScreen(
-                              conseleeId: temp[index].idConselee,
-                              conselorId: temp[index].idConselor,
-                              currentId: currentUserId,
-                            );
-                          },
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CouncelingChatScreen(
+                                conseleeId: temp[index].idConselee,
+                                conselorId: temp[index].idConselor,
+                                currentId: currentUserId,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 1.sw,
+                        height: 80.h,
+                        padding: EdgeInsets.only(
+                          left: 10,
+                          right: 10,
                         ),
-                      );
-                    },
-                    child: Container(
-                      width: 1.sw,
-                      height: 80.h,
-                      padding: EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
-                              image: const DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(
-                                  'assets/images/cat.png',
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50),
+                                image: const DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                    'assets/images/cat.png',
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Anonymous',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      temp[index].genderConselor.toString() ==
-                                              'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                              size: 15,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                              size: 15,
-                                            ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    temp[index].lastMessageConselor,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: Colors.grey,
+                                        temp[index].genderConselor.toString() ==
+                                                'P'
+                                            ? const Icon(
+                                                Icons.female,
+                                                color: Colors.pinkAccent,
+                                                size: 15,
+                                              )
+                                            : const Icon(
+                                                Icons.male,
+                                                color: Colors.blueAccent,
+                                                size: 15,
+                                              ),
+                                      ],
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      temp[index].lastMessageConselor,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.more_horiz,
+                                    color: Colors.blueAccent,
+                                  ),
                                 ),
+                                // Text(
+                                //   temp[index].generationConselor,
+                                //   style: GoogleFonts.poppins(
+                                //     color: Colors.blueAccent,
+                                //     fontSize: 12,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
+                                // Text(
+                                //   temp[index]
+                                //           .majorConselor
+                                //           .contains('Tahap Tahun Pertama')
+                                //       ? temp[index].majorConselor.substring(20)
+                                //       : temp[index]
+                                //               .majorConselor
+                                //               .contains('Tahap Tahun Kedua')
+                                //           ? temp[index]
+                                //               .majorConselor
+                                //               .substring(18)
+                                //           : temp[index]
+                                //                   .majorConselor
+                                //                   .contains('Tahap Tahun Ketiga')
+                                //               ? temp[index]
+                                //                   .majorConselor
+                                //                   .substring(19)
+                                //               : temp[index]
+                                //                       .majorConselor
+                                //                       .contains(
+                                //                           'Tahap Tahun Keempat')
+                                //                   ? temp[index]
+                                //                       .majorConselor
+                                //                       .substring(20)
+                                //                   : temp[index].majorConselor,
+                                //   style: GoogleFonts.poppins(
+                                //     color: Colors.blueAccent,
+                                //     fontSize: 12,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
                               ],
                             ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.more_horiz,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                              // Text(
-                              //   temp[index].generationConselor,
-                              //   style: GoogleFonts.poppins(
-                              //     color: Colors.blueAccent,
-                              //     fontSize: 12,
-                              //     fontWeight: FontWeight.bold,
-                              //   ),
-                              // ),
-                              // Text(
-                              //   temp[index]
-                              //           .majorConselor
-                              //           .contains('Tahap Tahun Pertama')
-                              //       ? temp[index].majorConselor.substring(20)
-                              //       : temp[index]
-                              //               .majorConselor
-                              //               .contains('Tahap Tahun Kedua')
-                              //           ? temp[index]
-                              //               .majorConselor
-                              //               .substring(18)
-                              //           : temp[index]
-                              //                   .majorConselor
-                              //                   .contains('Tahap Tahun Ketiga')
-                              //               ? temp[index]
-                              //                   .majorConselor
-                              //                   .substring(19)
-                              //               : temp[index]
-                              //                       .majorConselor
-                              //                       .contains(
-                              //                           'Tahap Tahun Keempat')
-                              //                   ? temp[index]
-                              //                       .majorConselor
-                              //                       .substring(20)
-                              //                   : temp[index].majorConselor,
-                              //   style: GoogleFonts.poppins(
-                              //     color: Colors.blueAccent,
-                              //     fontSize: 12,
-                              //     fontWeight: FontWeight.bold,
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: const Text('No chat history'),
-                    ),
-                  );
-                }
-              },
+                    );
+                  } else {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: const Text('No chat history'),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -565,8 +566,7 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
       return Container(
         color: Colors.white,
         width: 1.sw,
-        padding: EdgeInsets.only(bottom: 100),
-        // height: MediaQuery.of(context).size.height / 1,
+        padding: EdgeInsets.only(bottom: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -595,157 +595,161 @@ class _CounceleeSebayaViewsState extends State<CounceleeSebayaViews> {
                 ],
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: temp.length,
-              itemBuilder: (context, index) {
-                if (temp[index].idConselee.toString() == currentUserId) {
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: 1.sw,
-                      height: 80.h,
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.white,
-                              image: const DecorationImage(
-                                image: AssetImage('assets/images/cat.png'),
+            SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 2.5,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: temp.length,
+                itemBuilder: (context, index) {
+                  if (temp[index].idConselee.toString() == currentUserId) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 1.sw,
+                        height: 80.h,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.white,
+                                image: const DecorationImage(
+                                  image: AssetImage('assets/images/cat.png'),
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Anonymous',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Anonymous',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          softWrap: true,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      temp[index].genderConselor.toString() ==
-                                              'P'
-                                          ? const Icon(
-                                              Icons.female,
-                                              color: Colors.pinkAccent,
-                                              size: 15,
-                                            )
-                                          : const Icon(
-                                              Icons.male,
-                                              color: Colors.blueAccent,
-                                              size: 15,
-                                            ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    temp[index].lastMessageConselor,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: Colors.grey,
+                                        temp[index].genderConselor.toString() ==
+                                                'P'
+                                            ? const Icon(
+                                                Icons.female,
+                                                color: Colors.pinkAccent,
+                                                size: 15,
+                                              )
+                                            : const Icon(
+                                                Icons.male,
+                                                color: Colors.blueAccent,
+                                                size: 15,
+                                              ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      temp[index].lastMessageConselor,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.more_horiz,
-                              color: Colors.blueAccent,
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.more_horiz,
+                                color: Colors.blueAccent,
+                              ),
                             ),
-                          ),
-                          // Column(
-                          //   children: [
-                          //     Row(
-                          //       children: [
-                          //         Text(
-                          //           temp[index].genderConselor,
-                          //           style: TextStyle(
-                          //             backgroundColor:
-                          //                 Colors.grey.withOpacity(0.4),
-                          //             color: Colors.black,
-                          //             fontWeight: FontWeight.w500,
-                          //             fontSize: 9.sp,
-                          //           ),
-                          //         ),
-                          //         SizedBox(width: 2.w),
-                          //         Text(
-                          //           temp[index]
-                          //                   .majorConselor
-                          //                   .contains('Tahap Tahun Pertama')
-                          //               ? temp[index]
-                          //                   .majorConselor
-                          //                   .substring(20)
-                          //               : temp[index]
-                          //                       .majorConselor
-                          //                       .contains('Tahap Tahun Kedua')
-                          //                   ? temp[index]
-                          //                       .majorConselor
-                          //                       .substring(18)
-                          //                   : temp[index]
-                          //                           .majorConselor
-                          //                           .contains(
-                          //                               'Tahap Tahun Ketiga')
-                          //                       ? temp[index]
-                          //                           .majorConselor
-                          //                           .substring(19)
-                          //                       : temp[index]
-                          //                               .majorConselor
-                          //                               .contains(
-                          //                                   'Tahap Tahun Keempat')
-                          //                           ? temp[index]
-                          //                               .majorConselor
-                          //                               .substring(20)
-                          //                           : temp[index].majorConselor,
-                          //           style: TextStyle(
-                          //             backgroundColor:
-                          //                 Colors.grey.withOpacity(0.4),
-                          //             color: Colors.black,
-                          //             fontWeight: FontWeight.w500,
-                          //             fontSize: 9.sp,
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
+                            // Column(
+                            //   children: [
+                            //     Row(
+                            //       children: [
+                            //         Text(
+                            //           temp[index].genderConselor,
+                            //           style: TextStyle(
+                            //             backgroundColor:
+                            //                 Colors.grey.withOpacity(0.4),
+                            //             color: Colors.black,
+                            //             fontWeight: FontWeight.w500,
+                            //             fontSize: 9.sp,
+                            //           ),
+                            //         ),
+                            //         SizedBox(width: 2.w),
+                            //         Text(
+                            //           temp[index]
+                            //                   .majorConselor
+                            //                   .contains('Tahap Tahun Pertama')
+                            //               ? temp[index]
+                            //                   .majorConselor
+                            //                   .substring(20)
+                            //               : temp[index]
+                            //                       .majorConselor
+                            //                       .contains('Tahap Tahun Kedua')
+                            //                   ? temp[index]
+                            //                       .majorConselor
+                            //                       .substring(18)
+                            //                   : temp[index]
+                            //                           .majorConselor
+                            //                           .contains(
+                            //                               'Tahap Tahun Ketiga')
+                            //                       ? temp[index]
+                            //                           .majorConselor
+                            //                           .substring(19)
+                            //                       : temp[index]
+                            //                               .majorConselor
+                            //                               .contains(
+                            //                                   'Tahap Tahun Keempat')
+                            //                           ? temp[index]
+                            //                               .majorConselor
+                            //                               .substring(20)
+                            //                           : temp[index].majorConselor,
+                            //           style: TextStyle(
+                            //             backgroundColor:
+                            //                 Colors.grey.withOpacity(0.4),
+                            //             color: Colors.black,
+                            //             fontWeight: FontWeight.w500,
+                            //             fontSize: 9.sp,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: const Text('No chat history'),
-                    ),
-                  );
-                }
-              },
+                    );
+                  } else {
+                    return Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.w),
+                        child: const Text('No chat history'),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),
